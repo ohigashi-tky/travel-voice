@@ -1,0 +1,84 @@
+services:
+  # Laravel Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: guide-app-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
+      - /var/www/html/vendor
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=guide_app
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:YourAppKeyHere
+    depends_on:
+      - mysql
+    networks:
+      - guide-app-network
+
+  # Nuxt.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: guide-app-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - NUXT_API_BASE_URL=http://backend:8000/api
+    depends_on:
+      - backend
+    networks:
+      - guide-app-network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: guide-app-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=guide_app
+      - MYSQL_USER=guide_user
+      - MYSQL_PASSWORD=password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - guide-app-network
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: guide-app-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    depends_on:
+      - mysql
+    networks:
+      - guide-app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  guide-app-network:
+    driver: bridge

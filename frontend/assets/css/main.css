@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Glass Card Effects */
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl;
+  }
+  
+  /* Shimmer Text Animation */
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255,255,255,0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  
+  /* Gradient Animations */
+  .animate-gradient-x {
+    background-size: 400% 400%;
+    animation: gradientX 15s ease infinite;
+  }
+  
+  .animate-gradient-y {
+    background-size: 400% 400%;
+    animation: gradientY 15s ease infinite;
+  }
+  
+  /* Float Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-float-delay {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+  
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite;
+    animation-delay: 4s;
+  }
+  
+  /* Fade In Up Animation */
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  /* Sparkle Background */
+  .sparkle-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 50%, white 2px, transparent 2px),
+      radial-gradient(circle at 40% 40%, white 1px, transparent 1px),
+      radial-gradient(circle at 90% 10%, white 1px, transparent 1px),
+      radial-gradient(circle at 60% 90%, white 2px, transparent 2px),
+      radial-gradient(circle at 80% 30%, white 1px, transparent 1px);
+    background-size: 
+      300px 300px,
+      200px 200px,
+      400px 400px,
+      250px 250px,
+      350px 350px;
+    opacity: 0.6;
+    animation: sparkle 20s linear infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes gradientX {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes gradientY {
+  0%, 100% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  .sparkle-bg::before {
+    background-size: 
+      150px 150px,
+      100px 100px,
+      200px 200px,
+      125px 125px,
+      175px 175px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .sparkle-bg::before {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 2px, transparent 2px),
+      radial-gradient(circle at 40% 40%, rgba(255,255,255,0.6) 1px, transparent 1px),
+      radial-gradient(circle at 90% 10%, rgba(255,255,255,0.7) 1px, transparent 1px),
+      radial-gradient(circle at 60% 90%, rgba(255,255,255,0.8) 2px, transparent 2px),
+      radial-gradient(circle at 80% 30%, rgba(255,255,255,0.6) 1px, transparent 1px);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .glass-card {
+    @apply bg-white/90 border-2 border-black/50;
+  }
+}
