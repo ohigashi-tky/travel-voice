@@ -1,47 +1,29 @@
-# 🗾 日本観光ガイドアプリ
+# 🎧 Travel Voice
 
-高品質なGoogle Maps APIを使用した、インタラクティブな日本観光ガイドアプリケーション
+モダンなデザインと音声ガイドで日本の観光を楽しむアプリケーション
 
-[![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com/)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-red.svg)](https://laravel.com/)
 [![Nuxt.js](https://img.shields.io/badge/Nuxt.js-3.x-green.svg)](https://nuxt.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-blue.svg)](https://tailwindcss.com/)
-[![Google Maps](https://img.shields.io/badge/Google_Maps-API-green.svg)](https://developers.google.com/maps)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 
 ## 🌟 概要
 
-このアプリケーションは、Google Maps APIを活用した高品質な地図表示で、日本各地の観光スポットを音声ガイド付きで紹介する次世代の観光アプリです。
+Travel Voice は、音声ガイド付きで日本各地の観光スポットを紹介するモダンな観光アプリです。白背景をベースとしたクリーンなデザインとダークモード対応で、快適な観光体験を提供します。
 
 ### ✨ 主な機能
 
-- 🗾 **Google Maps統合** - 高品質で正確な日本地図
-- 🎯 **47都道府県対応** - 全都道府県のクリック可能なエリア  
 - 🎧 **音声ガイド** - 各観光スポットの詳細な音声解説
+- 🌓 **ダークモード** - ライト/ダークテーマの切り替え
+- 🔐 **認証システム** - ログイン/登録/ログアウト機能
 - 📱 **レスポンシブ対応** - PC・タブレット・スマートフォン対応
-- 💫 **モダンUI** - Glassmorphismデザインとスムーズなアニメーション
-- 🔐 **セキュア認証** - Laravel Sanctum採用
+- ⚡ **高速パフォーマンス** - Nuxt 3による最適化
+- 🎨 **モダンUI** - グラデーションとアニメーション
 
 ## 🚀 クイックスタート
 
-### 1. Google Maps APIキーの設定
-
-**重要**: アプリケーションを起動する前に、Google Maps APIキーを設定してください。
-
-#### APIキーの取得
-1. [Google Cloud Console](https://console.cloud.google.com/) にアクセス
-2. プロジェクトを作成または選択
-3. 「APIs & Services」→「Library」→「Maps JavaScript API」を有効化
-4. 「Credentials」→「Create Credentials」→「API Key」
-
-#### .envファイルの設定
-```bash
-# /frontend/.env ファイルに以下を設定
-NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
-```
-
-### 2. アプリケーションの起動
+### 1. アプリケーションの起動
 
 ```bash
 # プロジェクトルートで実行
@@ -51,16 +33,16 @@ docker compose up -d
 docker compose exec backend php artisan migrate --seed
 ```
 
-### 3. アクセス
+### 2. アクセス
 
-- **フロントエンド**: http://localhost:3000 （美しいGoogle Maps日本地図）
+- **フロントエンド**: http://localhost:3000 
 - **バックエンド**: http://localhost:8000  
 - **phpMyAdmin**: http://localhost:8080
 
 ### 🔑 テストアカウント
 
 - **Email**: demo@example.com
-- **Password**: password123
+- **Password**: password
 
 ## 🏗️ 技術スタック
 
@@ -69,13 +51,14 @@ docker compose exec backend php artisan migrate --seed
 - **TypeScript** - 型安全性による開発効率向上
 - **TailwindCSS** - ユーティリティファーストCSSフレームワーク
 - **Pinia** - Vue.js用状態管理ライブラリ
-- **Lucide Vue** - 美しいアイコンライブラリ
+- **VueUse** - Vue Composition Utilities（ダークモード等）
+- **Lucide Vue Next** - 美しいアイコンライブラリ
 
 ### Backend
-- **Laravel 12** - 高性能PHPフレームワーク
+- **Laravel 11** - 高性能PHPフレームワーク
 - **PHP 8.2+** - 最新PHP機能活用
 - **Laravel Sanctum** - API認証システム
-- **MySQL 8.0** - 高性能リレーショナルデータベース
+- **SQLite** - 軽量データベース
 
 ### Infrastructure
 - **Docker** - コンテナ化によるポータブルな開発環境
@@ -84,74 +67,72 @@ docker compose exec backend php artisan migrate --seed
 ## 📁 プロジェクト構造
 
 ```
-guide-app/
+travel-voice/
 ├── 🔧 docker-compose.yml     # Docker設定
 ├── 🌐 frontend/              # Nuxt.js アプリケーション
 │   ├── 📄 pages/            # ページコンポーネント
-│   ├── 🧩 components/       # 再利用可能コンポーネント
-│   ├── 🎨 assets/           # スタイル・画像等
+│   │   ├── index.vue        # メインページ（都道府県選択）
+│   │   ├── login.vue        # ログインページ
+│   │   ├── tokyo.vue        # 東京ガイドページ
+│   │   └── prefecture/      # 都道府県別ページ
+│   ├── 🧩 components/       # 共通コンポーネント
+│   │   ├── AppHeader.vue    # ヘッダー（プロフィール・設定）
+│   │   └── AppFooter.vue    # フッター（タブナビゲーション）
 │   ├── 🔧 composables/      # Vue Composition関数
+│   ├── 🛡️ middleware/       # ルートミドルウェア
+│   │   ├── auth.ts          # 認証必須ページ用
+│   │   └── guest.ts         # ゲスト用（ログイン済みは除外）
+│   ├── 🗄️ stores/          # Pinia ストア
+│   │   └── auth.ts          # 認証状態管理
 │   └── 📝 types/            # TypeScript型定義
 ├── ⚙️ backend/               # Laravel API
 │   ├── 🎯 app/Http/         # コントローラー・ミドルウェア
 │   ├── 📊 database/         # マイグレーション・シーダー
 │   └── 🛣️ routes/           # API ルート定義
 └── 📚 docs/                 # プロジェクトドキュメント
-    ├── 📖 README.md         # プロジェクト概要
-    ├── 🔧 setup.md          # セットアップガイド
-    ├── 🌐 api.md            # API仕様書
-    └── 🏗️ architecture.md   # アーキテクチャ設計
 ```
 
-## 🎯 対応観光スポット
+## 🎯 現在対応の観光スポット
 
-### 🗼 東京都 (5箇所)
+### 🗼 東京都 (3箇所)
 
-| スポット | カテゴリ | 音声ガイド数 | 特徴 |
-|---|---|---|---|
-| **東京スカイツリー** | 観光施設 | 2本 | 世界一高い電波塔の魅力 |
-| **浅草寺** | 寺院 | 2本 | 東京最古の寺院の歴史 |
-| **明治神宮** | 神社 | 1本 | 都心の神聖な森 |
-| **皇居東御苑** | 庭園 | 1本 | 江戸城跡の美しい庭園 |
-| **上野動物園** | 動物園 | 1本 | 日本最古の動物園 |
-
-## 📖 ドキュメント
-
-- 📋 [**セットアップガイド**](./docs/setup.md) - 詳細なインストール手順
-- 🌐 [**API仕様書**](./docs/api.md) - RESTful API完全リファレンス  
-- 🏗️ [**アーキテクチャ設計**](./docs/architecture.md) - システム設計思想
+| スポット | カテゴリ | 特徴 |
+|---|---|---|
+| **東京スカイツリー** | 展望台 | 高さ634mの世界最高クラスの電波塔 |
+| **浅草寺** | 寺院 | 東京最古の寺院、雷門と仲見世通りで有名 |
+| **明治神宮** | 神社 | 都心にありながら豊かな森に囲まれた神聖な空間 |
 
 ## 🎨 デザインシステム
 
 ### カラーパレット
-- 🔵 **Primary**: Blue (#3B82F6) - メインアクション・リンク
-- 🟣 **Secondary**: Purple (#8B5CF6) - アクセント・特別な要素  
-- 🟢 **Success**: Green (#10B981) - 成功状態・確認
-- 🟡 **Warning**: Yellow (#F59E0B) - 注意・警告
-- 🔴 **Error**: Red (#EF4444) - エラー・削除アクション
+- **Primary Gradient**: Cyan → Blue → Purple (`from-cyan-600 via-blue-600 to-purple-600`)
+- **Background**: White / Dark Gray (`bg-white dark:bg-gray-900`)
+- **Surface**: Light Gray / Dark Gray (`bg-gray-50 dark:bg-gray-800`)
+- **Text**: Gray 800 / White (`text-gray-800 dark:text-white`)
 
-### コンポーネント設計
-- **Atomic Design** 採用
-- **再利用性** を重視した設計
-- **アクセシビリティ** 対応
+### UI特徴
+- **ダークモード**: VueUseのuseDarkによる完全対応
+- **固定フッター**: スクロール時も常に表示
+- **モーダル設計**: 設定・プロフィール用
+- **レスポンシブ**: Tailwind CSSによる完全対応
 
 ## 🔧 開発コマンド
 
 ```bash
 # 🐳 Docker操作
-docker-compose up -d          # 全サービス起動
-docker-compose down          # 全サービス停止
-docker-compose logs -f       # ログ確認
+docker compose up -d          # 全サービス起動
+docker compose down          # 全サービス停止
+docker compose logs -f       # ログ確認
 
 # ⚙️ Laravel操作
-docker-compose exec backend php artisan migrate     # マイグレーション
-docker-compose exec backend php artisan db:seed     # シーダー実行
-docker-compose exec backend php artisan make:model Example  # モデル作成
+docker compose exec backend php artisan migrate     # マイグレーション
+docker compose exec backend php artisan db:seed     # シーダー実行
+docker compose exec backend php artisan make:model Example  # モデル作成
 
 # 🌐 Nuxt操作
-docker-compose exec frontend npm run dev           # 開発サーバー
-docker-compose exec frontend npm run build         # 本番ビルド
-docker-compose exec frontend npm run type-check    # 型チェック
+docker compose exec frontend npm run dev           # 開発サーバー
+docker compose exec frontend npm run build         # 本番ビルド
+docker compose exec frontend npm run type-check    # 型チェック
 ```
 
 ## 📊 API エンドポイント
@@ -165,25 +146,38 @@ docker-compose exec frontend npm run type-check    # 型チェック
 | `GET` | `/api/tourist-spots/{id}` | スポット詳細 | ❌ |
 | `GET` | `/api/tourist-spots/prefecture/{prefecture}` | 都道府県別 | ❌ |
 
+## 🎯 認証フロー
+
+### ルート保護
+- **認証必須**: `/` (メインページ), `/tokyo` (東京ガイド)
+- **ゲスト限定**: `/login` (ログインページ)
+
+### 認証状態管理
+- **Pinia Store**: 認証状態をグローバル管理
+- **localStorage**: ユーザー情報の永続化
+- **Middleware**: Nuxt 3のミドルウェアによる自動リダイレクト
+
 ## 🔮 ロードマップ
 
-### 🎯 Phase 1 (完了)
-- ✅ 基本認証システム
+### ✅ Phase 1 (完了)
+- ✅ モダンUI/UXデザイン（白背景+ダークモード）
+- ✅ 認証システム（ログイン/登録/ログアウト）
 - ✅ 東京都観光スポット
 - ✅ 音声ガイド機能
+- ✅ 共通コンポーネント化
 - ✅ レスポンシブデザイン
 
 ### 🚀 Phase 2 (計画中)
-- 🔄 他都道府県対応
+- 🔄 他都道府県対応（大阪、京都、北海道等）
+- 🔄 音声プレーヤー機能強化
 - 🔄 ユーザーレビュー機能
 - 🔄 お気に入り機能
-- 🔄 ソーシャル機能
 
 ### 🌟 Phase 3 (構想中)
-- 💡 AR/VR対応
-- 💡 AI音声ガイド
-- 💡 多言語対応
+- 💡 AI音声ガイド生成
+- 💡 多言語対応（英語、中国語等）
 - 💡 オフライン機能
+- 💡 プッシュ通知
 
 ## 🤝 コントリビューション
 
@@ -198,19 +192,17 @@ docker-compose exec frontend npm run type-check    # 型チェック
 ## 📄 ライセンス
 
 このプロジェクトは **MIT License** の下で公開されています。
-詳細は [LICENSE](./LICENSE) ファイルをご確認ください。
 
 ## 💬 サポート
 
-- 🐛 **バグ報告**: [GitHub Issues](https://github.com/username/guide-app/issues)
-- 💡 **機能提案**: [GitHub Discussions](https://github.com/username/guide-app/discussions)
-- 📧 **お問い合わせ**: support@guide-app.com
+- 🐛 **バグ報告**: [GitHub Issues](https://github.com/ohigashi-tky/travel-voice/issues)
+- 💡 **機能提案**: [GitHub Discussions](https://github.com/ohigashi-tky/travel-voice/discussions)
 
 ---
 
 <div align="center">
 
-**🗾 日本の美しい観光地を、音声ガイドと共に発見しよう 🎧**
+**🎧 音声ガイドで観光を楽しもう 🗾**
 
 Made with ❤️ by Claude Code
 
