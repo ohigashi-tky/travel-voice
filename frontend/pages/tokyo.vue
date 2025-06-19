@@ -8,7 +8,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold text-gray-800 dark:text-white tracking-wide transition-colors duration-300 text-center">
           <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-            東京ガイド
+            東京都
           </span>
         </h1>
       </div>
@@ -84,13 +84,12 @@
       </div>
 
       <!-- Audio Player -->
-      <div v-if="currentAudioGuide" class="fixed bottom-24 left-4 right-4 z-20">
-        <AdvancedAudioPlayer 
-          :audio-guide="currentAudioGuide"
-          :spot-name="currentSpot?.name || null"
-          @close="closePlayer"
-        />
-      </div>
+      <AudioGuidePlayer 
+        :audio-guide="currentAudioGuide"
+        :spot-name="currentSpot?.name || null"
+        :is-visible="!!currentAudioGuide"
+        @close="closePlayer"
+      />
     </main>
     
     <!-- Footer -->
@@ -124,8 +123,14 @@ const currentSpot = ref<TouristSpot | null>(null)
 
 
 const generateSpotImage = (spotName: string, category: string) => {
-  // Return placeholder image URL
-  return `https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=${encodeURIComponent(spotName)}`
+  // 観光地ごとの実際の画像URLを返す
+  const imageMap: Record<string, string> = {
+    '東京スカイツリー': 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format',
+    '浅草寺': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format',
+    '明治神宮': 'https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&h=300&fit=crop&auto=format'
+  }
+  
+  return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
 }
 
 const getSpotTags = (spot: TouristSpot) => {

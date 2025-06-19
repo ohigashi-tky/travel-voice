@@ -125,10 +125,11 @@
           </div>
         </div>
 
-        <!-- Advanced Audio Player -->
-        <AdvancedAudioPlayer 
+        <!-- Audio Guide Player -->
+        <AudioGuidePlayer 
           :audio-guide="currentAudioGuide"
           :spot-name="currentSpot?.name || null"
+          :is-visible="!!currentAudioGuide"
           @close="closePlayer"
         />
       </div>
@@ -158,7 +159,20 @@ const touristSpots = ref<TouristSpot[]>([])
 const currentAudioGuide = ref<AudioGuide | null>(null)
 const currentSpot = ref<TouristSpot | null>(null)
 
-const prefectureImage = computed(() => `https://via.placeholder.com/600x400/3B82F6/FFFFFF?text=${encodeURIComponent(prefectureName)}`)
+const prefectureImage = computed(() => {
+  const imageMap: Record<string, string> = {
+    '東京都': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&h=400&fit=crop&auto=format',
+    '大阪府': 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
+    '京都府': 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+    '北海道': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
+    '奈良県': 'https://images.unsplash.com/photo-1548407260-da850faa41e3?w=600&h=400&fit=crop&auto=format',
+    '広島県': 'https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=600&h=400&fit=crop&auto=format',
+    '福岡県': 'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=600&h=400&fit=crop&auto=format',
+    '沖縄県': 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&auto=format'
+  }
+  
+  return imageMap[prefectureName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&h=400&fit=crop&auto=format`
+})
 
 const prefectureDescription = computed(() => {
   const descriptions: Record<string, string> = {
@@ -175,7 +189,17 @@ const prefectureDescription = computed(() => {
 })
 
 const generateSpotImage = (spotName: string, category: string) => {
-  return `https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=${encodeURIComponent(spotName)}`
+  // 観光地ごとの実際の画像URLを返す
+  const imageMap: Record<string, string> = {
+    '東京スカイツリー': 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format',
+    '浅草寺': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format',
+    '明治神宮': 'https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&h=300&fit=crop&auto=format',
+    '大阪城': 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
+    '清水寺': 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format',
+    '札幌時計台': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&auto=format'
+  }
+  
+  return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
 }
 
 const goBack = () => {
