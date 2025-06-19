@@ -84,14 +84,21 @@ export const useAuthStore = defineStore('auth', () => {
   const initializeAuth = () => {
     // Only run on client side
     if (process.client) {
-      // Check if user is logged in from localStorage
-      const savedUser = localStorage.getItem('user')
-      if (savedUser) {
-        try {
-          user.value = JSON.parse(savedUser)
-        } catch {
-          localStorage.removeItem('user')
+      try {
+        // Check if user is logged in from localStorage
+        const savedUser = localStorage.getItem('user')
+        if (savedUser && savedUser !== 'null') {
+          const parsedUser = JSON.parse(savedUser)
+          if (parsedUser && parsedUser.id) {
+            user.value = parsedUser
+            console.log('認証状態を復元しました:', parsedUser.name)
+          } else {
+            localStorage.removeItem('user')
+          }
         }
+      } catch (error) {
+        console.error('認証状態の復元エラー:', error)
+        localStorage.removeItem('user')
       }
     }
   }

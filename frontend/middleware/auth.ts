@@ -1,9 +1,11 @@
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   
-  // Initialize auth state if not already done
+  // Ensure auth state is initialized on client side
   if (process.client) {
     authStore.initializeAuth()
+    // Small delay to ensure localStorage is read
+    await new Promise(resolve => setTimeout(resolve, 10))
   }
   
   // Check if user is authenticated

@@ -4,7 +4,7 @@
     <AppHeader />
     
     <!-- Main Content -->
-    <div class="flex-1 relative z-10 pb-24">
+    <div class="flex-1 relative z-10 pb-24 pt-16">
       <div class="p-6">
         <div class="max-w-7xl mx-auto text-center">
           <h1 class="text-7xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider text-center transition-colors duration-300">
@@ -53,13 +53,10 @@
               <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                 <span class="text-white text-xl">🎧</span>
               </div>
-              <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">音声ガイド機能</h3>
+              <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">TravelVoiceの使い方</h3>
             </div>
             <p class="text-gray-600 dark:text-gray-300 mb-4 font-thin tracking-wide transition-colors duration-300">
-              プロのガイドによる詳しい解説で、各観光地の歴史や文化を深く学べます。
-            </p>
-            <p class="text-gray-500 dark:text-gray-400 text-sm font-thin tracking-wide transition-colors duration-300">
-              スピード調整、再生制御、ブックマーク機能など、充実した音声体験をお楽しみください。
+              旅先で音声ガイドを聴きながら、歴史や文化を深く学ぶことができます。
             </p>
           </div>
         </div>
@@ -75,6 +72,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import AppHeader from '~/components/AppHeader.vue'
+import AppFooter from '~/components/AppFooter.vue'
 
 // Page meta
 definePageMeta({
@@ -101,21 +100,47 @@ onMounted(() => {
 
 const mainPrefectures = [
   { name: '東京都', emoji: '🗼', available: true },
-  { name: '大阪府', emoji: '🏰', available: false },
-  { name: '京都府', emoji: '⛩️', available: false },
-  { name: '北海道', emoji: '🏔️', available: false }
+  { name: '大阪府', emoji: '🏯', available: true },
+  { name: '京都府', emoji: '⛩️', available: true },
+  { name: '北海道', emoji: '🐄', available: true }
 ]
 
 const selectPrefecture = async (prefecture) => {
   console.log('Prefecture selected:', prefecture.name)
   
-  if (prefecture.available && prefecture.name === '東京都') {
-    console.log('Navigating to Tokyo guide...')
-    try {
-      await navigateTo('/tokyo')
-    } catch (error) {
-      console.error('Navigation error:', error)
-      alert('東京ガイドページに移動中です...')
+  if (prefecture.available) {
+    if (prefecture.name === '東京都') {
+      console.log('Navigating to Tokyo guide...')
+      try {
+        await navigateTo('/tokyo')
+      } catch (error) {
+        console.error('Navigation error:', error)
+        alert('東京ガイドページに移動中です...')
+      }
+    } else if (prefecture.name === '大阪府') {
+      console.log('Navigating to Osaka guide...')
+      try {
+        await navigateTo('/osaka')
+      } catch (error) {
+        console.error('Navigation error:', error)
+        alert('大阪ガイドページに移動中です...')
+      }
+    } else if (prefecture.name === '京都府') {
+      console.log('Navigating to Kyoto guide...')
+      try {
+        await navigateTo('/kyoto')
+      } catch (error) {
+        console.error('Navigation error:', error)
+        alert('京都ガイドページに移動中です...')
+      }
+    } else if (prefecture.name === '北海道') {
+      console.log('Navigating to Hokkaido guide...')
+      try {
+        await navigateTo('/hokkaido')
+      } catch (error) {
+        console.error('Navigation error:', error)
+        alert('北海道ガイドページに移動中です...')
+      }
     }
   } else {
     alert(`${prefecture.name}のガイドは準備中です。しばらくお待ちください。`)

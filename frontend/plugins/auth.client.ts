@@ -1,6 +1,9 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async () => {
   const authStore = useAuthStore()
   
-  // Initialize auth state on client side
+  // Initialize auth state synchronously on client side
   authStore.initializeAuth()
+  
+  // Ensure auth state is ready before app continues
+  await nextTick()
 })

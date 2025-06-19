@@ -8,7 +8,7 @@
     </div>
 
     <!-- Header -->
-    <header class="relative z-10 p-6">
+    <header class="relative z-10 p-6 pt-20">
       <nav class="flex items-center justify-between max-w-7xl mx-auto">
         <button @click="goBack" class="flex items-center gap-2 text-white hover:text-cyan-400 transition-colors">
           <ArrowLeft class="w-6 h-6" />
@@ -140,6 +140,7 @@
 <script setup lang="ts">
 import { ArrowLeft } from 'lucide-vue-next'
 import type { TouristSpot, AudioGuide } from '~/types'
+import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
 
 const route = useRoute()
 const prefectureName = decodeURIComponent(route.params.name as string)
@@ -192,11 +193,17 @@ const generateSpotImage = (spotName: string, category: string) => {
   // 観光地ごとの実際の画像URLを返す
   const imageMap: Record<string, string> = {
     '東京スカイツリー': 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format',
-    '浅草寺': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format',
-    '明治神宮': 'https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&h=300&fit=crop&auto=format',
-    '大阪城': 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
+    '浅草寺': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format',
+    '明治神宮': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
+    '大阪城': 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
+    '通天閣': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format',
+    '海遊館': 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=400&h=300&fit=crop&auto=format',
     '清水寺': 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format',
-    '札幌時計台': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&auto=format'
+    '金閣寺': 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&h=300&fit=crop&auto=format',
+    '伏見稲荷大社': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format',
+    '札幌時計台': 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format',
+    '函館山': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop&auto=format',
+    '小樽運河': 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=400&h=300&fit=crop&auto=format'
   }
   
   return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
@@ -231,12 +238,161 @@ const closePlayer = () => {
 // Fetch tourist spots for this prefecture
 onMounted(async () => {
   try {
-    const { $api } = useNuxtApp()
-    const spots = await $api<TouristSpot[]>(`/tourist-spots?prefecture=${encodeURIComponent(prefectureName)}`)
-    touristSpots.value = spots
+    if (prefectureName === '大阪府') {
+      // 大阪府のモックデータ
+      touristSpots.value = [
+        {
+          id: 101,
+          name: '大阪城',
+          description: '豊臣秀吉が築城した名城。美しい天守閣と桜の名所として親しまれています。',
+          category: '歴史建造物',
+          prefecture: '大阪府',
+          address: '大阪府大阪市中央区大阪城1-1',
+          latitude: 34.6873,
+          longitude: 135.5262,
+          imageUrl: '',
+          openingHours: '9:00-17:00',
+          admissionFee: '大人600円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 102,
+          name: '通天閣',
+          description: '新世界のシンボルタワー。ビリケンさんで有名な大阪を代表する観光地です。',
+          category: '展望台',
+          prefecture: '大阪府',
+          address: '大阪府大阪市浪速区恵美須東1-18-6',
+          latitude: 34.6523,
+          longitude: 135.5061,
+          imageUrl: '',
+          openingHours: '8:30-21:30',
+          admissionFee: '大人900円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 103,
+          name: '海遊館',
+          description: '世界最大級の水族館。ジンベエザメやマンタが泳ぐ太平洋水槽は圧巻です。',
+          category: '水族館',
+          prefecture: '大阪府',
+          address: '大阪府大阪市港区海岸通1-1-10',
+          latitude: 34.6547,
+          longitude: 135.4281,
+          imageUrl: '',
+          openingHours: '10:00-20:00',
+          admissionFee: '大人2700円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    } else if (prefectureName === '京都府') {
+      // 京都府のモックデータ
+      touristSpots.value = [
+        {
+          id: 201,
+          name: '清水寺',
+          description: '778年開創の京都最古の寺院。有名な清水の舞台と美しい景色で知られています。',
+          category: '寺院',
+          prefecture: '京都府',
+          address: '京都府京都市東山区清水1-294',
+          latitude: 34.9949,
+          longitude: 135.7851,
+          imageUrl: '',
+          openingHours: '6:00-18:00',
+          admissionFee: '大人400円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 202,
+          name: '金閣寺',
+          description: '足利義満の別荘として建てられた金箔で覆われた美しい楼閣。世界文化遺産です。',
+          category: '寺院',
+          prefecture: '京都府',
+          address: '京都府京都市北区金閣寺町1',
+          latitude: 35.0394,
+          longitude: 135.7292,
+          imageUrl: '',
+          openingHours: '9:00-17:00',
+          admissionFee: '大人500円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 203,
+          name: '伏見稲荷大社',
+          description: '全国の稲荷神社の総本宮。千本鳥居の美しい朱色のトンネルで有名です。',
+          category: '神社',
+          prefecture: '京都府',
+          address: '京都府京都市伏見区深草藪之内町68',
+          latitude: 34.9671,
+          longitude: 135.7727,
+          imageUrl: '',
+          openingHours: '24時間',
+          admissionFee: '無料',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    } else if (prefectureName === '北海道') {
+      // 北海道のモックデータ
+      touristSpots.value = [
+        {
+          id: 301,
+          name: '札幌時計台',
+          description: '旧札幌農学校演武場として1878年に建設された北海道のシンボル的建造物です。',
+          category: '歴史建造物',
+          prefecture: '北海道',
+          address: '北海道札幌市中央区北1条西2丁目',
+          latitude: 43.0642,
+          longitude: 141.3469,
+          imageUrl: '',
+          openingHours: '8:45-17:10',
+          admissionFee: '大人200円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 302,
+          name: '函館山',
+          description: '世界三大夜景の一つに数えられる美しい夜景スポット。津軽海峡を一望できます。',
+          category: '展望台',
+          prefecture: '北海道',
+          address: '北海道函館市函館山',
+          latitude: 41.7640,
+          longitude: 140.6982,
+          imageUrl: '',
+          openingHours: '10:00-21:00（ロープウェイ）',
+          admissionFee: 'ロープウェイ往復大人1500円',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 303,
+          name: '小樽運河',
+          description: '1923年完成の歴史ある運河。石造倉庫群とガス灯が織りなすロマンチックな景観です。',
+          category: '歴史的景観',
+          prefecture: '北海道',
+          address: '北海道小樽市港町',
+          latitude: 43.1907,
+          longitude: 140.9947,
+          imageUrl: '',
+          openingHours: '24時間',
+          admissionFee: '無料',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    } else {
+      const { $api } = useNuxtApp()
+      const spots = await $api<TouristSpot[]>(`/tourist-spots?prefecture=${encodeURIComponent(prefectureName)}`)
+      touristSpots.value = spots
+    }
   } catch (error) {
     console.error('Error fetching tourist spots:', error)
-    // For non-Tokyo prefectures, show empty state
+    // For non-supported prefectures, show empty state
     touristSpots.value = []
   }
 })

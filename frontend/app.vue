@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen">
+  <NuxtLayout>
     <NuxtPage />
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup>

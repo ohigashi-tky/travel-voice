@@ -1,5 +1,5 @@
 <template>
-  <header class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 flex items-center justify-between transition-colors duration-300">
+  <header class="fixed top-0 left-0 right-0 z-40 h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 flex items-center justify-between transition-colors duration-300">
     <!-- User Icon / Profile Button -->
     <button 
       @click="authStore.isAuthenticated ? showProfileModal = true : navigateTo('/login')" 
