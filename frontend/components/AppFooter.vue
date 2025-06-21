@@ -13,14 +13,14 @@
       </button>
       
       <button 
-        @click="activeTab = 'top2'"
+        @click="activeTab = 'ai'"
         :class="[
           'flex flex-col items-center justify-center flex-1 h-full transition-colors',
-          activeTab === 'top2' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'
+          activeTab === 'ai' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'
         ]"
       >
-        <Star class="w-6 h-6 mb-1" />
-        <span class="text-xs font-thin tracking-wide">Top2</span>
+        <Bot class="w-6 h-6 mb-1" />
+        <span class="text-xs font-thin tracking-wide">AIエージェント</span>
       </button>
     </div>
   </footer>
@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { Home, Star } from 'lucide-vue-next'
+import { Home, Bot } from 'lucide-vue-next'
 
 // Props
 const props = defineProps({
@@ -50,9 +50,8 @@ watch(activeTab, (newTab) => {
   
   if (newTab === 'top') {
     navigateTo('/')
-  } else if (newTab === 'top2') {
-    alert('Top2画面は未実装です')
-    activeTab.value = 'top'
+  } else if (newTab === 'ai') {
+    navigateTo('/ai-agent')
   }
 })
 

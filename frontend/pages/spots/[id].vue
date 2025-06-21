@@ -45,28 +45,34 @@
 
     <!-- Main Content -->
     <main class="flex-1 relative z-10 px-4 sm:px-6 lg:px-8 pb-24">
+      <!-- Debug Info -->
+      <div class="max-w-4xl mx-auto py-4 text-center" v-if="!currentSpot">
+        <p class="text-red-500">Debug: currentSpot is null/undefined</p>
+        <p class="text-gray-600">Route ID: {{ route.params.id }}</p>
+        <p class="text-gray-600">Parsed ID: {{ spotId }}</p>
+      </div>
+
       <div class="max-w-4xl mx-auto py-8" v-if="currentSpot">
         
         <!-- Audio Guide Section -->
         <div class="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-6 mb-8">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                <Headphones class="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">音声ガイド</h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">{{ currentSpot.name }}の詳しい解説を聞く</p>
-              </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+              <Headphones class="w-6 h-6 text-white" />
             </div>
-            <button 
-              @click="playAudioGuide"
-              class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center gap-2"
-            >
-              <Play class="w-4 h-4" />
-              再生
-            </button>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">音声ガイド</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">{{ currentSpot.name }}の詳しい解説を聞く</p>
+            </div>
           </div>
+          
+          <button 
+            @click="playAudioGuide"
+            class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <Play class="w-5 h-5" />
+            再生
+          </button>
         </div>
 
         <!-- Overview Section -->
@@ -175,7 +181,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { ArrowLeft, Headphones, Play, Info, Star, Clock, Camera, MapPin } from 'lucide-vue-next'
 import type { AudioGuide } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
@@ -188,15 +194,20 @@ definePageMeta({
 })
 
 const route = useRoute()
-const spotId = computed(() => parseInt(route.params.id as string))
+const spotId = computed(() => {
+  const id = route.params.id as string
+  console.log('Computing spotId from route.params.id:', id)
+  return parseInt(id)
+})
 
+// Set page title after currentSpot is loaded
 useHead({
-  title: computed(() => `${currentSpot.value?.name || '観光地詳細'} - Travel Voice`)
+  title: '観光地詳細 - Travel Voice'
 })
 
 // Reactive variables
 const activeTab = ref('top')
-const currentSpot = ref(null)
+const currentSpot = ref<any>(null)
 const currentAudioGuide = ref<AudioGuide | null>(null)
 
 // All spots data (same as in index.vue)
@@ -300,7 +311,13 @@ const allSpots = [
 ]
 
 const goBack = () => {
-  navigateTo('/')
+  // ブラウザの履歴を使って前のページに戻る
+  if (window.history.length > 1) {
+    window.history.back()
+  } else {
+    // 履歴がない場合はホームページに戻る
+    navigateTo('/')
+  }
 }
 
 const playAudioGuide = () => {
@@ -326,12 +343,48 @@ const closePlayer = () => {
 
 // Load spot data on mount
 onMounted(() => {
-  const spot = allSpots.find(s => s.id === spotId.value)
+  console.log('onMounted called')
+  console.log('Route params:', route.params)
+  
+  // Get the ID from route params
+  const id = route.params.id as string
+  console.log('Route ID:', id)
+  
+  if (!id) {
+    console.log('No ID in route params')
+    return
+  }
+  
+  const numericId = parseInt(id)
+  console.log('Numeric ID:', numericId)
+  
+  // Find the spot
+  const spot = allSpots.find(s => s.id === numericId)
+  console.log('Found spot:', spot)
+  
   if (spot) {
     currentSpot.value = spot
+    console.log('Current spot set to:', currentSpot.value.name)
+    
+    // Update page title
+    useHead({
+      title: `${spot.name} - Travel Voice`
+    })
   } else {
-    // Redirect to home if spot not found
-    navigateTo('/')
+    console.log('Spot not found for ID:', numericId)
+    console.log('Available spots:', allSpots.map(s => ({ id: s.id, name: s.name })))
+  }
+})
+
+// Also watch for route changes
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    console.log('Route ID changed to:', newId)
+    const numericId = parseInt(newId as string)
+    const spot = allSpots.find(s => s.id === numericId)
+    if (spot) {
+      currentSpot.value = spot
+    }
   }
 })
 </script>

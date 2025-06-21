@@ -319,8 +319,10 @@ const nextSpot = () => {
 
 // Navigate to spot detail page
 const goToSpotDetail = (spotId) => {
+  console.log('Navigating to spot:', spotId) // Debug log
   // Only navigate if not dragging
   if (!isDragging.value) {
+    stopCarousel() // Stop auto-scroll when navigating
     navigateTo(`/spots/${spotId}`)
   }
 }

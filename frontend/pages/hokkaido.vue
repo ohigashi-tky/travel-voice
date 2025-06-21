@@ -31,7 +31,8 @@
           <div 
             v-for="spot in touristSpots" 
             :key="spot.id"
-            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700"
+            @click="goToSpotDetail(spot.id)"
+            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer"
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-500 relative">
@@ -71,7 +72,7 @@
               
               <!-- Audio Guide Button -->
               <button 
-                @click="playAudioGuide(spot)"
+                @click.stop="playAudioGuide(spot)"
                 class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <Headphones class="w-4 h-4" />
@@ -180,6 +181,10 @@ const closePlayer = () => {
 
 const goHome = () => {
   navigateTo('/')
+}
+
+const goToSpotDetail = (spotId: number) => {
+  navigateTo(`/spots/${spotId}`)
 }
 
 
