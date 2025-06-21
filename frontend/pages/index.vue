@@ -302,7 +302,7 @@ const selectRandomSpots = () => {
 const startCarousel = () => {
   carouselInterval = setInterval(() => {
     nextSpot()
-  }, 5000) // 5秒ごとに切り替え
+  }, 4000) // 4秒ごとに切り替え
 }
 
 const stopCarousel = () => {

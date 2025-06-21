@@ -30,6 +30,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+        OPENROUTER_MODEL: ${OPENROUTER_MODEL}
     container_name: guide-app-frontend
     ports:
       - "3000:3000"
@@ -39,6 +42,8 @@ services:
     environment:
       - NODE_ENV=development
       - NUXT_API_BASE_URL=http://backend:8000/api
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL}
     depends_on:
       - backend
     networks:

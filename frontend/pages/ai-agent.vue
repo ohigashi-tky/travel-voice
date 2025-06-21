@@ -60,7 +60,7 @@
               <div 
                 v-if="message.role === 'assistant'"
                 class="text-sm max-w-none"
-                v-html="formatMessage(message.content)"
+                v-html="formatMessage(message.content, message.audioGuideSpots)"
               ></div>
               <p 
                 v-else
@@ -70,7 +70,7 @@
 
             <!-- Related Questions Buttons -->
             <div 
-              v-if="message.role === 'questions'"
+              v-if="message.role === 'questions' && message.questions && message.questions.length > 0"
               class="max-w-sm md:max-w-lg lg:max-w-2xl space-y-2 mb-8"
             >
               <button
@@ -168,6 +168,7 @@ interface Message {
   role: 'user' | 'assistant' | 'questions'
   content: string
   questions?: string[]
+  audioGuideSpots?: Array<{id: number, name: string}>
 }
 
 const messages = ref<Message[]>([])
@@ -185,8 +186,37 @@ const goHome = () => {
   navigateTo('/')
 }
 
-// シンプルなマークダウンフォーマット関数
-const formatMessage = (content: string) => {
+// 音声ガイドが実装されている観光地のマスターデータ
+const audioGuideSpots = [
+  { id: 1, name: '東京タワー', keywords: ['東京タワー'] },
+  { id: 2, name: '浅草寺', keywords: ['浅草寺', '浅草'] },
+  { id: 101, name: '大阪城', keywords: ['大阪城'] },
+  { id: 201, name: '清水寺', keywords: ['清水寺'] },
+  { id: 202, name: '金閣寺', keywords: ['金閣寺', '鹿苑寺'] },
+  { id: 301, name: '札幌時計台', keywords: ['札幌時計台', '時計台'] }
+]
+
+// AI回答から音声ガイド対応観光地を検出する関数
+const detectAudioGuideSpots = (content: string) => {
+  const detectedSpots = []
+  
+  for (const spot of audioGuideSpots) {
+    for (const keyword of spot.keywords) {
+      if (content.includes(keyword)) {
+        // 重複を避ける
+        if (!detectedSpots.find(s => s.id === spot.id)) {
+          detectedSpots.push(spot)
+        }
+        break
+      }
+    }
+  }
+  
+  return detectedSpots
+}
+
+// シンプルなマークダウンフォーマット関数（音声ガイドボタン挿入機能付き）
+const formatMessage = (content: string, detectedSpots?: Array<{id: number, name: string}>) => {
   let html = content
   
   // 関連質問セクションを削除（独立したメッセージとして表示するため）
@@ -198,6 +228,28 @@ const formatMessage = (content: string) => {
   
   // エスケープ処理
   html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  
+  // 音声ガイド対応観光地の後にボタンを挿入（重複を避ける）
+  const processedSpots = new Set()
+  if (detectedSpots && detectedSpots.length > 0) {
+    detectedSpots.forEach(detectedSpot => {
+      // 重複を避ける
+      if (processedSpots.has(detectedSpot.id)) return
+      
+      // マスターデータから該当するスポットのキーワードを取得
+      const masterSpot = audioGuideSpots.find(s => s.id === detectedSpot.id)
+      if (masterSpot) {
+        // 最初に見つかったキーワードのみ処理
+        const keyword = masterSpot.keywords.find(k => html.includes(k))
+        if (keyword) {
+          // キーワードの後に改行がある場合、そこにボタンを挿入（1回のみ）
+          const pattern = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^\\n]*)(\\n)`)
+          html = html.replace(pattern, `$1$2<div class="mt-1 mb-3"><button onclick="navigateToSpot(${detectedSpot.id})" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"><span>📍</span><span>${detectedSpot.name}を詳しく知る</span><span>→</span></button></div>`)
+          processedSpots.add(detectedSpot.id)
+        }
+      }
+    })
+  }
   
   // マークダウンパターンをHTMLに変換
   // ## タイトル
@@ -287,40 +339,46 @@ const sendMessage = async () => {
     if (response.content) {
       console.log('AI Response content:', response.content)
       
+      // AI回答から音声ガイド対応観光地を検出
+      const detectedSpots = detectAudioGuideSpots(response.content)
+      
       // AI回答を追加
       messages.value.push({
         role: 'assistant',
-        content: response.content
+        content: response.content,
+        audioGuideSpots: detectedSpots
       })
 
       // 関連質問を抽出して独立したメッセージとして追加
       const relatedQuestions = extractRelatedQuestions(response.content)
       console.log('Extracted related questions:', relatedQuestions)
       
-      // テスト用：関連質問が見つからない場合は固定の質問を追加
-      if (relatedQuestions.length > 0) {
-        const questionsMessage = {
-          role: 'questions',
-          content: '',
-          questions: relatedQuestions
-        }
-        messages.value.push(questionsMessage)
-        console.log('Added questions message to chat:', questionsMessage)
-      } else {
-        console.log('No related questions found, adding test questions')
-        // テスト用の関連質問
-        const testQuestionsMessage = {
-          role: 'questions',
-          content: '',
-          questions: [
-            'この観光地の営業時間は？',
-            'アクセス方法を教えて',
-            '近くのおすすめグルメは？'
-          ]
-        }
-        messages.value.push(testQuestionsMessage)
-        console.log('Added test questions message to chat:', testQuestionsMessage)
+      // 関連質問が見つからない場合はより具体的な質問を使用
+      const fallbackQuestions = [
+        'この場所の詳しい行き方を教えて',
+        '予算はどのくらい必要ですか',
+        '他におすすめの時期はありますか',
+        '混雑を避けるコツはありますか',
+        '近くの観光スポットも教えて',
+        '地元ならではの楽しみ方は？'
+      ]
+      
+      // ランダムに3つ選択してバリエーションを増やす
+      const randomQuestions = fallbackQuestions
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3)
+      
+      const finalQuestions = relatedQuestions.length > 0 ? relatedQuestions : randomQuestions
+      
+      const questionsMessage = {
+        role: 'questions' as const,
+        content: '',
+        questions: finalQuestions
       }
+      
+      messages.value.push(questionsMessage)
+      console.log('Added questions message to chat:', questionsMessage)
+      console.log('Total messages:', messages.value.length)
       
     } else if (response.error) {
       messages.value.push({
@@ -396,4 +454,17 @@ const extractRelatedQuestions = (content: string) => {
   console.log('Final questions array:', questions)
   return questions
 }
+
+// 観光地詳細ページへの遷移関数
+const navigateToSpot = (spotId: number) => {
+  navigateTo(`/spots/${spotId}`)
+}
+
+// グローバルウィンドウに関数を追加
+onMounted(() => {
+  // グローバル関数として観光地詳細への遷移を設定
+  if (typeof window !== 'undefined') {
+    (window as any).navigateToSpot = navigateToSpot
+  }
+})
 </script>

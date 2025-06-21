@@ -23,7 +23,21 @@ Travel Voice は、音声ガイド付きで日本各地の観光スポットを�
 
 ## 🚀 クイックスタート
 
-### 1. アプリケーションの起動
+### 1. 環境変数の設定
+
+**プロジェクトのルートディレクトリ**（`docker-compose.yml` と同じ場所）に `.env` ファイルを作成し、以下の内容を記述してください。
+
+```bash
+# .env (プロジェクトルート)
+NUXT_OPENROUTER_API_KEY=your_openrouter_api_key_here
+NUXT_OPENROUTER_MODEL=google/gemini-2.5-flash-lite-preview-06-17
+NUXT_API_BASE_URL=http://localhost:8000/api
+NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID=your_google_maps_map_id_here
+```
+**注意:** `frontend`ディレクトリではなく、プロジェクトのルートにファイルを作成してください。
+
+### 2. アプリケーションの起動
 
 ```bash
 # プロジェクトルートで実行
@@ -33,7 +47,7 @@ docker compose up -d
 docker compose exec backend php artisan migrate --seed
 ```
 
-### 2. アクセス
+### 3. アクセス
 
 - **フロントエンド**: http://localhost:3000 
 - **バックエンド**: http://localhost:8000  
@@ -79,7 +93,6 @@ travel-voice/
 │   │   ├── AppHeader.vue    # ヘッダー（プロフィール・設定）
 │   │   └── AppFooter.vue    # フッター（タブナビゲーション）
 │   ├── 🔧 composables/      # Vue Composition関数
-│   ├── 🛡️ middleware/       # ルートミドルウェア
 │   │   ├── auth.ts          # 認証必須ページ用
 │   │   └── guest.ts         # ゲスト用（ログイン済みは除外）
 │   ├── 🗄️ stores/          # Pinia ストア
