@@ -110,7 +110,7 @@
           </div>
           
           <!-- Loading時のスペーサー（適切なスクロールのため） -->
-          <div v-if="isLoading" class="h-96"></div>
+          <div v-if="isLoading" :style="{ height: dynamicSpacerHeight + 'px' }"></div>
         </div>
         
       </div>
@@ -164,6 +164,22 @@ const userInput = ref('')
 const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 
+// 動的スペーサー高さ（画面サイズに応じて調整）
+const dynamicSpacerHeight = computed(() => {
+  if (typeof window === 'undefined') return 400 // SSR時のデフォルト
+  
+  const viewportHeight = window.innerHeight
+  const headerHeight = 64
+  const footerHeight = 80
+  const inputHeight = 80
+  
+  // 利用可能なチャット表示領域の高さ
+  const availableHeight = viewportHeight - headerHeight - footerHeight - inputHeight
+  
+  // スペーサー高さは利用可能高さの80%〜最大600px
+  return Math.min(600, Math.max(300, availableHeight * 0.8))
+})
+
 interface Message {
   role: 'user' | 'assistant' | 'questions'
   content: string
@@ -193,7 +209,13 @@ const audioGuideSpots = [
   { id: 101, name: '大阪城', keywords: ['大阪城'] },
   { id: 201, name: '清水寺', keywords: ['清水寺'] },
   { id: 202, name: '金閣寺', keywords: ['金閣寺', '鹿苑寺'] },
-  { id: 301, name: '札幌時計台', keywords: ['札幌時計台', '時計台'] }
+  { id: 301, name: '札幌時計台', keywords: ['札幌時計台', '時計台'] },
+  { id: 401, name: '名古屋城', keywords: ['名古屋城'] },
+  { id: 402, name: '熱田神宮', keywords: ['熱田神宮'] },
+  { id: 403, name: 'トヨタ産業技術記念館', keywords: ['トヨタ産業技術記念館', 'トヨタ記念館'] },
+  { id: 501, name: '太宰府天満宮', keywords: ['太宰府天満宮', '太宰府'] },
+  { id: 502, name: '福岡城跡', keywords: ['福岡城跡', '福岡城'] },
+  { id: 503, name: '博多駅', keywords: ['博多駅', '博多'] }
 ]
 
 // AI回答から音声ガイド対応観光地を検出する関数
@@ -289,13 +311,27 @@ const scrollToBottom = async () => {
 const scrollToLastUserMessage = async () => {
   await nextTick()
   if (chatContainer.value) {
-    // チャット領域の高さを計算
-    const containerHeight = chatContainer.value.clientHeight
-    // 入力欄のスペース（m-5 = 20px）を考慮
-    const reservedSpace = 20
-    // 目標位置を計算（最新のユーザーメッセージが見える位置 + m-5のマージン）
-    const targetScrollTop = chatContainer.value.scrollHeight - containerHeight + reservedSpace
-    chatContainer.value.scrollTop = Math.max(0, targetScrollTop)
+    // 画面の高さを取得（ビューポート高さ）
+    const viewportHeight = window.innerHeight
+    // ヘッダーとフッターの高さを考慮（概算）
+    const headerHeight = 64 // ヘッダー高さ
+    const footerHeight = 80 // フッター高さ
+    const inputHeight = 80  // 入力欄高さ
+    
+    // 利用可能なチャット表示領域の高さ
+    const availableHeight = viewportHeight - headerHeight - footerHeight - inputHeight
+    
+    // 上部に余白を残してユーザー質問が見える位置にスクロール
+    const topMargin = Math.min(100, availableHeight * 0.1) // 画面高さの10%または100px
+    
+    // 最新のユーザーメッセージを上部に表示する位置を計算
+    const targetScrollTop = chatContainer.value.scrollHeight - availableHeight + topMargin
+    
+    // スムーズにスクロール
+    chatContainer.value.scrollTo({
+      top: Math.max(0, targetScrollTop),
+      behavior: 'smooth'
+    })
   }
 }
 
@@ -322,8 +358,12 @@ const sendMessage = async () => {
     content: userMessage
   })
 
-  await scrollToLastUserMessage()
   isLoading.value = true
+  
+  // 少し待ってからスクロール（ローディング表示とスペーサーが描画されてから）
+  setTimeout(() => {
+    scrollToLastUserMessage()
+  }, 100)
 
   try {
     // Call Real Chat API
@@ -465,6 +505,18 @@ onMounted(() => {
   // グローバル関数として観光地詳細への遷移を設定
   if (typeof window !== 'undefined') {
     (window as any).navigateToSpot = navigateToSpot
+    
+    // ウィンドウリサイズ時に動的スペーサー高さを再計算
+    const handleResize = () => {
+      // computedプロパティは自動的に再計算される
+    }
+    
+    window.addEventListener('resize', handleResize)
+    
+    // クリーンアップ
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleResize)
+    })
   }
 })
 </script>

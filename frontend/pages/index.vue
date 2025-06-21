@@ -18,39 +18,88 @@
         </div>
         
         <div class="max-w-6xl mx-auto">
-          <!-- Functional Map Area -->
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 mb-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">            
-            <!-- Prefecture Selection -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button
-                v-for="prefecture in mainPrefectures"
-                :key="prefecture.name"
-                @click="selectPrefecture(prefecture)"
-                :class="[
-                  'group p-4 rounded-xl border transition-all duration-300',
-                  prefecture.available 
-                    ? 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer'
-                    : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
-                ]"
-                :disabled="!prefecture.available"
+          <!-- Search Section -->
+          <div class="mb-8">
+            <!-- Search Input with Suggestions -->
+            <div class="relative max-w-md mx-auto">
+              <div class="relative">
+                <input
+                  v-model="searchQuery"
+                  @input="onSearchInput"
+                  @focus="onInputFocus"
+                  @blur="onInputBlur"
+                  type="text"
+                  placeholder=""
+                  class="w-full px-4 py-3 pl-12 pr-20 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-300"
+                />
+                <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                
+                <!-- Animated Placeholder -->
+                <div 
+                  v-if="!searchQuery && !isInputFocused"
+                  class="absolute left-12 top-1/2 transform -translate-y-1/2 pointer-events-none h-6 overflow-hidden w-64"
+                >
+                  <div class="relative h-6">
+                    <div 
+                      v-for="(spot, index) in placeholderSpots"
+                      :key="index"
+                      class="absolute inset-0 text-gray-400 dark:text-gray-500 whitespace-nowrap flex items-center transition-all duration-300 ease-out"
+                      :style="getPlaceholderStyle(index)"
+                    >
+                      {{ spot }}
+                    </div>
+                  </div>
+                </div>
+                
+                <button
+                  @click="performSearch"
+                  :disabled="!searchQuery.trim()"
+                  class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-4 py-1.5 rounded-md text-sm font-medium transition-colors"
+                >
+                  検索
+                </button>
+              </div>
+              
+              <!-- Search Suggestions -->
+              <div 
+                v-if="showSuggestions && searchSuggestions.length > 0"
+                class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
               >
-                <div class="text-3xl mb-2">{{ prefecture.emoji }}</div>
-                <h4 :class="[
-                  'font-light text-sm transition-colors tracking-wide',
-                  prefecture.available 
-                    ? 'text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
-                    : 'text-gray-500 dark:text-gray-400'
-                ]">
-                  {{ prefecture.name }}
-                </h4>
-              </button>
+                <button
+                  v-for="suggestion in searchSuggestions"
+                  :key="suggestion.id"
+                  @mousedown="selectSuggestion(suggestion)"
+                  class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                >
+                  <div class="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-lg flex-shrink-0 overflow-hidden">
+                    <img 
+                      :src="suggestion.imageUrl" 
+                      :alt="suggestion.name"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-medium text-gray-900 dark:text-white text-sm">{{ suggestion.name }}</div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                      <span>{{ suggestion.prefecture }}</span>
+                      <span>•</span>
+                      <span>{{ suggestion.category }}</span>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           
-          <!-- Pickup Spots Section -->
-          <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 transition-colors duration-300">
+          <!-- Popular Spots Section -->
+          <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-8 transition-colors duration-300">
             <div class="text-center mb-6">
-              <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">ピックアップ</h3>
+              <div class="flex items-center justify-center gap-3 mb-2">
+                <div class="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                  <Sparkles class="w-5 h-5 text-white" />
+                </div>
+                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">人気スポット</h3>
+              </div>
             </div>
             
             <!-- Carousel Container -->
@@ -138,10 +187,135 @@
               </div>
             </div>
           </div>
+          
+          <!-- Prefecture Selection -->
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            <div class="text-center mb-6">
+              <div class="flex items-center justify-center gap-3 mb-2">
+                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                  <MapPin class="w-5 h-5 text-white" />
+                </div>
+                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">都道府県から探す</h3>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button
+                v-for="prefecture in mainPrefectures"
+                :key="prefecture.name"
+                @click="selectPrefecture(prefecture)"
+                :class="[
+                  'group p-4 rounded-xl border transition-all duration-300',
+                  prefecture.available 
+                    ? 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer'
+                    : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
+                ]"
+                :disabled="!prefecture.available"
+              >
+                <div class="text-3xl mb-2">{{ prefecture.emoji }}</div>
+                <h4 :class="[
+                  'font-light text-sm transition-colors tracking-wide',
+                  prefecture.available 
+                    ? 'text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                    : 'text-gray-500 dark:text-gray-400'
+                ]">
+                  {{ prefecture.name }}
+                </h4>
+              </button>
+            </div>
+            
+            <!-- All Prefectures Button -->
+            <div class="mt-6 text-center">
+              <button
+                @click="showPrefectureModal = true"
+                class="inline-flex items-center gap-2 px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
+              >
+                <span>すべて表示</span>
+                <span class="text-sm">→</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Category Selection -->
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300 mt-8">
+            <div class="text-center mb-6">
+              <div class="flex items-center justify-center gap-3 mb-2">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                  <Grid3X3 class="w-5 h-5 text-white" />
+                </div>
+                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">カテゴリから探す</h3>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <button
+                v-for="category in categoryList"
+                :key="category.name"
+                @click="selectCategory(category)"
+                class="group p-4 rounded-xl border bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer transition-all duration-300"
+              >
+                <div class="text-3xl mb-2">{{ category.emoji }}</div>
+                <h4 class="font-light text-sm transition-colors tracking-wide text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                  {{ category.name }}
+                </h4>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     
+    <!-- Prefecture Modal -->
+    <div
+      v-if="showPrefectureModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      @click="closePrefectureModal"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        @click.stop
+      >
+        <!-- Modal Header -->
+        <div class="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-white">都道府県を選択</h2>
+          <button
+            @click="showPrefectureModal = false"
+            class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-2xl"
+          >
+            ×
+          </button>
+        </div>
+        
+        <!-- Modal Content -->
+        <div class="p-6">
+          <div
+            v-for="region in prefectureRegions"
+            :key="region.name"
+            class="mb-8 last:mb-0"
+          >
+            <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4">{{ region.name }}</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <button
+                v-for="prefecture in region.prefectures"
+                :key="prefecture.name"
+                @click="selectPrefectureFromModal(prefecture)"
+                :disabled="!prefecture.available"
+                :class="[
+                  'text-left p-3 rounded-lg border transition-all duration-200',
+                  prefecture.available
+                    ? 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white cursor-pointer'
+                    : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                ]"
+              >
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">{{ prefecture.emoji }}</span>
+                  <span class="text-sm font-medium">{{ prefecture.name }}</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
     <AppFooter v-model="activeTab" />
     
@@ -149,7 +323,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { Sparkles, MapPin, Grid3X3, Search } from 'lucide-vue-next'
 import { useAuthStore } from '~/stores/auth'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
@@ -173,7 +348,19 @@ const authStore = useAuthStore()
 const activeTab = ref('top')
 const currentIndex = ref(0)
 const recommendedSpots = ref([])
+const showPrefectureModal = ref(false)
 let carouselInterval = null
+
+// Search related variables
+const searchQuery = ref('')
+const showSuggestions = ref(false)
+const searchSuggestions = ref([])
+const isInputFocused = ref(false)
+
+// Placeholder rotation
+const placeholderSpots = ['東京スカイツリー', '大阪城', '清水寺', '太宰府天満宮', '名古屋城']
+const currentPlaceholderIndex = ref(0)
+let placeholderInterval = null
 
 // Drag/swipe functionality
 const isDragging = ref(false)
@@ -278,6 +465,104 @@ const allSpots = [
       'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
       'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format'
     ]
+  },
+  // 愛知県
+  {
+    id: 401,
+    name: '名古屋城',
+    description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
+    category: '歴史建造物',
+    prefecture: '愛知県',
+    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
+    overview: '名古屋城は1610年に徳川家康の命により築城された平城です。天守閣の金の鯱鉾は名古屋の象徴として親しまれ、日本三大名城の一つに数えられています。',
+    highlights: ['金の鯱鉾', '本丸御殿', '西南隅櫓', '名古屋城桜まつり'],
+    history: '慶長15年（1610年）、徳川家康の九男義直の居城として築城開始。明治維新後は名古屋離宮となり、戦災で焼失後、1959年に鉄筋コンクリート造で再建されました。',
+    images: [
+      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 402,
+    name: '熱田神宮',
+    description: '三種の神器の一つ草薙剣を祀る由緒ある神社。1900年の歴史を誇る格式高い神宮です。',
+    category: '神社',
+    prefecture: '愛知県',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
+    overview: '熱田神宮は三種の神器の一つである草薙剣を御神体とする神社で、伊勢神宮に次ぐ格式を誇ります。約1900年の歴史を持つ由緒ある神宮です。',
+    highlights: ['草薙剣', '宝物館', '熱田まつり', '信長塀'],
+    history: '景行天皇43年、日本武尊が草薙剣を留め置かれたのが起源とされています。織田信長が桶狭間の戦いの前に戦勝祈願をしたことでも有名です。',
+    images: [
+      'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 403,
+    name: 'トヨタ産業技術記念館',
+    description: 'トヨタグループ発祥の地に建つ産業技術博物館。自動車産業の歴史と技術を学べます。',
+    category: '博物館',
+    prefecture: '愛知県',
+    imageUrl: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&auto=format',
+    overview: 'トヨタ産業技術記念館は、トヨタグループ発祥の地に建つ産業博物館です。繊維機械から自動車への発展過程と、ものづくりの技術を体験できます。',
+    highlights: ['繊維機械館', '自動車館', 'テクノランド', '実演展示'],
+    history: '1994年に開館。豊田佐吉が発明した自動織機から始まり、トヨタ自動車の発展まで、日本の産業技術の歩みを展示しています。',
+    images: [
+      'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  // 福岡県
+  {
+    id: 501,
+    name: '太宰府天満宮',
+    description: '学問の神様菅原道真公を祀る由緒ある神社。受験合格や学業成就を願う多くの参拝者が訪れます。',
+    category: '神社',
+    prefecture: '福岡県',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
+    overview: '太宰府天満宮は学問の神様として親しまれる菅原道真公を祀る神社です。全国約12,000社の天満宮の総本宮として多くの参拝者が訪れます。',
+    highlights: ['本殿', '飛梅', '宝物殿', '天満宮博物館'],
+    history: '延喜3年（903年）に菅原道真公が薨去された後、919年に社殿が建立されました。学問・至誠・厄除けの神様として全国から信仰を集めています。',
+    images: [
+      'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 502,
+    name: '福岡城跡',
+    description: '黒田長政が築城した福岡藩の居城跡。現在は舞鶴公園として桜の名所にもなっています。',
+    category: '歴史建造物',
+    prefecture: '福岡県',
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
+    overview: '福岡城は黒田長政によって築城された福岡藩52万石の居城跡です。現在は舞鶴公園として整備され、桜の名所としても親しまれています。',
+    highlights: ['天守台', '多聞櫓', '舞鶴公園', '桜の名所'],
+    history: '慶長6年（1601年）から7年をかけて黒田長政が築城。明治時代に廃城となりましたが、石垣や櫓などの遺構が残り、福岡市のシンボルとなっています。',
+    images: [
+      'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 503,
+    name: '博多駅',
+    description: '九州の玄関口として知られる福岡の中心駅。周辺にはグルメや買い物スポットが充実しています。',
+    category: '観光エリア',
+    prefecture: '福岡県',
+    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format',
+    overview: '博多駅は九州最大のターミナル駅で、新幹線から在来線まで多くの路線が乗り入れています。駅周辺は商業施設やグルメスポットが充実した福岡の中心地です。',
+    highlights: ['JR博多シティ', 'キャナルシティ博多', '博多グルメ', '屋台街'],
+    history: '1889年に開業。九州の玄関口として発展し、2011年に九州新幹線が全線開通したことで、さらに重要な交通拠点となりました。',
+    images: [
+      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
+    ]
   }
 ]
 
@@ -286,16 +571,18 @@ onMounted(() => {
   // Auth is already initialized by plugin and checked by middleware
   selectRandomSpots()
   startCarousel()
+  startPlaceholderRotation()
 })
 
 onUnmounted(() => {
   stopCarousel()
+  stopPlaceholderRotation()
 })
 
-// Select 3 random spots for recommendations
+// Select 5 random spots for recommendations
 const selectRandomSpots = () => {
   const shuffled = [...allSpots].sort(() => 0.5 - Math.random())
-  recommendedSpots.value = shuffled.slice(0, 3)
+  recommendedSpots.value = shuffled.slice(0, 5)
 }
 
 // Auto carousel functions
@@ -309,6 +596,20 @@ const stopCarousel = () => {
   if (carouselInterval) {
     clearInterval(carouselInterval)
     carouselInterval = null
+  }
+}
+
+// Placeholder rotation functions
+const startPlaceholderRotation = () => {
+  placeholderInterval = setInterval(() => {
+    currentPlaceholderIndex.value = (currentPlaceholderIndex.value + 1) % placeholderSpots.length
+  }, 3000) // 3秒ごとに切り替え
+}
+
+const stopPlaceholderRotation = () => {
+  if (placeholderInterval) {
+    clearInterval(placeholderInterval)
+    placeholderInterval = null
   }
 }
 
@@ -402,6 +703,102 @@ const mainPrefectures = [
   { name: '北海道', emoji: '🐄', available: true }
 ]
 
+// カテゴリリスト
+const categoryList = [
+  { name: '寺院', emoji: '⛩️' },
+  { name: '歴史建造物', emoji: '🏯' },
+  { name: '神社', emoji: '🕊️' },
+  { name: '展望台', emoji: '🗼' },
+  { name: '博物館', emoji: '🏛️' },
+  { name: '観光エリア', emoji: '🌆' }
+]
+
+// 地域別都道府県データ（人口順）
+const prefectureRegions = [
+  {
+    name: '北海道・東北地方',
+    prefectures: [
+      { name: '北海道', emoji: '🐄', available: true },
+      { name: '宮城県', emoji: '🌾', available: false },
+      { name: '福島県', emoji: '🍑', available: false },
+      { name: '青森県', emoji: '🍎', available: false },
+      { name: '岩手県', emoji: '⛰️', available: false },
+      { name: '山形県', emoji: '🍒', available: false },
+      { name: '秋田県', emoji: '🌾', available: false }
+    ]
+  },
+  {
+    name: '関東地方',
+    prefectures: [
+      { name: '東京都', emoji: '🗼', available: true },
+      { name: '神奈川県', emoji: '🗻', available: false },
+      { name: '埼玉県', emoji: '🌸', available: false },
+      { name: '千葉県', emoji: '🌊', available: false },
+      { name: '茨城県', emoji: '🥔', available: false },
+      { name: '栃木県', emoji: '🍓', available: false },
+      { name: '群馬県', emoji: '🏔️', available: false }
+    ]
+  },
+  {
+    name: '中部地方',
+    prefectures: [
+      { name: '愛知県', emoji: '🏭', available: true },
+      { name: '静岡県', emoji: '🗻', available: false },
+      { name: '新潟県', emoji: '🍚', available: false },
+      { name: '長野県', emoji: '🏔️', available: false },
+      { name: '岐阜県', emoji: '🏯', available: false },
+      { name: '山梨県', emoji: '🍇', available: false },
+      { name: '富山県', emoji: '🏔️', available: false },
+      { name: '石川県', emoji: '🦀', available: false },
+      { name: '福井県', emoji: '🦕', available: false }
+    ]
+  },
+  {
+    name: '近畿地方',
+    prefectures: [
+      { name: '大阪府', emoji: '🏯', available: true },
+      { name: '兵庫県', emoji: '🦌', available: false },
+      { name: '京都府', emoji: '⛩️', available: true },
+      { name: '三重県', emoji: '🦐', available: false },
+      { name: '滋賀県', emoji: '🏞️', available: false },
+      { name: '奈良県', emoji: '🦌', available: false },
+      { name: '和歌山県', emoji: '🍊', available: false }
+    ]
+  },
+  {
+    name: '中国地方',
+    prefectures: [
+      { name: '広島県', emoji: '🕊️', available: false },
+      { name: '岡山県', emoji: '🍑', available: false },
+      { name: '山口県', emoji: '🌉', available: false },
+      { name: '島根県', emoji: '⛩️', available: false },
+      { name: '鳥取県', emoji: '🏜️', available: false }
+    ]
+  },
+  {
+    name: '四国地方',
+    prefectures: [
+      { name: '愛媛県', emoji: '🍊', available: false },
+      { name: '香川県', emoji: '🍜', available: false },
+      { name: '徳島県', emoji: '🌀', available: false },
+      { name: '高知県', emoji: '🐟', available: false }
+    ]
+  },
+  {
+    name: '九州・沖縄地方',
+    prefectures: [
+      { name: '福岡県', emoji: '🏮', available: true },
+      { name: '熊本県', emoji: '🐻', available: false },
+      { name: '鹿児島県', emoji: '🌋', available: false },
+      { name: '長崎県', emoji: '⛪', available: false },
+      { name: '沖縄県', emoji: '🏖️', available: false },
+      { name: '大分県', emoji: '♨️', available: false },
+      { name: '宮崎県', emoji: '🌺', available: false },
+      { name: '佐賀県', emoji: '🏺', available: false }
+    ]
+  }
+]
+
 const selectPrefecture = async (prefecture) => {
   console.log('Prefecture selected:', prefecture.name)
   
@@ -438,10 +835,115 @@ const selectPrefecture = async (prefecture) => {
         console.error('Navigation error:', error)
         alert('北海道ガイドページに移動中です...')
       }
+    } else if (prefecture.name === '愛知県') {
+      console.log('Navigating to Aichi guide...')
+      try {
+        await navigateTo('/aichi')
+      } catch (error) {
+        console.error('Navigation error:', error)
+        alert('愛知県ガイドページに移動中です...')
+      }
+    } else if (prefecture.name === '福岡県') {
+      console.log('Navigating to Fukuoka guide...')
+      try {
+        await navigateTo('/fukuoka')
+      } catch (error) {
+        console.error('Navigation error:', error)
+        alert('福岡県ガイドページに移動中です...')
+      }
     }
   } else {
     alert(`${prefecture.name}のガイドは準備中です。しばらくお待ちください。`)
   }
 }
 
+// モーダル関連の関数
+const closePrefectureModal = (event) => {
+  if (event.target === event.currentTarget) {
+    showPrefectureModal.value = false
+  }
+}
+
+const selectPrefectureFromModal = async (prefecture) => {
+  showPrefectureModal.value = false
+  await selectPrefecture(prefecture)
+}
+
+const selectCategory = (category) => {
+  console.log('Category selected:', category.name)
+  navigateTo(`/category?name=${encodeURIComponent(category.name)}`)
+}
+
+// Search functionality
+const onSearchInput = () => {
+  if (searchQuery.value.trim().length > 0) {
+    searchSuggestions.value = allSpots.filter(spot =>
+      spot.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      spot.prefecture.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      spot.category.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      spot.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+    ).slice(0, 5) // 最大5件まで表示
+  } else {
+    searchSuggestions.value = []
+  }
+}
+
+const selectSuggestion = (suggestion) => {
+  console.log('Suggestion selected:', suggestion.name)
+  navigateTo(`/spots/${suggestion.id}`)
+}
+
+const onInputFocus = () => {
+  isInputFocused.value = true
+  showSuggestions.value = true
+}
+
+const onInputBlur = () => {
+  // 少し遅延させてクリックイベントが発火するようにする
+  setTimeout(() => {
+    isInputFocused.value = false
+    showSuggestions.value = false
+  }, 200)
+}
+
+const performSearch = () => {
+  if (searchQuery.value.trim()) {
+    console.log('Performing search for:', searchQuery.value)
+    navigateTo(`/search?q=${encodeURIComponent(searchQuery.value.trim())}`)
+  }
+}
+
+// プレースホルダーの位置を計算
+const getPlaceholderStyle = (index) => {
+  const currentIndex = currentPlaceholderIndex.value
+  const diff = index - currentIndex
+  
+  if (diff === 0) {
+    // 現在表示中
+    return {
+      transform: 'translateY(0)',
+      opacity: '1'
+    }
+  } else if (diff === 1 || (currentIndex === placeholderSpots.length - 1 && index === 0)) {
+    // 次に表示される（下から来る）
+    return {
+      transform: 'translateY(24px)',
+      opacity: '0'
+    }
+  } else if (diff === -1 || (currentIndex === 0 && index === placeholderSpots.length - 1)) {
+    // 前に表示されていた（上に去る）
+    return {
+      transform: 'translateY(-24px)',
+      opacity: '0'
+    }
+  } else {
+    // その他（非表示）
+    return {
+      transform: 'translateY(24px)',
+      opacity: '0'
+    }
+  }
+}
+
 </script>
+

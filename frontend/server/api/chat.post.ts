@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     console.log('Processing message:', message)
 
     // OpenRouter API設定（一時的にハードコーディング）
-    const OPENROUTER_API_KEY = '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'
+    const OPENROUTER_API_KEY = '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'
     const MODEL = 'google/gemini-2.5-flash-lite-preview-06-17'
 
     // デバッグ用：環境変数の確認

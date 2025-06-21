@@ -307,6 +307,104 @@ const allSpots = [
       'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
       'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format'
     ]
+  },
+  // 愛知県
+  {
+    id: 401,
+    name: '名古屋城',
+    description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
+    category: '歴史建造物',
+    prefecture: '愛知県',
+    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
+    overview: '名古屋城は1610年に徳川家康の命により築城された平城です。天守閣の金の鯱鉾は名古屋の象徴として親しまれ、日本三大名城の一つに数えられています。現在は復元された本丸御殿も見どころの一つとなっており、豪華絢爛な障壁画や彫刻を間近で見ることができます。',
+    highlights: ['金の鯱鉾', '本丸御殿', '西南隅櫓', '名古屋城桜まつり'],
+    history: '慶長15年（1610年）、徳川家康の九男義直の居城として築城開始。当時は東海道の要衝として重要な役割を果たしました。明治維新後は名古屋離宮となり、戦災で焼失後、1959年に鉄筋コンクリート造で再建されました。2018年には本丸御殿が完全復元され、江戸時代の匠の技を現代に蘇らせています。',
+    images: [
+      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 402,
+    name: '熱田神宮',
+    description: '三種の神器の一つ草薙剣を祀る由緒ある神社。1900年の歴史を誇る格式高い神宮です。',
+    category: '神社',
+    prefecture: '愛知県',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
+    overview: '熱田神宮は三種の神器の一つである草薙剣を御神体とする神社で、伊勢神宮に次ぐ格式を誇ります。約1900年の歴史を持つ由緒ある神宮で、年間約700万人の参拝者が訪れます。境内には約6万坪の広大な森があり、都市部にありながら神聖な雰囲気に包まれています。',
+    highlights: ['草薙剣', '宝物館', '熱田まつり', '信長塀'],
+    history: '景行天皇43年、日本武尊が草薙剣を留め置かれたのが起源とされています。織田信長が桶狭間の戦いの前に戦勝祈願をしたことでも有名で、勝利後に信長塀を奉納しました。江戸時代には東海道の宮宿として栄え、現在でも「熱田さん」として地元の人々に親しまれています。',
+    images: [
+      'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 403,
+    name: 'トヨタ産業技術記念館',
+    description: 'トヨタグループ発祥の地に建つ産業技術博物館。自動車産業の歴史と技術を学べます。',
+    category: '博物館',
+    prefecture: '愛知県',
+    imageUrl: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&auto=format',
+    overview: 'トヨタ産業技術記念館は、トヨタグループ発祥の地に建つ産業博物館です。繊維機械から自動車への発展過程と、ものづくりの技術を体験できます。館内では実際に動く機械の実演を見ることができ、日本の産業技術の発展を間近で感じることができる貴重な施設です。',
+    highlights: ['繊維機械館', '自動車館', 'テクノランド', '実演展示'],
+    history: '1994年に開館。豊田佐吉が発明した自動織機から始まり、トヨタ自動車の発展まで、日本の産業技術の歩みを展示しています。豊田佐吉の「研究と創造の精神」、豊田喜一郎の「お客様第一、現地現物」の理念を受け継ぎ、ものづくりの大切さを伝え続けています。',
+    images: [
+      'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  // 福岡県
+  {
+    id: 501,
+    name: '太宰府天満宮',
+    description: '学問の神様菅原道真公を祀る由緒ある神社。受験合格や学業成就を願う多くの参拝者が訪れます。',
+    category: '神社',
+    prefecture: '福岡県',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
+    overview: '太宰府天満宮は学問の神様として親しまれる菅原道真公を祀る神社です。全国約12,000社の天満宮の総本宮として多くの参拝者が訪れます。境内には約6,000本の梅の木があり、2月上旬から3月上旬にかけて美しい梅の花を楽しむことができます。',
+    highlights: ['本殿', '飛梅', '宝物殿', '天満宮博物館'],
+    history: '延喜3年（903年）に菅原道真公が薨去された後、919年に社殿が建立されました。学問・至誠・厄除けの神様として全国から信仰を集めており、特に受験シーズンには多くの学生や保護者が合格祈願に訪れます。境内の飛梅は道真公を慕って京都から一夜で飛んできたという伝説があります。',
+    images: [
+      'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 502,
+    name: '福岡城跡',
+    description: '黒田長政が築城した福岡藩の居城跡。現在は舞鶴公園として桜の名所にもなっています。',
+    category: '歴史建造物',
+    prefecture: '福岡県',
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
+    overview: '福岡城は黒田長政によって築城された福岡藩52万石の居城跡です。現在は舞鶴公園として整備され、桜の名所としても親しまれています。春には約1,000本の桜が咲き誇り、多くの花見客で賑わいます。天守台からは福岡市街地を一望することができます。',
+    highlights: ['天守台', '多聞櫓', '舞鶴公園', '桜の名所'],
+    history: '慶長6年（1601年）から7年をかけて黒田長政が築城。関ヶ原の戦いでの功績により筑前国を与えられた黒田氏の居城となりました。明治時代に廃城となりましたが、石垣や櫓などの遺構が残り、福岡市のシンボルとなっています。現在は国の史跡に指定されています。',
+    images: [
+      'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format'
+    ]
+  },
+  {
+    id: 503,
+    name: '博多駅',
+    description: '九州の玄関口として知られる福岡の中心駅。周辺にはグルメや買い物スポットが充実しています。',
+    category: '観光エリア',
+    prefecture: '福岡県',
+    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format',
+    overview: '博多駅は九州最大のターミナル駅で、新幹線から在来線まで多くの路線が乗り入れています。駅周辺は商業施設やグルメスポットが充実した福岡の中心地です。博多ラーメンをはじめとする福岡グルメを楽しめる店舗が数多くあり、観光の拠点としても最適です。',
+    highlights: ['JR博多シティ', 'キャナルシティ博多', '博多グルメ', '屋台街'],
+    history: '1889年に開業。九州の玄関口として発展し、2011年に九州新幹線が全線開通したことで、さらに重要な交通拠点となりました。2011年には新しい駅ビル「JR博多シティ」がオープンし、ショッピングやグルメを楽しめる複合施設として多くの人々に利用されています。',
+    images: [
+      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
+    ]
   }
 ]
 
