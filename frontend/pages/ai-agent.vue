@@ -11,7 +11,8 @@
         <!-- Chat Messages -->
         <div 
           ref="chatContainer"
-          class="flex-1 overflow-y-auto p-4 space-y-4"
+          class="overflow-y-auto p-4 space-y-4"
+          style="height: calc(100vh - 240px); min-height: 400px; scroll-behavior: smooth;"
         >
           <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full">
             <Bot class="w-16 h-16 text-gray-300 mb-4" />
@@ -37,8 +38,10 @@
           <div 
             v-for="(message, index) in messages" 
             :key="index"
+            :ref="message.role === 'user' ? 'userMessage' : null"
             class="flex gap-3"
             :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
+            :style="message.role === 'user' ? 'scroll-margin-top: 16px' : ''"
           >
             <!-- AI Avatar -->
             <div 
@@ -163,11 +166,20 @@ const activeTab = ref('ai')
 const userInput = ref('')
 const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
+const userMessage = ref<HTMLElement[]>([])
 
-// 動的スペーサー高さ（画面サイズに応じて調整）
+// 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
-  if (typeof window === 'undefined') return 400 // SSR時のデフォルト
+  if (typeof window === 'undefined') return 600 // SSR時のデフォルト
   
+  // チャットコンテナの高さを基準にする
+  if (chatContainer.value) {
+    const containerHeight = chatContainer.value.clientHeight
+    // チャットコンテナの90%の高さをスペーサーにする
+    return Math.max(500, containerHeight * 0.9)
+  }
+  
+  // フォールバック: ビューポートベースの計算
   const viewportHeight = window.innerHeight
   const headerHeight = 64
   const footerHeight = 80
@@ -176,8 +188,8 @@ const dynamicSpacerHeight = computed(() => {
   // 利用可能なチャット表示領域の高さ
   const availableHeight = viewportHeight - headerHeight - footerHeight - inputHeight
   
-  // スペーサー高さは利用可能高さの80%〜最大600px
-  return Math.min(600, Math.max(300, availableHeight * 0.8))
+  // スペーサー高さはチャット領域の90%〜最大800px
+  return Math.min(800, Math.max(500, availableHeight * 0.9))
 })
 
 interface Message {
@@ -301,37 +313,17 @@ const formatMessage = (content: string, detectedSpots?: Array<{id: number, name:
   return html
 }
 
-const scrollToBottom = async () => {
-  await nextTick()
-  if (chatContainer.value) {
-    chatContainer.value.scrollTop = chatContainer.value.scrollHeight
-  }
-}
-
-const scrollToLastUserMessage = async () => {
-  await nextTick()
-  if (chatContainer.value) {
-    // 画面の高さを取得（ビューポート高さ）
-    const viewportHeight = window.innerHeight
-    // ヘッダーとフッターの高さを考慮（概算）
-    const headerHeight = 64 // ヘッダー高さ
-    const footerHeight = 80 // フッター高さ
-    const inputHeight = 80  // 入力欄高さ
-    
-    // 利用可能なチャット表示領域の高さ
-    const availableHeight = viewportHeight - headerHeight - footerHeight - inputHeight
-    
-    // 上部に余白を残してユーザー質問が見える位置にスクロール
-    const topMargin = Math.min(100, availableHeight * 0.1) // 画面高さの10%または100px
-    
-    // 最新のユーザーメッセージを上部に表示する位置を計算
-    const targetScrollTop = chatContainer.value.scrollHeight - availableHeight + topMargin
-    
-    // スムーズにスクロール
-    chatContainer.value.scrollTo({
-      top: Math.max(0, targetScrollTop),
-      behavior: 'smooth'
-    })
+// ユーザー質問をチャット上部に表示するスクロール関数
+const scrollToUserQuestion = () => {
+  if (userMessage.value && userMessage.value.length > 0) {
+    const lastUserMessageEl = userMessage.value[userMessage.value.length - 1]
+    if (lastUserMessageEl) {
+      lastUserMessageEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      })
+    }
   }
 }
 
@@ -360,10 +352,11 @@ const sendMessage = async () => {
 
   isLoading.value = true
   
-  // 少し待ってからスクロール（ローディング表示とスペーサーが描画されてから）
+  // ユーザーメッセージ送信直後のスクロール（ローディング表示後）
+  await nextTick()
   setTimeout(() => {
-    scrollToLastUserMessage()
-  }, 100)
+    scrollToUserQuestion()
+  }, 300) // 2回目以降でもDOMが確実に更新されるよう遅延を増加
 
   try {
     // Call Real Chat API
@@ -377,7 +370,7 @@ const sendMessage = async () => {
 
     // Add AI response
     if (response.content) {
-      console.log('AI Response content:', response.content)
+      // console.log('AI Response content:', response.content)
       
       // AI回答から音声ガイド対応観光地を検出
       const detectedSpots = detectAudioGuideSpots(response.content)
@@ -435,7 +428,7 @@ const sendMessage = async () => {
     })
   } finally {
     isLoading.value = false
-    await scrollToBottom()
+    // AI回答完了後はスクロールしない（ユーザーが読みやすい位置を維持）
   }
 }
 

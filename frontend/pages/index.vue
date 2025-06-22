@@ -9,11 +9,11 @@
         <div class="max-w-7xl mx-auto text-center">
           <h1 class="text-7xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider text-center transition-colors duration-300">
             <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">
-              Travel Voice
+              {{ t('Travel Voice') }}
             </span>
           </h1>
           <p class="text-xl text-gray-600 dark:text-gray-300 font-medium max-w-2xl mx-auto mb-8 tracking-wide transition-colors duration-300">
-            音声ガイドで観光を楽しもう
+            {{ t('音声ガイドで観光を楽しもう') }}
           </p>
         </div>
         
@@ -56,7 +56,7 @@
                   :disabled="!searchQuery.trim()"
                   class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-4 py-1.5 rounded-md text-sm font-medium transition-colors"
                 >
-                  検索
+                  {{ t('検索') }}
                 </button>
               </div>
               
@@ -98,7 +98,7 @@
                 <div class="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
                   <Sparkles class="w-5 h-5 text-white" />
                 </div>
-                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">人気スポット</h3>
+                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">{{ t('人気スポット') }}</h3>
               </div>
             </div>
             
@@ -161,9 +161,6 @@
                             <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded text-xs transition-colors duration-300">
                               {{ spot.category }}
                             </span>
-                            <span class="text-gray-500 dark:text-gray-400 text-xs">
-                              詳細を見る →
-                            </span>
                           </div>
                         </div>
                       </div>
@@ -195,7 +192,7 @@
                 <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
                   <MapPin class="w-5 h-5 text-white" />
                 </div>
-                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">都道府県から探す</h3>
+                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">{{ t('都道府県から探す') }}</h3>
               </div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -242,7 +239,7 @@
                 <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
                   <Grid3X3 class="w-5 h-5 text-white" />
                 </div>
-                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">カテゴリから探す</h3>
+                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">{{ t('カテゴリから探す') }}</h3>
               </div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -326,6 +323,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Sparkles, MapPin, Grid3X3, Search } from 'lucide-vue-next'
 import { useAuthStore } from '~/stores/auth'
+import { useLanguage } from '~/composables/useLanguage'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 
@@ -343,6 +341,9 @@ useHead({
 
 // Auth store
 const authStore = useAuthStore()
+
+// Language
+const { t } = useLanguage()
 
 // Reactive variables
 const activeTab = ref('top')
@@ -473,14 +474,14 @@ const allSpots = [
     description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
     category: '歴史建造物',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
     overview: '名古屋城は1610年に徳川家康の命により築城された平城です。天守閣の金の鯱鉾は名古屋の象徴として親しまれ、日本三大名城の一つに数えられています。',
     highlights: ['金の鯱鉾', '本丸御殿', '西南隅櫓', '名古屋城桜まつり'],
     history: '慶長15年（1610年）、徳川家康の九男義直の居城として築城開始。明治維新後は名古屋離宮となり、戦災で焼失後、1959年に鉄筋コンクリート造で再建されました。',
     images: [
-      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
       'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
-      'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format'
+      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&h=400&fit=crop&auto=format'
     ]
   },
   {

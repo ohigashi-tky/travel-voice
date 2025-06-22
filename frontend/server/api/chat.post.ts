@@ -20,16 +20,18 @@ export default defineEventHandler(async (event) => {
 
     console.log('Processing message:', message)
 
-    // OpenRouter API設定（一時的にハードコーディング）
-    const OPENROUTER_API_KEY = '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'
-    const MODEL = 'google/gemini-2.5-flash-lite-preview-06-17'
+    // OpenRouter API設定
+    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
+    const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
+    const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash-lite-preview-06-17'
 
-    // デバッグ用：環境変数の確認
-    const config = useRuntimeConfig()
-    console.log('Environment variables debug:')
-    console.log('- config.openrouterApiKey:', config.openrouterApiKey)
-    console.log('- config.openrouterModel:', config.openrouterModel)
-    console.log('- process.env.OPENROUTER_API_KEY:', process.env.OPENROUTER_API_KEY)
+    if (!OPENROUTER_API_KEY) {
+      console.error('OPENROUTER_API_KEY is not set')
+      return {
+        error: 'APIキーエラー',
+        details: 'OpenRouterのAPIキーが取得できません。環境変数OPENROUTER_API_KEYを設定してください。'
+      }
+    }
 
     // 会話履歴から文脈情報を抽出
     let contextInfo = ''
@@ -127,7 +129,7 @@ Travel Voiceアプリのユーザーとして、音声ガイド機能も活用�
     console.log('Calling OpenRouter API with messages:', messages.length, 'messages')
 
     // OpenRouter APIを呼び出し
-    const apiResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const apiResponse = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
@@ -170,7 +172,7 @@ Travel Voiceアプリのユーザーとして、音声ガイド機能も活用�
     }
 
     const aiContent = data.choices[0].message.content
-    console.log('AI response content:', aiContent)
+    // console.log('AI response content:', aiContent)
 
     return {
       content: aiContent,

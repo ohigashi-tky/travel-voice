@@ -28,7 +28,7 @@
           @click="logout"
           class="w-full bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-thin tracking-wide transition-colors"
         >
-          ログアウト
+          {{ t('ログアウト') }}
         </button>
       </div>
     </div>
@@ -37,11 +37,11 @@
   <!-- Settings Modal -->
   <div v-if="showSettingsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click="showSettingsModal = false">
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 m-4 max-w-sm w-full transition-colors duration-300" @click.stop>
-      <h3 class="text-xl font-light text-gray-800 dark:text-white mb-6 tracking-wide text-center transition-colors duration-300">設定</h3>
+      <h3 class="text-xl font-light text-gray-800 dark:text-white mb-6 tracking-wide text-center transition-colors duration-300">{{ t('設定') }}</h3>
       
       <div class="space-y-4">
         <div class="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-          <span class="text-gray-700 dark:text-gray-300 font-thin tracking-wide transition-colors duration-300">ダークモード</span>
+          <span class="text-gray-700 dark:text-gray-300 font-thin tracking-wide transition-colors duration-300">{{ t('ダークモード') }}</span>
           <button 
             @click="toggleDarkMode"
             :class="[
@@ -57,20 +57,45 @@
             />
           </button>
         </div>
+        
+        <div class="py-3 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-gray-700 dark:text-gray-300 font-thin tracking-wide transition-colors duration-300">{{ t('言語') }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button
+              v-for="locale in availableLocales"
+              :key="locale.code"
+              @click="selectLanguage(locale.code)"
+              :class="[
+                'flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                currentLocale === locale.code
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              ]"
+            >
+              {{ t(locale.name) }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { User, Settings } from 'lucide-vue-next'
 import { useAuthStore } from '~/stores/auth'
+import { useLanguage } from '~/composables/useLanguage'
 
 // Dark mode setup
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+
+// Language setup
+const { t, availableLocales, currentLocale, setLocale } = useLanguage()
 
 // Auth store
 const authStore = useAuthStore()
@@ -88,5 +113,16 @@ const logout = async () => {
 
 const toggleDarkMode = () => {
   toggleDark()
+}
+
+const selectLanguage = (localeCode) => {
+  currentLocale.value = localeCode
+  setLocale(localeCode)
+}
+
+const changeLanguage = () => {
+  setLocale(currentLocale.value)
+  // 設定モーダルを閉じる
+  showSettingsModal.value = false
 }
 </script>
