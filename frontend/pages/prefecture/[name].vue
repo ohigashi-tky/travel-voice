@@ -215,6 +215,11 @@ const goBack = () => {
 
 const exploreSpot = async (spot: TouristSpot) => {
   try {
+    // Navigate to the spot detail page instead of just playing audio
+    await navigateTo(`/spots/${spot.id}`)
+  } catch (error) {
+    console.error('Error navigating to spot detail:', error)
+    // Fallback to audio guide if navigation fails
     currentSpot.value = spot
     currentAudioGuide.value = {
       id: spot.id,
@@ -225,8 +230,6 @@ const exploreSpot = async (spot: TouristSpot) => {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }
-  } catch (error) {
-    console.error('Error loading audio guide:', error)
   }
 }
 

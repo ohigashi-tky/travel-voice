@@ -86,7 +86,12 @@ const initMap = async () => {
   if (!import.meta.client || !mapElement.value) return
 
   const config = useRuntimeConfig()
-  const apiKey = config.public.googleMapsApiKey || 'AIzaSyDBTzeSepixQFP2y2pQcNciOSj8kYlDzh4'
+  const apiKey = config.public.googleMapsApiKey
+  
+  if (!apiKey) {
+    console.error('Google Maps API key not found in environment variables')
+    return
+  }
   
   console.log('📍 Loading map for:', props.spotName)
   console.log('🔑 API Key:', apiKey)

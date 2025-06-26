@@ -30,6 +30,25 @@ export interface TouristSpot {
   created_at: string
   updated_at: string
   active_guides?: Guide[]
+  overview?: string
+  highlights?: string[]
+  history?: string
+  public_transport?: PublicTransport[]
+  car_access?: CarAccess[]
+  parking_info?: string
+  walking_info?: string
+}
+
+export interface PublicTransport {
+  route: string
+  station: string
+  time: string
+}
+
+export interface CarAccess {
+  from: string
+  exit: string
+  time: string
 }
 
 export interface Guide {

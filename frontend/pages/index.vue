@@ -648,7 +648,10 @@ const selectPrefecture = async (prefecture) => {
     await navigateTo(route)
   } catch (error) {
     console.error('Navigation error:', error)
-    alert(`${prefecture.name}ガイドページに移動中です...`)
+    // Remove alert and use proper error handling
+    console.warn(`Failed to navigate to ${prefecture.name}. Attempting fallback...`)
+    // Fallback to prefecture page route
+    await navigateTo(`/prefecture/${encodeURIComponent(prefecture.name)}`)
   }
 }
 
