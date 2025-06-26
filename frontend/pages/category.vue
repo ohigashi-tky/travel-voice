@@ -47,22 +47,22 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
-              <img 
-                :src="spot.imageUrl" 
+              <UnsplashImage 
+                :spot-name="spot.name"
                 :alt="spot.name"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-              <div class="absolute top-3 right-3">
-                <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                  {{ spot.prefecture }}
-                </span>
-              </div>
-              <div class="absolute top-3 left-3">
-                <span class="bg-blue-500/90 text-white px-2 py-1 rounded-lg text-xs font-medium">
-                  {{ spot.category }}
-                </span>
-              </div>
+                image-class="group-hover:scale-105 transition-transform duration-300"
+              >
+                <div class="absolute top-3 right-3">
+                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
+                    {{ spot.prefecture }}
+                  </span>
+                </div>
+                <div class="absolute top-3 left-3">
+                  <span class="bg-blue-500/90 text-white px-2 py-1 rounded-lg text-xs font-medium">
+                    {{ spot.category }}
+                  </span>
+                </div>
+              </UnsplashImage>
             </div>
 
             <!-- Spot Info -->
@@ -105,30 +105,6 @@
           </button>
         </div>
 
-        <!-- Category Stats -->
-        <div v-if="filteredSpots.length > 0" class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6">
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-            {{ categoryName }}について
-          </h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-              <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ filteredSpots.length }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-300">観光地数</div>
-            </div>
-            <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-              <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ uniquePrefectures.length }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-300">都道府県</div>
-            </div>
-            <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-              <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ filteredSpots.length }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-300">音声ガイド</div>
-            </div>
-            <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-              <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">★</div>
-              <div class="text-sm text-gray-600 dark:text-gray-300">おすすめ</div>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
     
@@ -142,6 +118,7 @@ import { ref, onMounted, computed } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
+import UnsplashImage from '~/components/UnsplashImage.vue'
 
 // Page meta
 definePageMeta({
@@ -176,12 +153,36 @@ const allSpots = [
     imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
   },
   {
+    id: 3,
+    name: '明治神宮',
+    description: '明治天皇と昭憲皇太后を祀る神社。都心にありながら豊かな森に囲まれた神聖な空間です。',
+    category: '神社',
+    prefecture: '東京都',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+  },
+  {
     id: 101,
     name: '大阪城',
     description: '豊臣秀吉が築城した名城。美しい天守閣と桜の名所として親しまれています。',
     category: '歴史建造物',
     prefecture: '大阪府',
     imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 102,
+    name: '通天閣',
+    description: '新世界のシンボルタワー。ビリケンさんで有名な大阪を代表する観光地です。',
+    category: '展望台',
+    prefecture: '大阪府',
+    imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 103,
+    name: '海遊館',
+    description: '世界最大級の水族館。ジンベエザメやマンタが泳ぐ太平洋水槽は圧巻です。',
+    category: '水族館',
+    prefecture: '大阪府',
+    imageUrl: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=400&h=300&fit=crop&auto=format'
   },
   {
     id: 201,
@@ -192,14 +193,6 @@ const allSpots = [
     imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format'
   },
   {
-    id: 301,
-    name: '札幌時計台',
-    description: '旧札幌農学校演武場として1878年に建設された北海道のシンボル的建造物です。',
-    category: '歴史建造物',
-    prefecture: '北海道',
-    imageUrl: 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format'
-  },
-  {
     id: 202,
     name: '金閣寺',
     description: '足利義満の別荘として建てられた金箔で覆われた美しい楼閣。世界文化遺産です。',
@@ -208,12 +201,44 @@ const allSpots = [
     imageUrl: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&h=300&fit=crop&auto=format'
   },
   {
+    id: 203,
+    name: '伏見稲荷大社',
+    description: '全国の稲荷神社の総本宮。千本鳥居の美しい朱色のトンネルで有名です。',
+    category: '神社',
+    prefecture: '京都府',
+    imageUrl: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 301,
+    name: '札幌時計台',
+    description: '旧札幌農学校演武場として1878年に建設された北海道のシンボル的建造物です。',
+    category: '歴史建造物',
+    prefecture: '北海道',
+    imageUrl: 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 302,
+    name: '函館山',
+    description: '世界三大夜景の一つに数えられる美しい夜景スポット。津軽海峡を一望できます。',
+    category: '展望台',
+    prefecture: '北海道',
+    imageUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 303,
+    name: '小樽運河',
+    description: '1923年完成の歴史ある運河。石造倉庫群とガス灯が織りなすロマンチックな景観です。',
+    category: '歴史的景観',
+    prefecture: '北海道',
+    imageUrl: 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=400&h=300&fit=crop&auto=format'
+  },
+  {
     id: 401,
     name: '名古屋城',
     description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
     category: '歴史建造物',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format'
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
   },
   {
     id: 402,
@@ -254,6 +279,80 @@ const allSpots = [
     category: '観光エリア',
     prefecture: '福岡県',
     imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+  },
+  // 広島県
+  {
+    id: 601,
+    name: '原爆ドーム',
+    description: '平和の象徴として世界中に知られる広島の代表的なランドマーク。ユネスコ世界文化遺産です。',
+    category: '歴史建造物',
+    prefecture: '広島県',
+    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 602,
+    name: '厳島神社',
+    description: '海に浮かぶ朱色の大鳥居で有名な日本三景の一つ。満潮時の美しさは格別です。',
+    category: '神社',
+    prefecture: '広島県',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 603,
+    name: '広島城',
+    description: '毛利輝元が築いた名城。現在は歴史博物館として広島の歴史を学ぶことができます。',
+    category: '歴史建造物',
+    prefecture: '広島県',
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+  },
+  // 愛媛県
+  {
+    id: 801,
+    name: '道後温泉',
+    description: '日本最古の温泉の一つ。千と千尋の神隠しのモデルとしても有名な歴史ある温泉地です。',
+    category: '温泉',
+    prefecture: '愛媛県',
+    imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 802,
+    name: '松山城',
+    description: '松山市の中心部、勝山山頂に建つ現存12天守の一つ。美しい桜の名所としても知られています。',
+    category: '歴史建造物',
+    prefecture: '愛媛県',
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 803,
+    name: '今治城',
+    description: '瀬戸内海に面した水城として築かれた美しい城。藤堂高虎が築城した海岸平城です。',
+    category: '歴史建造物',
+    prefecture: '愛媛県',
+    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 804,
+    name: '内子町',
+    description: '江戸時代から明治時代の町並みが美しく保存された重要伝統的建造物群保存地区です。',
+    category: '歴史的景観',
+    prefecture: '愛媛県',
+    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 805,
+    name: '石鎚山',
+    description: '西日本最高峰の霊峰。四季折々の美しい自然と登山が楽しめる愛媛県のシンボルです。',
+    category: '自然',
+    prefecture: '愛媛県',
+    imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 806,
+    name: 'しまなみ海道',
+    description: '本州と四国を結ぶ美しい橋の連続。サイクリングの聖地として世界的に有名です。',
+    category: '観光エリア',
+    prefecture: '愛媛県',
+    imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop&auto=format'
   }
 ]
 
@@ -264,7 +363,11 @@ const categoryEmojiMap = {
   '神社': '🕊️',
   '展望台': '🗼',
   '博物館': '🏛️',
-  '観光エリア': '🌆'
+  '観光エリア': '🌆',
+  '水族館': '🐟',
+  '歴史的景観': '🏞️',
+  '温泉': '♨️',
+  '自然': '🌲'
 }
 
 // Filter spots by category
@@ -273,11 +376,6 @@ const filteredSpots = computed(() => {
   return allSpots.filter(spot => spot.category === categoryName.value)
 })
 
-// Get unique prefectures for stats
-const uniquePrefectures = computed(() => {
-  const prefectures = filteredSpots.value.map(spot => spot.prefecture)
-  return [...new Set(prefectures)]
-})
 
 // Set page title dynamically
 useHead(() => ({

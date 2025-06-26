@@ -2,7 +2,7 @@
   <footer class="fixed bottom-0 left-0 right-0 h-20 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 transition-colors duration-300 z-40">
     <div class="flex items-center justify-around h-full">
       <button 
-        @click="activeTab = 'top'"
+        @click="goToTop"
         :class="[
           'flex flex-col items-center justify-center flex-1 h-full transition-colors',
           activeTab === 'top' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'
@@ -13,7 +13,7 @@
       </button>
       
       <button 
-        @click="activeTab = 'ai'"
+        @click="goToAI"
         :class="[
           'flex flex-col items-center justify-center flex-1 h-full transition-colors',
           activeTab === 'ai' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'
@@ -44,16 +44,18 @@ const emit = defineEmits(['update:modelValue'])
 // Reactive variables
 const activeTab = ref(props.modelValue)
 
-// Handle tab switching
-watch(activeTab, (newTab) => {
-  emit('update:modelValue', newTab)
-  
-  if (newTab === 'top') {
-    navigateTo('/')
-  } else if (newTab === 'ai') {
-    navigateTo('/ai-agent')
-  }
-})
+// Navigation functions
+const goToTop = () => {
+  activeTab.value = 'top'
+  emit('update:modelValue', 'top')
+  navigateTo('/')
+}
+
+const goToAI = () => {
+  activeTab.value = 'ai'
+  emit('update:modelValue', 'ai')
+  navigateTo('/ai-agent')
+}
 
 // Watch props changes
 watch(() => props.modelValue, (newValue) => {

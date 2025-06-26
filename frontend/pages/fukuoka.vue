@@ -36,17 +36,16 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-red-400 to-pink-500 relative">
-              <img 
-                :src="generateSpotImage(spot.name, spot.category)" 
+              <UnsplashImage 
+                :spot-name="spot.name"
                 :alt="spot.name"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div class="absolute top-3 right-3">
-                <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                  {{ spot.category }}
-                </span>
-              </div>
+              >
+                <div class="absolute top-3 right-3">
+                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
+                    {{ spot.category }}
+                  </span>
+                </div>
+              </UnsplashImage>
             </div>
 
             <!-- Spot Info -->
@@ -75,6 +74,7 @@ import { ref } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
+import UnsplashImage from '~/components/UnsplashImage.vue'
 
 // Page meta
 definePageMeta({
@@ -123,14 +123,4 @@ const goToSpotDetail = (spotId) => {
   navigateTo(`/spots/${spotId}`)
 }
 
-// Generate spot images
-const generateSpotImage = (name, category) => {
-  const imageMap = {
-    '太宰府天満宮': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
-    '福岡城跡': 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
-    '博多駅': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
-  }
-  
-  return imageMap[name] || 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format'
-}
 </script>

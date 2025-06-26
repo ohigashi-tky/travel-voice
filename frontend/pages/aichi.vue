@@ -36,17 +36,16 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-red-400 to-orange-500 relative">
-              <img 
-                :src="generateSpotImage(spot.name, spot.category)" 
+              <UnsplashImage 
+                :spot-name="spot.name"
                 :alt="spot.name"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div class="absolute top-3 right-3">
-                <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                  {{ spot.category }}
-                </span>
-              </div>
+              >
+                <div class="absolute top-3 right-3">
+                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
+                    {{ spot.category }}
+                  </span>
+                </div>
+              </UnsplashImage>
             </div>
 
             <!-- Spot Info -->
@@ -75,6 +74,7 @@ import { ref } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
+import UnsplashImage from '~/components/UnsplashImage.vue'
 
 // Page meta
 definePageMeta({
@@ -123,14 +123,4 @@ const goToSpotDetail = (spotId) => {
   navigateTo(`/spots/${spotId}`)
 }
 
-// Generate spot images
-const generateSpotImage = (name, category) => {
-  const imageMap = {
-    '名古屋城': 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
-    '熱田神宮': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
-    'トヨタ産業技術記念館': 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&auto=format'
-  }
-  
-  return imageMap[name] || 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format'
-}
 </script>

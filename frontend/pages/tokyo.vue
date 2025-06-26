@@ -37,14 +37,21 @@
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-cyan-400 to-blue-500 relative">
               <img 
-                :src="generateSpotImage(spot.name, spot.category)" 
+                :src="getSpotImage(spot.name)" 
                 :alt="spot.name"
                 class="w-full h-full object-cover"
                 loading="lazy"
+                @error="handleImageError"
               />
               <div class="absolute top-3 right-3">
                 <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
                   {{ spot.category }}
+                </span>
+              </div>
+              <!-- Unsplash Credit -->
+              <div v-if="imageCredits[spot.name]" class="absolute bottom-0.5 right-0.5">
+                <span class="bg-black/40 text-white px-1 py-0.5 rounded text-xs font-light opacity-60 text-[10px]">
+                  {{ imageCredits[spot.name] }}
                 </span>
               </div>
             </div>
@@ -115,6 +122,7 @@ import type { TouristSpot, AudioGuide } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
+import { useUnsplashImages } from '~/composables/useUnsplashImages'
 
 // Page meta
 definePageMeta({
@@ -134,25 +142,61 @@ const touristSpots = ref<TouristSpot[]>([])
 const currentAudioGuide = ref<AudioGuide | null>(null)
 const currentSpot = ref<TouristSpot | null>(null)
 
+// Unsplash Images
+const { getSpotImageUrl, searchImages, getImageCredit } = useUnsplashImages()
+const spotImages = ref<Record<string, string>>({})
+const imageCredits = ref<Record<string, string>>({})
 
-const generateSpotImage = (spotName: string, category: string) => {
-  // 観光地ごとの実際の画像URLを返す
-  const imageMap: Record<string, string> = {
-    '東京スカイツリー': 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format',
-    '浅草寺': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format',
-    '明治神宮': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
-    '大阪城': 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
-    '通天閣': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format',
-    '海遊館': 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=400&h=300&fit=crop&auto=format',
-    '清水寺': 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format',
-    '金閣寺': 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&h=300&fit=crop&auto=format',
-    '伏見稲荷大社': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format',
-    '札幌時計台': 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format',
-    '函館山': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop&auto=format',
-    '小樽運河': 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=400&h=300&fit=crop&auto=format'
+
+// Unsplash画像を取得する関数
+const getSpotImage = (spotName: string): string => {
+  // キャッシュされた画像があればそれを返す
+  if (spotImages.value[spotName]) {
+    return spotImages.value[spotName]
   }
   
-  return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
+  // フォールバック画像を返す
+  return 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+}
+
+// 画像読み込み時のエラーハンドリング
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement
+  img.src = 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+}
+
+// 観光地の画像とクレジット情報を事前に取得（Unsplash APIを使用）
+const preloadSpotImages = async () => {
+  const spots = ['東京スカイツリー', '浅草寺'] // 東京の主要スポット
+  
+  for (const spotName of spots) {
+    try {
+      console.log(`Loading image for ${spotName}...`)
+      
+      // 画像とクレジット情報を取得
+      const images = await searchImages(spotName)
+      if (images.length > 0) {
+        const firstImage = images[0]
+        spotImages.value[spotName] = firstImage.urls.regular
+        imageCredits.value[spotName] = getImageCredit(firstImage)
+        console.log(`Successfully loaded image for ${spotName}:`, firstImage.urls.regular)
+        console.log(`Credit: ${imageCredits.value[spotName]}`)
+      } else {
+        // フォールバック画像の場合はクレジット表記なし
+        const imageUrl = await getSpotImageUrl(spotName, 'regular')
+        spotImages.value[spotName] = imageUrl
+        console.log(`Using fallback image for ${spotName}:`, imageUrl)
+      }
+    } catch (error) {
+      console.error(`Failed to load image for ${spotName}:`, error)
+      // エラーの場合もフォールバック画像を設定
+      const imageUrl = await getSpotImageUrl(spotName, 'regular')
+      spotImages.value[spotName] = imageUrl
+    }
+  }
+  
+  console.log('Final spot images:', spotImages.value)
+  console.log('Image credits:', imageCredits.value)
 }
 
 const getSpotTags = (spot: TouristSpot) => {
@@ -203,7 +247,10 @@ const goToSpotDetail = (spotId: number) => {
 
 
 // Load mock tourist spots data
-onMounted(() => {
+onMounted(async () => {
+  // Unsplash画像を事前に読み込み
+  await preloadSpotImages()
+  
   // Mock data for Tokyo tourist spots
   touristSpots.value = [
     {

@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // Mock authentication - in real app, this would be an API call
-      if (email === 'demo@example.com' && password === 'password') {
+      if (email === 'demo@example.com' && password === 'TravelGuide2024!') {
         user.value = {
           id: 1,
           name: '田中太郎',
@@ -81,10 +81,13 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user')
   }
 
-  const initializeAuth = () => {
+  const initializeAuth = async () => {
     // Only run on client side
     if (process.client) {
       try {
+        // Add a small delay to ensure localStorage is available
+        await new Promise(resolve => setTimeout(resolve, 10))
+        
         // Check if user is logged in from localStorage
         const savedUser = localStorage.getItem('user')
         if (savedUser && savedUser !== 'null') {

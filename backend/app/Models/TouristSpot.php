@@ -13,6 +13,9 @@ class TouristSpot extends Model
     protected $fillable = [
         'name',
         'description',
+        'overview',
+        'highlights',
+        'history',
         'prefecture',
         'city',
         'address',
@@ -21,6 +24,10 @@ class TouristSpot extends Model
         'category',
         'images',
         'access_info',
+        'public_transport',
+        'car_access',
+        'parking_info',
+        'walking_info',
         'website',
         'phone',
         'opening_hours',
@@ -30,6 +37,9 @@ class TouristSpot extends Model
 
     protected $casts = [
         'images' => 'array',
+        'highlights' => 'array',
+        'public_transport' => 'array',
+        'car_access' => 'array',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
         'is_active' => 'boolean'

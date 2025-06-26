@@ -31,8 +31,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-        OPENROUTER_MODEL: ${OPENROUTER_MODEL}
+        NUXT_OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+        NUXT_OPENROUTER_MODEL: ${OPENROUTER_MODEL}
+        NUXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+        NUXT_UNSPLASH_ACCESS_KEY: ${UNSPLASH_ACCESS_KEY}
     container_name: guide-app-frontend
     ports:
       - "3000:3000"
@@ -42,8 +44,10 @@ services:
     environment:
       - NODE_ENV=development
       - NUXT_API_BASE_URL=http://backend:8000/api
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL}
+      - NUXT_OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - NUXT_OPENROUTER_MODEL=${OPENROUTER_MODEL}
+      - NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+      - NUXT_UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY}
     depends_on:
       - backend
     networks:

@@ -13,104 +13,398 @@ class TouristSpotSeeder extends Seeder
     public function run(): void
     {
         $touristSpots = [
+            // 東京都
             [
                 'name' => '東京スカイツリー',
-                'description' => '東京の新しいシンボルタワー。高さ634mの世界一高い自立式電波塔で、展望デッキからは関東平野を一望できます。',
+                'description' => '高さ634mの世界最高クラスの電波塔。展望デッキからは東京の絶景を一望できます。',
+                'overview' => '東京スカイツリーは、東京都墨田区押上にある電波塔で、2012年に開業しました。高さ634mは世界第2位の高さを誇り、東京の新たなランドマークとして親しまれています。展望デッキからは関東平野を一望でき、晴天時には富士山まで見渡すことができます。',
+                'highlights' => ['展望デッキ（350m・450m）', 'スカイツリータウン', 'ライトアップ', 'プラネタリウム'],
+                'history' => '2008年に着工し、2012年に完成。武蔵国の旧国名に因んで634m（ムサシ）の高さに設計されました。建設には最新の制振技術が使われ、日本の伝統的な建築技法も取り入れられています。',
                 'prefecture' => '東京都',
                 'city' => '墨田区',
                 'address' => '東京都墨田区押上1-1-2',
                 'latitude' => 35.710063,
                 'longitude' => 139.810700,
-                'category' => '観光施設',
-                'images' => [
-                    'https://example.com/skytree1.jpg',
-                    'https://example.com/skytree2.jpg'
+                'category' => '展望台',
+                'images' => ['https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=600&h=400&fit=crop&auto=format'],
+                'access_info' => '東武スカイツリーライン「とうきょうスカイツリー駅」すぐ',
+                'public_transport' => [
+                    ['type' => '電車', 'route' => '東武スカイツリーライン', 'station' => 'とうきょうスカイツリー駅', 'time' => '直結'],
+                    ['type' => '地下鉄', 'route' => '東京メトロ半蔵門線', 'station' => '押上駅', 'time' => '徒歩1分'],
+                    ['type' => '地下鉄', 'route' => '都営浅草線', 'station' => '押上駅', 'time' => '徒歩1分']
                 ],
-                'access_info' => '東武スカイツリーライン「とうきょうスカイツリー駅」すぐ、東京メトロ半蔵門線「押上駅」徒歩5分',
+                'car_access' => [
+                    ['from' => '首都高速6号向島線', 'exit' => '向島IC', 'time' => '約5分'],
+                    ['from' => '首都高速7号小松川線', 'exit' => '錦糸町IC', 'time' => '約10分']
+                ],
+                'parking_info' => '東京スカイツリータウン駐車場（634台）・料金：30分350円、土日祝日は30分400円・営業時間：7:30-23:00',
+                'walking_info' => '浅草駅から徒歩約15分、錦糸町駅から徒歩約15分',
                 'website' => 'https://www.tokyo-skytree.jp/',
                 'phone' => '0570-55-0634',
-                'opening_hours' => '8:00-22:00（最終入場21:00）',
-                'admission_fee' => '大人2,100円〜、中学生1,550円〜、小学生950円〜',
+                'opening_hours' => '8:00-22:00',
+                'admission_fee' => '大人2,100円〜',
                 'is_active' => true,
             ],
             [
                 'name' => '浅草寺',
-                'description' => '東京最古の寺院として知られ、雷門の大提灯で有名。仲見世通りでの食べ歩きも楽しめる、日本の伝統文化を感じられるスポットです。',
+                'description' => '東京最古の寺院。雷門と仲見世通りで有名な東京を代表する観光地です。',
+                'overview' => '浅草寺は628年に創建された東京最古の寺院です。雷門から仲見世通りを通って本堂に至る参道は、常に多くの参拝者と観光客で賑わっています。',
+                'highlights' => ['雷門', '仲見世通り', '本堂', '五重塔'],
+                'history' => '推古天皇36年（628年）、隅田川で漁をしていた檜前浜成・竹成兄弟の網にかかった観音像を本尊として祀ったのが始まりとされています。江戸時代には徳川家の祈願所として栄えました。',
                 'prefecture' => '東京都',
                 'city' => '台東区',
                 'address' => '東京都台東区浅草2-3-1',
                 'latitude' => 35.714765,
                 'longitude' => 139.796742,
                 'category' => '寺院',
-                'images' => [
-                    'https://example.com/asakusa1.jpg',
-                    'https://example.com/asakusa2.jpg'
+                'images' => ['https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&auto=format'],
+                'access_info' => '東京メトロ銀座線「浅草駅」徒歩5分',
+                'public_transport' => [
+                    ['type' => '地下鉄', 'route' => '東京メトロ銀座線', 'station' => '浅草駅', 'time' => '徒歩5分'],
+                    ['type' => '地下鉄', 'route' => '都営浅草線', 'station' => '浅草駅', 'time' => '徒歩7分'],
+                    ['type' => '電車', 'route' => '東武伊勢崎線', 'station' => '浅草駅', 'time' => '徒歩5分']
                 ],
-                'access_info' => '東京メトロ銀座線「浅草駅」徒歩5分、都営地下鉄浅草線「浅草駅」徒歩7分',
+                'car_access' => [
+                    ['from' => '首都高速6号向島線', 'exit' => '駒形IC', 'time' => '約5分'],
+                    ['from' => '首都高速1号上野線', 'exit' => '入谷IC', 'time' => '約10分']
+                ],
+                'parking_info' => '雷門地下駐車場（197台）・料金：30分200円・営業時間：7:00-23:00',
+                'walking_info' => '上野駅から徒歩約20分、押上駅から徒歩約10分',
                 'website' => 'https://www.senso-ji.jp/',
                 'phone' => '03-3842-0181',
-                'opening_hours' => '6:00-17:00（10月-3月は6:30-17:00）',
+                'opening_hours' => '6:00-17:00',
                 'admission_fee' => '無料',
                 'is_active' => true,
             ],
+            
+            // 大阪府
             [
-                'name' => '明治神宮',
-                'description' => '明治天皇と昭憲皇太后を祀る神社。都心にありながら豊かな森に囲まれた神聖な空間で、初詣では日本一の参拝者数を誇ります。',
-                'prefecture' => '東京都',
-                'city' => '渋谷区',
-                'address' => '東京都渋谷区代々木神園町1-1',
-                'latitude' => 35.676391,
-                'longitude' => 139.699431,
+                'name' => '大阪城',
+                'description' => '豊臣秀吉が築城した名城。美しい天守閣と桜の名所として親しまれています。',
+                'overview' => '大阪城は豊臣秀吉によって1583年に築城された日本の名城の一つです。現在の天守閣は1931年に再建されたもので、大阪のシンボルとして親しまれています。城内には歴史博物館があり、豊臣時代から現代までの大阪の歴史を学ぶことができます。',
+                'highlights' => ['天守閣', '大阪城公園', '桜の名所', '歴史博物館'],
+                'history' => '1583年、豊臣秀吉が石山本願寺の跡地に築城を開始。当時は「三国無双」と称される壮大な城でした。江戸時代には徳川幕府の直轄地となり、明治維新後は陸軍の施設として使用されました。現在の天守閣は昭和6年（1931年）に市民の寄付により復興されたものです。',
+                'prefecture' => '大阪府',
+                'city' => '大阪市',
+                'address' => '大阪府大阪市中央区大阪城1-1',
+                'latitude' => 34.687315,
+                'longitude' => 135.526201,
+                'category' => '歴史建造物',
+                'images' => [
+                    'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&auto=format'
+                ],
+                'access_info' => 'JR大阪環状線「大阪城公園駅」徒歩3分',
+                'public_transport' => [
+                    ['type' => 'JR', 'route' => '大阪環状線', 'station' => '大阪城公園駅', 'time' => '徒歩3分'],
+                    ['type' => '地下鉄', 'route' => '大阪メトロ中央線', 'station' => '森ノ宮駅', 'time' => '徒歩10分'],
+                    ['type' => '地下鉄', 'route' => '大阪メトロ谷町線', 'station' => '谷町四丁目駅', 'time' => '徒歩12分']
+                ],
+                'car_access' => [
+                    ['from' => '阪神高速13号東大阪線', 'exit' => '法円坂IC', 'time' => '約5分'],
+                    ['from' => '阪神高速1号環状線', 'exit' => '森小路IC', 'time' => '約10分']
+                ],
+                'parking_info' => '大阪城公園駐車場（171台）・料金：1時間350円・営業時間：24時間・大型バス可',
+                'walking_info' => '大阪駅から徒歩約25分、難波駅から徒歩約20分',
+                'website' => 'https://www.osakacastle.net/',
+                'phone' => '06-6941-3044',
+                'opening_hours' => '9:00-17:00',
+                'admission_fee' => '大人600円',
+                'is_active' => true,
+            ],
+            
+            // 京都府
+            [
+                'name' => '清水寺',
+                'description' => '778年開創の京都最古の寺院。有名な清水の舞台と美しい景色で知られています。',
+                'overview' => '清水寺は京都東山にある法相宗の寺院で、「清水の舞台」で有名です。1994年にユネスコ世界文化遺産に登録されており、年間を通じて多くの観光客が訪れます。四季折々の美しい景色を楽しむことができ、特に桜と紅葉の季節は格別の美しさです。',
+                'highlights' => ['清水の舞台', '音羽の滝', '地主神社', '三重塔'],
+                'history' => '延暦17年（798年）、坂上田村麻呂によって建立されました。平安時代から「清水詣」として庶民に親しまれ、江戸時代には西国三十三箇所観音霊場の第16番札所として栄えました。現在の本堂は寛永10年（1633年）に再建されたものです。',
+                'prefecture' => '京都府',
+                'city' => '京都市',
+                'address' => '京都府京都市東山区清水1-294',
+                'latitude' => 34.994857,
+                'longitude' => 135.784985,
+                'category' => '寺院',
+                'images' => [
+                    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
+                ],
+                'access_info' => '京阪本線「清水五条駅」徒歩25分',
+                'public_transport' => [
+                    ['type' => 'バス', 'route' => '京都市バス206系統', 'station' => '清水道バス停', 'time' => '徒歩10分'],
+                    ['type' => 'バス', 'route' => '京都市バス100系統', 'station' => '五条坂バス停', 'time' => '徒歩10分'],
+                    ['type' => '電車', 'route' => '京阪本線', 'station' => '清水五条駅', 'time' => '徒歩25分']
+                ],
+                'car_access' => [
+                    ['from' => '名神高速道路', 'exit' => '京都東IC', 'time' => '約30分'],
+                    ['from' => '京都縦貫自動車道', 'exit' => '沓掛IC', 'time' => '約40分']
+                ],
+                'parking_info' => '清水寺周辺の民間駐車場を利用（料金：1時間500円〜）・混雑時は満車の可能性が高い',
+                'walking_info' => '京都駅から徒歩約45分、祇園四条駅から徒歩約20分・石畳の坂道が続くため歩きやすい靴推奨',
+                'website' => 'https://www.kiyomizudera.or.jp/',
+                'phone' => '075-551-1234',
+                'opening_hours' => '6:00-18:00',
+                'admission_fee' => '大人400円',
+                'is_active' => true,
+            ],
+            [
+                'name' => '金閣寺',
+                'description' => '足利義満の別荘として建てられた金箔で覆われた美しい楼閣。世界文化遺産です。',
+                'overview' => '金閣寺（鹿苑寺）は室町幕府三代将軍足利義満の別荘として1397年に建てられました。金箔で覆われた三層の楼閣が池に映る美しい姿は、京都を代表する風景です。1994年にユネスコ世界文化遺産に登録されています。',
+                'highlights' => ['金閣（舎利殿）', '鏡湖池', '庭園', '夕佳亭'],
+                'history' => '応永4年（1397年）、足利義満が西園寺家の山荘を譲り受けて「北山殿」を造営。義満の死後、禅寺となり鹿苑寺と名付けられました。昭和25年に放火により焼失しましたが、昭和30年に再建されました。',
+                'prefecture' => '京都府',
+                'city' => '京都市',
+                'address' => '京都府京都市北区金閣寺町1',
+                'latitude' => 35.039705,
+                'longitude' => 135.728898,
+                'category' => '寺院',
+                'images' => [
+                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format'
+                ],
+                'access_info' => '京都市バス「金閣寺道」徒歩3分',
+                'public_transport' => [
+                    ['type' => 'バス', 'route' => '京都市バス101系統', 'station' => '金閣寺道バス停', 'time' => '徒歩3分'],
+                    ['type' => 'バス', 'route' => '京都市バス102系統', 'station' => '金閣寺道バス停', 'time' => '徒歩3分'],
+                    ['type' => 'バス', 'route' => '京都市バス204系統', 'station' => '金閣寺道バス停', 'time' => '徒歩3分']
+                ],
+                'car_access' => [
+                    ['from' => '名神高速道路', 'exit' => '京都南IC', 'time' => '約45分'],
+                    ['from' => '京都縦貫自動車道', 'exit' => '沓掛IC', 'time' => '約30分']
+                ],
+                'parking_info' => '金閣寺第1駐車場（250台）・料金：1時間400円・営業時間：8:00-17:30',
+                'walking_info' => '京都駅から徒歩約60分、二条城前駅から徒歩約40分',
+                'website' => 'https://www.shokoku-ji.jp/kinkakuji/',
+                'phone' => '075-461-0013',
+                'opening_hours' => '9:00-17:00',
+                'admission_fee' => '大人400円',
+                'is_active' => true,
+            ],
+            
+            // 北海道
+            [
+                'name' => '札幌時計台',
+                'description' => '旧札幌農学校演武場として1878年に建設された北海道のシンボル的建造物です。',
+                'overview' => '札幌時計台は正式名称を「旧札幌農学校演武場」といい、1878年に建設された北海道の代表的な観光スポットです。現在は重要文化財に指定されており、札幌の歴史を物語る貴重な建造物として親しまれています。',
+                'highlights' => ['時計台の鐘', '歴史展示', 'クラーク博士の資料', 'コンサートホール'],
+                'history' => '明治11年（1878年）、札幌農学校（現在の北海道大学）の演武場として建設されました。時計は明治14年に設置され、以来140年以上にわたって札幌の街に時を告げ続けています。「少年よ、大志を抱け」で有名なクラーク博士ゆかりの建物でもあります。',
+                'prefecture' => '北海道',
+                'city' => '札幌市',
+                'address' => '北海道札幌市中央区北1条西2丁目',
+                'latitude' => 43.063968,
+                'longitude' => 141.353735,
+                'category' => '歴史建造物',
+                'images' => [
+                    'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
+                ],
+                'access_info' => 'JR札幌駅徒歩10分',
+                'public_transport' => [
+                    ['type' => 'JR', 'route' => '函館本線', 'station' => '札幌駅', 'time' => '徒歩10分'],
+                    ['type' => '地下鉄', 'route' => '札幌市営地下鉄南北線', 'station' => '大通駅', 'time' => '徒歩5分'],
+                    ['type' => '地下鉄', 'route' => '札幌市営地下鉄東西線', 'station' => '大通駅', 'time' => '徒歩5分']
+                ],
+                'car_access' => [
+                    ['from' => '道央自動車道', 'exit' => '札幌IC', 'time' => '約20分'],
+                    ['from' => '新千歳空港', 'exit' => 'JR快速エアポート', 'time' => '約40分']
+                ],
+                'parking_info' => '札幌市時計台駐車場なし・周辺コインパーキング利用（料金：20分100円〜）',
+                'walking_info' => '札幌駅から徒歩約10分、すすきの駅から徒歩約10分',
+                'website' => 'https://sapporoclock.jp/',
+                'phone' => '011-231-0838',
+                'opening_hours' => '8:45-17:10',
+                'admission_fee' => '大人200円',
+                'is_active' => true,
+            ],
+            
+            // 愛知県
+            [
+                'name' => '名古屋城',
+                'description' => '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
+                'overview' => '名古屋城は1610年、徳川家康によって築城された日本三大名城の一つです。金の鯱鉾（しゃちほこ）で有名で、尾張徳川家の居城として栄えました。現在は名古屋のシンボルとして親しまれ、春には桜の名所としても知られています。',
+                'highlights' => ['金の鯱鉾', '本丸御殿', '名古屋城公園', '桜の名所'],
+                'history' => '慶長15年（1610年）、徳川家康が九男義直のために築城を開始。「清洲越し」と呼ばれる大規模な都市移転も行われました。戦災で焼失しましたが、昭和34年に鉄筋コンクリート造で再建され、平成30年には本丸御殿が完成公開されました。',
+                'prefecture' => '愛知県',
+                'city' => '名古屋市',
+                'address' => '愛知県名古屋市中区本丸1-1',
+                'latitude' => 35.185043,
+                'longitude' => 136.899180,
+                'category' => '歴史建造物',
+                'images' => [
+                    'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format'
+                ],
+                'access_info' => '地下鉄名城線「市役所駅」徒歩5分',
+                'public_transport' => [
+                    ['type' => '地下鉄', 'route' => '名古屋市営地下鉄名城線', 'station' => '市役所駅', 'time' => '徒歩5分'],
+                    ['type' => '地下鉄', 'route' => '名古屋市営地下鉄鶴舞線', 'station' => '浅間町駅', 'time' => '徒歩12分'],
+                    ['type' => 'JR', 'route' => 'JR中央本線', 'station' => '名古屋駅', 'time' => '地下鉄乗継20分']
+                ],
+                'car_access' => [
+                    ['from' => '名古屋高速都心環状線', 'exit' => '丸の内IC', 'time' => '約5分'],
+                    ['from' => '東海北陸自動車道', 'exit' => '清須IC', 'time' => '約20分']
+                ],
+                'parking_info' => '名城公園正門前駐車場（308台）・料金：30分180円・営業時間：8:30-21:30',
+                'walking_info' => '名古屋駅から徒歩約20分、栄駅から徒歩約15分',
+                'website' => 'https://www.nagoyajo.city.nagoya.jp/',
+                'phone' => '052-231-1700',
+                'opening_hours' => '9:00-16:30',
+                'admission_fee' => '大人500円',
+                'is_active' => true,
+            ],
+            
+            // 福岡県
+            [
+                'name' => '太宰府天満宮',
+                'description' => '学問の神様菅原道真公を祀る由緒ある神社。受験合格や学業成就を願う多くの参拝者が訪れます。',
+                'overview' => '太宰府天満宮は「学問の神様」として知られる菅原道真公を祀る神社です。全国約12,000社ある天満宮の総本宮として、年間約1,000万人の参拝者が訪れます。梅の名所としても有名で、境内には約6,000本の梅の木が植えられています。',
+                'highlights' => ['本殿', '飛梅', '太鼓橋', '宝物殿'],
+                'history' => '延喜3年（903年）、菅原道真公がこの地で薨去された後、延喜19年（919年）に社殿が建立されました。道真公は優れた学者・政治家として活躍し、死後天神として信仰されるようになりました。現在の本殿は天正19年（1591年）に再建されたものです。',
+                'prefecture' => '福岡県',
+                'city' => '太宰府市',
+                'address' => '福岡県太宰府市宰府4-7-1',
+                'latitude' => 33.519585,
+                'longitude' => 130.533234,
                 'category' => '神社',
                 'images' => [
-                    'https://example.com/meiji1.jpg',
-                    'https://example.com/meiji2.jpg'
+                    'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format'
                 ],
-                'access_info' => 'JR山手線「原宿駅」徒歩3分、東京メトロ千代田線・副都心線「明治神宮前駅」徒歩3分',
-                'website' => 'https://www.meijijingu.or.jp/',
-                'phone' => '03-3379-5511',
-                'opening_hours' => '日の出〜日没（季節により変動）',
-                'admission_fee' => '無料（宝物殿は有料）',
+                'access_info' => '西鉄太宰府線「太宰府駅」徒歩5分',
+                'public_transport' => [
+                    ['type' => '電車', 'route' => '西鉄太宰府線', 'station' => '太宰府駅', 'time' => '徒歩5分'],
+                    ['type' => '電車', 'route' => '西鉄天神大牟田線', 'station' => '二日市駅', 'time' => '太宰府線乗継10分'],
+                    ['type' => 'バス', 'route' => '西鉄バス', 'station' => '太宰府バス停', 'time' => '徒歩3分']
+                ],
+                'car_access' => [
+                    ['from' => '九州自動車道', 'exit' => '太宰府IC', 'time' => '約6分'],
+                    ['from' => '福岡都市高速道路', 'exit' => '水城IC', 'time' => '約6分']
+                ],
+                'parking_info' => '太宰府駐車場（850台）・料金：普通車500円・営業時間：8:00-19:00',
+                'walking_info' => '西鉄二日市駅から徒歩約25分、JR二日市駅から徒歩約30分',
+                'website' => 'https://www.dazaifutenmangu.or.jp/',
+                'phone' => '092-922-8225',
+                'opening_hours' => '6:00-19:00',
+                'admission_fee' => '無料',
                 'is_active' => true,
             ],
+            
+            // 広島県
             [
-                'name' => '皇居東御苑',
-                'description' => '江戸城の跡地に造られた庭園。四季折々の美しい自然と歴史を感じることができる、都心のオアシスです。',
-                'prefecture' => '東京都',
-                'city' => '千代田区',
-                'address' => '東京都千代田区千代田1-1',
-                'latitude' => 35.685175,
-                'longitude' => 139.753348,
-                'category' => '庭園',
+                'name' => '原爆ドーム',
+                'description' => '平和の象徴として世界中に知られる広島の代表的なランドマーク。ユネスコ世界文化遺産です。',
+                'overview' => '原爆ドームは1945年8月6日の原子爆弾投下により被爆した建物で、現在は平和の象徴として保存されています。1996年にユネスコ世界文化遺産に登録され、核兵器の廃絶と世界平和の重要性を訴え続けています。',
+                'highlights' => ['被爆建物', '平和記念公園', '平和の灯', '慰霊碑'],
+                'history' => '大正4年（1915年）に広島県物産陳列館として建設されました。昭和20年（1945年）8月6日午前8時15分、原子爆弾により一瞬にして破壊されましたが、爆心地に近い位置でありながら奇跡的に倒壊を免れ、現在まで保存されています。',
+                'prefecture' => '広島県',
+                'city' => '広島市',
+                'address' => '広島県広島市中区大手町1-10',
+                'latitude' => 34.395483,
+                'longitude' => 132.453592,
+                'category' => '歴史建造物',
                 'images' => [
-                    'https://example.com/kokyo1.jpg',
-                    'https://example.com/kokyo2.jpg'
+                    'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
                 ],
-                'access_info' => 'JR「東京駅」徒歩10分、東京メトロ大手町駅徒歩5分',
-                'website' => 'https://www.kunaicho.go.jp/',
-                'phone' => '03-3213-1111',
-                'opening_hours' => '9:00-17:00（入園は16:30まで）月曜・金曜休園',
+                'access_info' => '広島電鉄「原爆ドーム前駅」すぐ',
+                'public_transport' => [
+                    ['type' => '路面電車', 'route' => '広島電鉄2号線', 'station' => '原爆ドーム前駅', 'time' => '徒歩1分'],
+                    ['type' => '路面電車', 'route' => '広島電鉄6号線', 'station' => '原爆ドーム前駅', 'time' => '徒歩1分'],
+                    ['type' => 'バス', 'route' => '広島バス', 'station' => '原爆ドーム前バス停', 'time' => '徒歩1分']
+                ],
+                'car_access' => [
+                    ['from' => '山陽自動車道', 'exit' => '広島IC', 'time' => '約20分'],
+                    ['from' => '広島高速道路', 'exit' => '祇園新道IC', 'time' => '約15分']
+                ],
+                'parking_info' => '平和記念公園駐車場なし・周辺コインパーキング利用（料金：30分200円〜）',
+                'walking_info' => '広島駅から徒歩約25分、本通駅から徒歩約10分',
+                'website' => 'https://www.city.hiroshima.lg.jp/',
+                'phone' => '082-504-2390',
+                'opening_hours' => '見学自由',
                 'admission_fee' => '無料',
                 'is_active' => true,
             ],
             [
-                'name' => '上野動物園',
-                'description' => '日本最古の動物園。ジャイアントパンダをはじめ、約400種3000点の動物たちに出会えます。',
-                'prefecture' => '東京都',
-                'city' => '台東区',
-                'address' => '東京都台東区上野公園9-83',
-                'latitude' => 35.716626,
-                'longitude' => 139.771306,
-                'category' => '動物園',
+                'name' => '厳島神社',
+                'description' => '海に浮かぶ朱色の大鳥居で有名な日本三景の一つ。満潮時の美しさは格別です。',
+                'overview' => '厳島神社は宮島にある古社で、海に建つ朱色の大鳥居で有名です。日本三景の一つに数えられ、1996年にユネスコ世界文化遺産に登録されました。満潮時には海に浮かぶ幻想的な姿を見ることができます。',
+                'highlights' => ['大鳥居', '本殿', '能舞台', '千畳閣'],
+                'history' => '推古天皇元年（593年）に佐伯鞍職によって創建されたと伝えられています。平安時代後期には平清盛の信仰を受けて栄え、現在の壮麗な社殿群が造営されました。古くから島全体が神の島として崇められてきました。',
+                'prefecture' => '広島県',
+                'city' => '廿日市市',
+                'address' => '広島県廿日市市宮島町1-1',
+                'latitude' => 34.296051,
+                'longitude' => 132.319829,
+                'category' => '神社',
                 'images' => [
-                    'https://example.com/ueno1.jpg',
-                    'https://example.com/ueno2.jpg'
+                    'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format'
                 ],
-                'access_info' => 'JR「上野駅」徒歩5分、東京メトロ銀座線・日比谷線「上野駅」徒歩5分',
-                'website' => 'https://www.tokyo-zoo.net/zoo/ueno/',
-                'phone' => '03-3828-5171',
-                'opening_hours' => '9:30-17:00（入園は16:00まで）月曜休園',
-                'admission_fee' => '一般600円、中学生200円、小学生以下無料',
+                'access_info' => 'JR宮島口駅→宮島フェリー→宮島桟橋徒歩12分',
+                'public_transport' => [
+                    ['type' => 'JR+フェリー', 'route' => 'JR山陽本線+宮島フェリー', 'station' => '宮島口駅→宮島桟橋', 'time' => '徒歩12分'],
+                    ['type' => '路面電車+フェリー', 'route' => '広島電鉄宮島線+宮島フェリー', 'station' => '広電宮島口駅→宮島桟橋', 'time' => '徒歩12分'],
+                    ['type' => 'バス+フェリー', 'route' => '広島バス+宮島フェリー', 'station' => '宮島口フェリー乗り場', 'time' => '徒歩12分']
+                ],
+                'car_access' => [
+                    ['from' => '山陽自動車道', 'exit' => '大野IC', 'time' => '宮島口まで約10分+フェリー10分'],
+                    ['from' => '広島岩国道路', 'exit' => '廿日市IC', 'time' => '宮島口まで約10分+フェリー10分']
+                ],
+                'parking_info' => '宮島口周辺の民間駐車場利用（料金：1日1,000円〜）・宮島島内は一般車両進入禁止',
+                'walking_info' => '宮島桟橋から徒歩約12分・表参道商店街経由がおすすめ',
+                'website' => 'http://www.itsukushimajinja.jp/',
+                'phone' => '0829-44-2020',
+                'opening_hours' => '6:30-18:00',
+                'admission_fee' => '大人300円',
+                'is_active' => true,
+            ],
+            
+            // 愛媛県
+            [
+                'name' => '道後温泉',
+                'description' => '日本最古の温泉の一つ。夏目漱石の小説にも登場する歴史ある温泉街です。',
+                'overview' => '道後温泉は日本最古の温泉の一つとして知られ、約3,000年の歴史を持ちます。夏目漱石の小説「坊っちゃん」にも登場し、現在も多くの文学ファンが訪れます。道後温泉本館は重要文化財に指定されています。',
+                'highlights' => ['道後温泉本館', '霊の湯', '神の湯', '道後商店街'],
+                'history' => '古事記や日本書紀にも記載される古い温泉で、聖徳太子や一遍上人なども入浴したと伝えられています。明治27年（1894年）に現在の道後温泉本館が建設され、ジブリ映画「千と千尋の神隠し」の湯屋のモデルの一つとしても有名になりました。',
+                'prefecture' => '愛媛県',
+                'city' => '松山市',
+                'address' => '愛媛県松山市道後湯之町5-6',
+                'latitude' => 33.851918,
+                'longitude' => 132.785891,
+                'category' => '温泉',
+                'images' => [
+                    'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=600&h=400&fit=crop&auto=format',
+                    'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
+                ],
+                'access_info' => '伊予鉄道「道後温泉駅」徒歩5分',
+                'public_transport' => [
+                    ['type' => '路面電車', 'route' => '伊予鉄道城南線', 'station' => '道後温泉駅', 'time' => '徒歩5分'],
+                    ['type' => 'バス', 'route' => '伊予鉄バス', 'station' => '道後温泉バス停', 'time' => '徒歩3分'],
+                    ['type' => 'JR+路面電車', 'route' => 'JR予讃線+伊予鉄道', 'station' => '松山駅→道後温泉駅', 'time' => '乗継25分']
+                ],
+                'car_access' => [
+                    ['from' => '松山自動車道', 'exit' => '松山IC', 'time' => '約25分'],
+                    ['from' => '高知自動車道', 'exit' => '伊野IC', 'time' => '約90分']
+                ],
+                'parking_info' => '道後温泉駐車場（100台）・料金：1時間100円・営業時間：6:30-23:00',
+                'walking_info' => '松山市駅から徒歩約30分、松山城から徒歩約20分',
+                'website' => 'https://dogo.jp/',
+                'phone' => '089-921-5141',
+                'opening_hours' => '6:00-23:00',
+                'admission_fee' => '大人420円',
                 'is_active' => true,
             ]
         ];

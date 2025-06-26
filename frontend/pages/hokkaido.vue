@@ -36,18 +36,16 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-500 relative">
-              <img 
-                :src="generateSpotImage(spot.name, spot.category)" 
+              <UnsplashImage 
+                :spot-name="spot.name"
                 :alt="spot.name"
-                class="w-full h-full object-cover"
-                loading="lazy"
-                @error="$event.target.style.display = 'none'"
-              />
-              <div class="absolute top-3 right-3">
-                <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                  {{ spot.category }}
-                </span>
-              </div>
+              >
+                <div class="absolute top-3 right-3">
+                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
+                    {{ spot.category }}
+                  </span>
+                </div>
+              </UnsplashImage>
             </div>
             
             <!-- Spot Info -->
@@ -116,6 +114,7 @@ import type { TouristSpot, AudioGuide } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
+import UnsplashImage from '~/components/UnsplashImage.vue'
 
 // Page meta
 definePageMeta({
