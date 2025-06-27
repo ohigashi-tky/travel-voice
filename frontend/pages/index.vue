@@ -347,7 +347,16 @@ const authStore = useAuthStore()
 const { t } = useLanguage()
 
 // Tourist spots data
-const { spots: allSpots, fetchSpots, getRandomSpots, searchSpots } = useTouristSpots()
+const { 
+  spots: allSpots, 
+  fetchSpots, 
+  getRandomSpots, 
+  searchSpots,
+  popularSpots,
+  popularSpotsLoading,
+  fetchPopularSpots,
+  getPopularSpots
+} = useTouristSpots()
 
 // Reactive variables
 const activeTab = ref('top')
@@ -379,7 +388,7 @@ const dragThreshold = 50
 onMounted(async () => {
   // Auth is already initialized by plugin and checked by middleware
   await fetchSpots() // データを取得
-  selectRandomSpots()
+  await selectPopularSpots() // AI分析による人気スポット選択
   startCarousel()
   startPlaceholderRotation()
 })
@@ -389,10 +398,25 @@ onUnmounted(() => {
   stopPlaceholderRotation()
 })
 
-// Select 5 random spots for recommendations
-const selectRandomSpots = () => {
-  if (allSpots.value.length > 0) {
-    recommendedSpots.value = getRandomSpots(5)
+// Select popular spots using AI analysis
+const selectPopularSpots = async () => {
+  try {
+    await fetchPopularSpots()
+    if (popularSpots.value.length > 0) {
+      recommendedSpots.value = popularSpots.value
+    } else {
+      // Fallback to random spots if AI analysis fails
+      console.warn('No popular spots found, using random selection')
+      if (allSpots.value.length > 0) {
+        recommendedSpots.value = getRandomSpots(5)
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching popular spots:', error)
+    // Fallback to random spots
+    if (allSpots.value.length > 0) {
+      recommendedSpots.value = getRandomSpots(5)
+    }
   }
 }
 

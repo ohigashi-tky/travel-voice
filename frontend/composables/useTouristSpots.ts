@@ -257,6 +257,52 @@ export const useTouristSpots = () => {
     return shuffled.slice(0, count)
   }
 
+  // AIで分析された人気スポットを取得
+  const popularSpots = ref<TouristSpot[]>([])
+  const popularSpotsLoading = ref(false)
+  const popularSpotsError = ref<string | null>(null)
+
+  const fetchPopularSpots = async () => {
+    popularSpotsLoading.value = true
+    popularSpotsError.value = null
+
+    try {
+      const config = useRuntimeConfig()
+      const baseURL = config.public.apiBaseUrl || 'http://localhost:8000/api'
+      
+      const response = await $fetch<{
+        success: boolean
+        data: TouristSpot[]
+        fallback?: boolean
+        message?: string
+      }>(`${baseURL}/popular-spots`)
+
+      if (response.success) {
+        popularSpots.value = response.data
+        if (response.fallback) {
+          console.warn('Using fallback popular spots:', response.message)
+        }
+      } else {
+        throw new Error('Failed to fetch popular spots')
+      }
+    } catch (err) {
+      console.error('Failed to fetch popular spots:', err)
+      popularSpotsError.value = 'Failed to fetch popular spots'
+      
+      // Fallback to random spots
+      popularSpots.value = getRandomSpots(5)
+    } finally {
+      popularSpotsLoading.value = false
+    }
+  }
+
+  const getPopularSpots = () => {
+    if (popularSpots.value.length === 0) {
+      fetchPopularSpots()
+    }
+    return popularSpots.value
+  }
+
   // 検索機能
   const searchSpots = (query: string) => {
     if (!query.trim()) return []
@@ -274,12 +320,17 @@ export const useTouristSpots = () => {
     spots: readonly(spots),
     loading: readonly(loading),
     error: readonly(error),
+    popularSpots: readonly(popularSpots),
+    popularSpotsLoading: readonly(popularSpotsLoading),
+    popularSpotsError: readonly(popularSpotsError),
     fetchSpots,
     fetchSpotsByPrefecture,
+    fetchPopularSpots,
     getSpotsByPrefecture,
     getSpotsByCategory,
     getSpotById,
     getRandomSpots,
+    getPopularSpots,
     searchSpots
   }
 }
