@@ -294,14 +294,14 @@
                   image-class="hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <!-- Additional images from database -->
+              <!-- Additional images from Google Place Photos -->
               <div 
-                v-for="(image, index) in getGalleryImages()" 
+                v-for="(photo, index) in getGalleryImages()" 
                 :key="index"
                 class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
               >
                 <img 
-                  :src="image" 
+                  :src="photo.url" 
                   :alt="`${currentSpot.name} - 画像 ${index + 2}`"
                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
@@ -387,6 +387,7 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { ArrowLeft, Headphones, Play, Info, Star, Clock, Camera, MapPin } from 'lucide-vue-next'
 import type { AudioGuide } from '~/types'
 import { useTouristSpots } from '~/composables/useTouristSpots'
+import { useGooglePlacePhotos } from '~/composables/useGooglePlacePhotos'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
@@ -435,6 +436,10 @@ const currentImageIndex = ref(0)
 // Tourist spots data
 const { spots, fetchSpots, getSpotById } = useTouristSpots()
 
+// Google Place Photos for gallery
+const { getGalleryPhotos } = useGooglePlacePhotos()
+const galleryPhotos = ref<any[]>([])
+
 // All spots data (same as in index.vue)
 const allSpots = [
   {
@@ -443,6 +448,7 @@ const allSpots = [
     description: '高さ634mの世界最高クラスの電波塔。展望デッキからは東京の絶景を一望できます。',
     category: '展望台',
     prefecture: '東京都',
+    place_id: 'ChIJ35ov0dCOGGARKvdDH7NPHX0',
     imageUrl: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format',
     overview: '東京スカイツリーは、東京都墨田区押上にある電波塔で、2012年に開業しました。高さ634mは世界第2位の高さを誇り、東京の新たなランドマークとして親しまれています。展望デッキからは関東平野を一望でき、晴天時には富士山まで見渡すことができます。',
     highlights: ['展望デッキ（350m・450m）', 'スカイツリータウン', 'ライトアップ', 'プラネタリウム'],
@@ -484,6 +490,45 @@ const allSpots = [
       'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
       'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
     ]
+  },
+  {
+    id: 4,
+    name: '銀座',
+    description: '高級ブランド店が立ち並ぶ東京の代表的なショッピングエリア。洗練された大人の街として世界的に有名です。',
+    category: '観光エリア',
+    prefecture: '東京都',
+    place_id: 'ChIJu2-DAeeLGGARUZipC7OFRmA',
+    imageUrl: '',
+    overview: '銀座は東京の中央区にある日本を代表する繁華街です。明治時代から続く老舗店舗と最新のブランドショップが共存し、洗練された大人の街として世界中から注目されています。銀座四丁目交差点を中心とした8つの丁目からなる街並みには、高級デパート、ブティック、ギャラリー、レストランなどが軒を連ね、ショッピングやグルメを楽しむことができます。',
+    highlights: ['銀座四丁目交差点', '歌舞伎座', '築地市場（近隣）', '高級ブランド店街'],
+    history: '江戸時代に徳川幕府が銀貨鋳造所（銀座）を置いたことが地名の由来です。明治5年（1872年）の銀座大火後、煉瓦街として復興され、文明開化の象徴となりました。大正時代にはカフェ文化が花開き、昭和期には百貨店が次々と開業。現在では世界有数の高級商業地区として発展しています。',
+    images: []
+  },
+  {
+    id: 5,
+    name: '上野公園',
+    description: '桜の名所として有名な都市公園。上野動物園や博物館、美術館が集まる文化の拠点です。',
+    category: '公園',
+    prefecture: '東京都',
+    place_id: 'ChIJw2qQRZuOGGARWmROEiM2y7E',
+    imageUrl: '',
+    overview: '上野恩賜公園は1873年に開園した日本初の公園の一つです。園内には上野動物園、東京国立博物館、国立西洋美術館、東京都美術館、国立科学博物館など多くの文化施設が集まり、「文化の森」と呼ばれています。春には約1200本の桜が咲き誇る東京屈指の花見スポットとしても親しまれています。',
+    highlights: ['上野動物園', '東京国立博物館', '桜の名所', '不忍池'],
+    history: '江戸時代は寛永寺の境内でしたが、明治維新後に公園として整備されました。明治6年（1873年）に太政官布達により芝、浅草、深川、飛鳥山とともに日本初の公園に指定されました。その後、帝室博物館（現東京国立博物館）や動物園が開設され、文化と自然が調和した都市公園として発展してきました。',
+    images: []
+  },
+  {
+    id: 6,
+    name: '渋谷スクランブル交差点',
+    description: '世界で最も有名な交差点の一つ。一度に3000人もの人が行き交う東京のシンボル的な光景です。',
+    category: '観光エリア',
+    prefecture: '東京都',
+    place_id: 'ChIJK9EM68qLGGARacmu4KJj5SA',
+    imageUrl: '',
+    overview: '渋谷スクランブル交差点は渋谷駅ハチ公口前にある世界最大級の歩行者交差点です。信号が変わると一度に約3000人が様々な方向に歩き始める光景は、東京の象徴として世界中に知られています。周辺には109、センター街、スペイン坂など若者文化の発信地が集まり、常に活気に満ちています。',
+    highlights: ['スクランブル交差点', 'ハチ公像', '渋谷109', 'センター街'],
+    history: '渋谷の発展は明治18年（1885年）の山手線開通から始まりました。戦後復興期の昭和30年代に若者の街として注目され、1990年代にはギャル文化の発信地となりました。スクランブル交差点は1973年に現在の形になり、近年は外国人観光客にも人気の観光スポットとして世界的に有名になっています。',
+    images: []
   },
   {
     id: 101,
@@ -582,6 +627,45 @@ const allSpots = [
       'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop&auto=format',
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop&auto=format'
     ]
+  },
+  {
+    id: 104,
+    name: '道頓堀',
+    description: '大阪の代表的な繁華街。グリコの看板や川沿いのネオンサインで有名な観光エリアです。',
+    category: '観光エリア',
+    prefecture: '大阪府',
+    place_id: 'ChIJzWVthgDgAGARYOk-pwyZ5UU',
+    imageUrl: '',
+    overview: '道頓堀は大阪ミナミの繁華街の中心で、戎橋から見るグリコの看板は大阪の象徴として世界中に知られています。川沿いには巨大な看板やネオンサインが立ち並び、たこ焼き、お好み焼き、串カツなどの大阪グルメを楽しめる店舗が軒を連ねています。昼夜を問わず多くの観光客で賑わう大阪観光の定番スポットです。',
+    highlights: ['グリコの看板', '戎橋', 'かに道楽本店', 'たこ焼き'],
+    history: '慶長17年（1612年）、安井道頓が私財を投じて川を開削したことが名前の由来です。江戸時代には芝居小屋が建ち並び、「天下の台所」大阪の娯楽の中心地として発展しました。現在のグリコの看板は1935年に設置され、6代目となる現在の看板は2014年にLED化されました。',
+    images: []
+  },
+  {
+    id: 105,
+    name: '新世界',
+    description: '通天閣を中心とした下町レトロエリア。串カツやお好み焼きなど大阪グルメの聖地です。',
+    category: '観光エリア',
+    prefecture: '大阪府',
+    place_id: 'ChIJX8PVvGLnAGARIh1kJH-aVKM',
+    imageUrl: '',
+    overview: '新世界は通天閣を中心とした大阪の下町エリアです。明治36年（1903年）に開発された新しい街として「新世界」と名付けられました。現在は昭和レトロな雰囲気が残る観光地として人気で、串カツの名店が多数軒を連ねています。独特の大阪文化を体験できる貴重なエリアとして多くの観光客に愛されています。',
+    highlights: ['串カツ店街', '通天閣', 'ビリケンさん', 'レトロな看板'],
+    history: '明治36年（1903年）の第5回内国勧業博覧会の会場跡地に開発されました。当時はパリをモデルにした北側とニューヨークをモデルにした南側に分かれており、「東洋一の遊園地」として栄えました。戦後は庶民的な娯楽街として発展し、現在の串カツ文化が根付きました。',
+    images: []
+  },
+  {
+    id: 106,
+    name: '大阪駅・梅田',
+    description: '関西最大の交通ハブ。ショッピング、グルメ、エンターテイメントが集まる西日本の玄関口です。',
+    category: '観光エリア',
+    prefecture: '大阪府',
+    place_id: 'ChIJC6fjlY3mAGARSshZ6CLIrhs',
+    imageUrl: '',
+    overview: '大阪駅・梅田エリアは関西最大の交通ターミナルであり、西日本最大の繁華街です。JR大阪駅を中心に、阪急、阪神、地下鉄が乗り入れ、1日約250万人が利用します。高層ビルが立ち並び、デパート、ショッピングモール、レストラン、ホテルが集積する関西経済の中心地として機能しています。',
+    highlights: ['梅田スカイビル', 'グランフロント大阪', 'ルクア大阪', 'ヨドバシカメラ'],
+    history: '明治7年（1874年）に大阪駅が開業。当時は田畑が広がる郊外でしたが、鉄道の発達とともに発展しました。戦後復興期には阪急、阪神の私鉄ターミナルが整備され、現在の巨大ターミナルの基礎が築かれました。21世紀に入ってからの再開発により、さらに現代的な都市空間に生まれ変わっています。',
+    images: []
   },
   {
     id: 203,
@@ -1486,16 +1570,29 @@ const playAudioGuide = () => {
   }
 }
 
-// Photo gallery functions
+// Photo gallery functions - all from Google Place Photos
+const loadGalleryPhotos = async () => {
+  if (currentSpot.value?.name) {
+    try {
+      console.log('🖼️ Loading gallery photos for:', currentSpot.value.name)
+      const photos = await getGalleryPhotos(currentSpot.value.name, currentSpot.value.place_id)
+      galleryPhotos.value = photos
+      console.log('✅ Gallery photos loaded:', photos.length, 'photos')
+    } catch (error) {
+      console.error('❌ Error loading gallery photos:', error)
+      galleryPhotos.value = []
+    }
+  }
+}
+
 const getGalleryImages = () => {
-  // Get up to 2 additional images from the database (total 3 with Google Place Photos)
-  return currentSpot.value?.images?.slice(0, 2) || []
+  // Return Google Place Photos (excluding the first one which is used as main image)
+  return galleryPhotos.value.slice(1) || []
 }
 
 const getTotalImageCount = () => {
-  const placePhotoCount = 1 // Always include Google Place Photo
-  const dbImages = currentSpot.value?.images?.length || 0
-  return Math.min(placePhotoCount + dbImages, 3) // Maximum 3 images
+  // Total count of all Google Place Photos
+  return galleryPhotos.value.length || 1
 }
 
 const scrollLeft = () => {
@@ -1675,6 +1772,9 @@ onMounted(async () => {
       currentSpot.value = spot
       console.log('Current spot set to:', currentSpot.value.name)
       
+      // Load gallery photos from Google Places API
+      await loadGalleryPhotos()
+      
       // Initialize access tabs
       initializeTabs()
       
@@ -1701,13 +1801,15 @@ onMounted(async () => {
 })
 
 // Also watch for route changes
-watch(() => route.params.id, (newId) => {
+watch(() => route.params.id, async (newId) => {
   if (newId) {
     console.log('Route ID changed to:', newId)
     const numericId = parseInt(newId as string)
     const spot = allSpots.find(s => s.id === numericId)
     if (spot) {
       currentSpot.value = spot
+      // Load gallery photos for the new spot
+      await loadGalleryPhotos()
     }
   }
 })

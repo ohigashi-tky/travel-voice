@@ -142,6 +142,7 @@ const allSpots = [
     description: '高さ634mの世界最高クラスの電波塔。展望デッキからは東京の絶景を一望できます。',
     category: '展望台',
     prefecture: '東京都',
+    place_id: 'ChIJ35ov0dCOGGARKvdDH7NPHX0',
     imageUrl: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format'
   },
   {
@@ -150,6 +151,7 @@ const allSpots = [
     description: '東京最古の寺院。雷門と仲見世通りで有名な東京を代表する観光地です。',
     category: '寺院',
     prefecture: '東京都',
+    place_id: 'ChIJ8T1GpMGOGGARDYGSgpooDWw',
     imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
   },
   {
@@ -158,7 +160,35 @@ const allSpots = [
     description: '明治天皇と昭憲皇太后を祀る神社。都心にありながら豊かな森に囲まれた神聖な空間です。',
     category: '神社',
     prefecture: '東京都',
+    place_id: 'ChIJ5SZMmreMGGARcz8QSTiJyo8',
     imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 4,
+    name: '銀座',
+    description: '高級ブランド店が立ち並ぶ東京の代表的なショッピングエリア。洗練された大人の街として世界的に有名です。',
+    category: '観光エリア',
+    prefecture: '東京都',
+    place_id: 'ChIJu2-DAeeLGGARUZipC7OFRmA',
+    imageUrl: ''
+  },
+  {
+    id: 5,
+    name: '上野公園',
+    description: '桜の名所として有名な都市公園。上野動物園や博物館、美術館が集まる文化の拠点です。',
+    category: '公園',
+    prefecture: '東京都',
+    place_id: 'ChIJw2qQRZuOGGARWmROEiM2y7E',
+    imageUrl: ''
+  },
+  {
+    id: 6,
+    name: '渋谷スクランブル交差点',
+    description: '世界で最も有名な交差点の一つ。一度に3000人もの人が行き交う東京のシンボル的な光景です。',
+    category: '観光エリア',
+    prefecture: '東京都',
+    place_id: 'ChIJK9EM68qLGGARacmu4KJj5SA',
+    imageUrl: ''
   },
   {
     id: 101,
@@ -166,6 +196,7 @@ const allSpots = [
     description: '豊臣秀吉が築城した名城。美しい天守閣と桜の名所として親しまれています。',
     category: '歴史建造物',
     prefecture: '大阪府',
+    place_id: 'ChIJ_TooXM3gAGARQR6hXH3QAQ8',
     imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
   },
   {
@@ -174,6 +205,7 @@ const allSpots = [
     description: '新世界のシンボルタワー。ビリケンさんで有名な大阪を代表する観光地です。',
     category: '展望台',
     prefecture: '大阪府',
+    place_id: 'ChIJ_0Lgd2DnAGARV0X03lbPy-U',
     imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format'
   },
   {
@@ -182,7 +214,35 @@ const allSpots = [
     description: '世界最大級の水族館。ジンベエザメやマンタが泳ぐ太平洋水槽は圧巻です。',
     category: '水族館',
     prefecture: '大阪府',
+    place_id: 'ChIJzakNjPToAGARzCwIriDFg28',
     imageUrl: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=400&h=300&fit=crop&auto=format'
+  },
+  {
+    id: 104,
+    name: '道頓堀',
+    description: '大阪の代表的な繁華街。グリコの看板や川沿いのネオンサインで有名な観光エリアです。',
+    category: '観光エリア',
+    prefecture: '大阪府',
+    place_id: 'ChIJzWVthgDgAGARYOk-pwyZ5UU',
+    imageUrl: ''
+  },
+  {
+    id: 105,
+    name: '新世界',
+    description: '通天閣を中心とした下町レトロエリア。串カツやお好み焼きなど大阪グルメの聖地です。',
+    category: '観光エリア',
+    prefecture: '大阪府',
+    place_id: 'ChIJX8PVvGLnAGARIh1kJH-aVKM',
+    imageUrl: ''
+  },
+  {
+    id: 106,
+    name: '大阪駅・梅田',
+    description: '関西最大の交通ハブ。ショッピング、グルメ、エンターテイメントが集まる西日本の玄関口です。',
+    category: '観光エリア',
+    prefecture: '大阪府',
+    place_id: 'ChIJC6fjlY3mAGARSshZ6CLIrhs',
+    imageUrl: ''
   },
   {
     id: 201,
@@ -364,6 +424,7 @@ const categoryEmojiMap = {
   '展望台': '🗼',
   '博物館': '🏛️',
   '観光エリア': '🌆',
+  '公園': '🌳',
   '水族館': '🐟',
   '歴史的景観': '🏞️',
   '温泉': '♨️',

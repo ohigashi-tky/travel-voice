@@ -37,7 +37,8 @@
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-cyan-400 to-blue-500 relative">
               <PlacePhotoImage 
-                :spot-name="spot.name" :place-id="spot.place_id"
+                :spot-name="spot.name"
+                :place-id="spot.place_id"
                 :alt="spot.name"
                 image-class="w-full h-full object-cover"
               >
@@ -200,6 +201,7 @@ onMounted(() => {
       address: '東京都墨田区押上1-1-2',
       latitude: 35.7101,
       longitude: 139.8107,
+      place_id: 'ChIJ35ov0dCOGGARKvdDH7NPHX0',
       imageUrl: '',
       openingHours: '8:00-22:00',
       admissionFee: '大人2100円',
@@ -215,6 +217,7 @@ onMounted(() => {
       address: '東京都台東区浅草2-3-1',
       latitude: 35.7148,
       longitude: 139.7967,
+      place_id: 'ChIJ8T1GpMGOGGARDYGSgpooDWw',
       imageUrl: '',
       openingHours: '6:00-17:00',
       admissionFee: '無料',
@@ -230,8 +233,57 @@ onMounted(() => {
       address: '東京都渋谷区代々木神園町1-1',
       latitude: 35.6762,
       longitude: 139.6993,
+      place_id: 'ChIJ5SZMmreMGGARcz8QSTiJyo8',
       imageUrl: '',
       openingHours: '5:00-18:00',
+      admissionFee: '無料',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 4,
+      name: '銀座',
+      description: '高級ブランド店が立ち並ぶ東京の代表的なショッピングエリア。洗練された大人の街として世界的に有名です。',
+      category: '観光エリア',
+      prefecture: '東京都',
+      address: '東京都中央区銀座',
+      latitude: 35.6762,
+      longitude: 139.7631,
+      place_id: 'ChIJu2-DAeeLGGARUZipC7OFRmA',
+      imageUrl: '',
+      openingHours: '店舗により異なる',
+      admissionFee: '無料（店舗により異なる）',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 5,
+      name: '上野公園',
+      description: '桜の名所として有名な都市公園。上野動物園や博物館、美術館が集まる文化の拠点です。',
+      category: '公園',
+      prefecture: '東京都',
+      address: '東京都台東区上野公園',
+      latitude: 35.7153,
+      longitude: 139.7734,
+      place_id: 'ChIJw2qQRZuOGGARWmROEiM2y7E',
+      imageUrl: '',
+      openingHours: '24時間（施設により異なる）',
+      admissionFee: '無料（施設により異なる）',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 6,
+      name: '渋谷スクランブル交差点',
+      description: '世界で最も有名な交差点の一つ。一度に3000人もの人が行き交う東京のシンボル的な光景です。',
+      category: '観光エリア',
+      prefecture: '東京都',
+      address: '東京都渋谷区道玄坂2丁目',
+      latitude: 35.6598,
+      longitude: 139.7006,
+      place_id: 'ChIJK9EM68qLGGARacmu4KJj5SA',
+      imageUrl: '',
+      openingHours: '24時間',
       admissionFee: '無料',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

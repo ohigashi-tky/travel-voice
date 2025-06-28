@@ -157,6 +157,9 @@ const getSpotTags = (spot: TouristSpot) => {
   if (spot.name.includes('大阪城')) tags.push('歴史', '桜の名所')
   if (spot.name.includes('通天閣')) tags.push('展望台', 'レトロ')
   if (spot.name.includes('海遊館')) tags.push('水族館', 'ファミリー')
+  if (spot.name.includes('道頓堀')) tags.push('グルメ', 'ネオン', '繁華街')
+  if (spot.name.includes('新世界')) tags.push('レトロ', 'グルメ', '下町')
+  if (spot.name.includes('梅田') || spot.name.includes('大阪駅')) tags.push('ショッピング', '交通', 'ビジネス')
   return tags.slice(0, 3)
 }
 
@@ -205,6 +208,7 @@ onMounted(() => {
       address: '大阪府大阪市中央区大阪城1-1',
       latitude: 34.6873,
       longitude: 135.5262,
+      place_id: 'ChIJ_TooXM3gAGARQR6hXH3QAQ8',
       imageUrl: '',
       openingHours: '9:00-17:00',
       admissionFee: '大人600円',
@@ -220,6 +224,7 @@ onMounted(() => {
       address: '大阪府大阪市浪速区恵美須東1-18-6',
       latitude: 34.6523,
       longitude: 135.5061,
+      place_id: 'ChIJ_0Lgd2DnAGARV0X03lbPy-U',
       imageUrl: '',
       openingHours: '8:30-21:30',
       admissionFee: '大人900円',
@@ -235,9 +240,58 @@ onMounted(() => {
       address: '大阪府大阪市港区海岸通1-1-10',
       latitude: 34.6547,
       longitude: 135.4281,
+      place_id: 'ChIJzakNjPToAGARzCwIriDFg28',
       imageUrl: '',
       openingHours: '10:00-20:00',
       admissionFee: '大人2700円',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 104,
+      name: '道頓堀',
+      description: '大阪の代表的な繁華街。グリコの看板や川沿いのネオンサインで有名な観光エリアです。',
+      category: '観光エリア',
+      prefecture: '大阪府',
+      address: '大阪府大阪市中央区道頓堀',
+      latitude: 34.6686,
+      longitude: 135.5023,
+      place_id: 'ChIJzWVthgDgAGARYOk-pwyZ5UU',
+      imageUrl: '',
+      openingHours: '24時間（店舗により異なる）',
+      admissionFee: '無料（店舗により異なる）',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 105,
+      name: '新世界',
+      description: '通天閣を中心とした下町レトロエリア。串カツやお好み焼きなど大阪グルメの聖地です。',
+      category: '観光エリア',
+      prefecture: '大阪府',
+      address: '大阪府大阪市浪速区恵美須東',
+      latitude: 34.6520,
+      longitude: 135.5065,
+      place_id: 'ChIJX8PVvGLnAGARIh1kJH-aVKM',
+      imageUrl: '',
+      openingHours: '24時間（店舗により異なる）',
+      admissionFee: '無料（店舗により異なる）',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 106,
+      name: '大阪駅・梅田',
+      description: '関西最大の交通ハブ。ショッピング、グルメ、エンターテイメントが集まる西日本の玄関口です。',
+      category: '観光エリア',
+      prefecture: '大阪府',
+      address: '大阪府大阪市北区梅田',
+      latitude: 34.7024,
+      longitude: 135.4959,
+      place_id: 'ChIJC6fjlY3mAGARSshZ6CLIrhs',
+      imageUrl: '',
+      openingHours: '24時間（施設により異なる）',
+      admissionFee: '無料（施設により異なる）',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }

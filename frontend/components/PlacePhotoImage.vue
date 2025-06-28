@@ -7,7 +7,7 @@
 
     <!-- Image -->
     <img 
-      v-else
+      v-if="!loading && !error && imageUrl"
       :src="imageUrl" 
       :alt="alt"
       class="w-full h-full object-cover"
@@ -19,7 +19,7 @@
     <!-- Attribution removed -->
     
     <!-- Error/No photo state -->
-    <div v-if="error" class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+    <div v-if="!loading && (error || !imageUrl)" class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
       <div class="text-center text-gray-500 dark:text-gray-400 p-4">
         <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,14 +61,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { 
-  loading, 
-  error: apiError, 
   getPhotosWithFallback, 
   getFallbackImages 
 } = useGooglePlacePhotos()
 
 const imageUrl = ref(props.fallbackUrl)
-// Attribution removed for cleaner UI
+const loading = ref(true)
 const error = ref(false)
 
 const handleImageError = (event: Event) => {
@@ -78,12 +76,22 @@ const handleImageError = (event: Event) => {
 
 const loadImage = async () => {
   try {
+    loading.value = true
     error.value = false
+    
+    // Check if we have either spotName or placeId
+    if (!props.spotName && !props.placeId) {
+      console.warn('⚠️ Neither spotName nor placeId provided')
+      error.value = true
+      loading.value = false
+      return
+    }
     
     const photos = await getPhotosWithFallback(props.spotName, props.placeId)
     
     if (photos.length > 0) {
       imageUrl.value = photos[0].url
+      error.value = false
     } else {
       // No photos available - show error state
       console.warn('⚠️ No photos found for:', props.spotName)
@@ -92,11 +100,18 @@ const loadImage = async () => {
   } catch (err) {
     console.error('❌ Error loading place photo:', err)
     error.value = true
+  } finally {
+    loading.value = false
   }
 }
 
 // Load image on mount
 onMounted(() => {
+  console.log('🚀 PlacePhotoImage mounted with props:', { 
+    spotName: props.spotName, 
+    placeId: props.placeId,
+    alt: props.alt 
+  })
   loadImage()
 })
 

@@ -15,11 +15,17 @@ export interface PlacePhotosResponse {
   message?: string
 }
 
+interface CacheEntry {
+  data: PlacePhotosResponse
+  timestamp: number
+}
+
 export const useGooglePlacePhotos = () => {
-  // Cache for photos to avoid repeated API calls
-  const photoCache = new Map<string, PlacePhotosResponse>()
+  // Cache for photos with 1-day expiration
+  const photoCache = new Map<string, CacheEntry>()
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const CACHE_DURATION = 24 * 60 * 60 * 1000 // 1 day in milliseconds
 
   /**
    * Get photos for a tourist spot by name or place_id
@@ -27,9 +33,17 @@ export const useGooglePlacePhotos = () => {
   const getPlacePhotos = async (spotName: string, placeId?: string): Promise<PlacePhotosResponse> => {
     const cacheKey = placeId || spotName
     
-    // Check cache first
+    // Check cache first - validate timestamp
     if (photoCache.has(cacheKey)) {
-      return photoCache.get(cacheKey)!
+      const cached = photoCache.get(cacheKey)!
+      const now = Date.now()
+      if (now - cached.timestamp < CACHE_DURATION) {
+        console.log('📦 Using cached photos for:', spotName)
+        return cached.data
+      } else {
+        console.log('⏰ Cache expired for:', spotName, 'removing...')
+        photoCache.delete(cacheKey)
+      }
     }
 
     loading.value = true
@@ -44,9 +58,13 @@ export const useGooglePlacePhotos = () => {
         }
       })
 
-      // Cache successful responses
+      // Cache successful responses with timestamp
       if (response.success) {
-        photoCache.set(cacheKey, response)
+        photoCache.set(cacheKey, {
+          data: response,
+          timestamp: Date.now()
+        })
+        console.log('💾 Cached photos for:', spotName, 'Count:', response.photos?.length || 0)
       } else {
         console.warn('⚠️ No photos found for:', spotName)
       }
@@ -81,18 +99,20 @@ export const useGooglePlacePhotos = () => {
    */
   const getPhotosWithFallback = async (spotName: string, placeId?: string): Promise<PlacePhoto[]> => {
     try {
+      console.log('🔄 getPhotosWithFallback called with:', { spotName, placeId })
       const response = await getPlacePhotos(spotName, placeId)
       
       if (response.success && response.photos.length > 0) {
+        console.log('✅ Photos found:', response.photos.length, 'photos')
         return response.photos
       }
       
       // No fallback - show placeholder or error state
-      console.warn(`No Google Photos found for ${spotName}`)
+      console.warn(`⚠️ No Google Photos found for ${spotName}`)
       return []
       
     } catch (err) {
-      console.error('Error fetching Google Place photos:', err)
+      console.error('❌ Error fetching Google Place photos:', err)
       return []
     }
   }
@@ -107,6 +127,27 @@ export const useGooglePlacePhotos = () => {
     } catch (err) {
       console.error('Error getting primary photo:', err)
       return null
+    }
+  }
+
+  /**
+   * Get multiple photos for gallery (up to 5 photos)
+   */
+  const getGalleryPhotos = async (spotName: string, placeId?: string): Promise<PlacePhoto[]> => {
+    try {
+      const response = await getPlacePhotos(spotName, placeId)
+      
+      if (response.success && response.photos.length > 0) {
+        // Return up to 5 photos for gallery
+        return response.photos.slice(0, 5)
+      }
+      
+      console.warn(`No gallery photos found for ${spotName}`)
+      return []
+      
+    } catch (err) {
+      console.error('Error fetching gallery photos:', err)
+      return []
     }
   }
 
@@ -130,6 +171,7 @@ export const useGooglePlacePhotos = () => {
     error: readonly(error),
     getPlacePhotos,
     getPhotosWithFallback,
+    getGalleryPhotos,
     getPrimaryPhotoUrl,
     getFallbackImages,
     clearCache,
