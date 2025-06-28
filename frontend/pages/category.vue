@@ -47,8 +47,8 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
-              <UnsplashImage 
-                :spot-name="spot.name"
+              <PlacePhotoImage 
+                :spot-name="spot.name" :place-id="spot.place_id"
                 :alt="spot.name"
                 image-class="group-hover:scale-105 transition-transform duration-300"
               >
@@ -62,7 +62,7 @@
                     {{ spot.category }}
                   </span>
                 </div>
-              </UnsplashImage>
+              </PlacePhotoImage>
             </div>
 
             <!-- Spot Info -->
@@ -118,7 +118,7 @@ import { ref, onMounted, computed } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import UnsplashImage from '~/components/UnsplashImage.vue'
+import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 
 // Page meta
 definePageMeta({

@@ -37,6 +37,7 @@ export interface TouristSpot {
   car_access?: CarAccess[]
   parking_info?: string
   walking_info?: string
+  place_id?: string
 }
 
 export interface PublicTransport {

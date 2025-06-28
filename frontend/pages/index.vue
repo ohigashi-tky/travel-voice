@@ -132,8 +132,9 @@
                       <div class="flex h-32">
                         <!-- Spot Image -->
                         <div class="w-48 bg-gradient-to-br from-blue-400 to-purple-500 relative flex-shrink-0">
-                          <UnsplashImage 
+                          <PlacePhotoImage 
                             :spot-name="spot.name"
+                            :place-id="spot.place_id"
                             :alt="spot.name"
                           >
                             <div class="absolute top-2 right-2">
@@ -141,7 +142,7 @@
                                 {{ spot.prefecture }}
                               </span>
                             </div>
-                          </UnsplashImage>
+                          </PlacePhotoImage>
                         </div>
                         
                         <!-- Spot Info -->
@@ -326,7 +327,7 @@ import { useLanguage } from '~/composables/useLanguage'
 import { useTouristSpots } from '~/composables/useTouristSpots'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import UnsplashImage from '~/components/UnsplashImage.vue'
+import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 
 // Page meta
 definePageMeta({

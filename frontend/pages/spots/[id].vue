@@ -16,8 +16,9 @@
     <div v-if="currentSpot && !isLoading" class="relative pt-16">
       <!-- Main Image -->
       <div class="h-64 md:h-80 relative overflow-hidden">
-        <UnsplashImage 
+        <PlacePhotoImage 
           :spot-name="currentSpot?.name"
+          :place-id="currentSpot?.place_id"
           :alt="currentSpot?.name"
           image-class="w-full h-full object-cover"
         />
@@ -103,7 +104,7 @@
           </h2>
           <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
             <GoogleMapEmbed 
-              :spot-name="currentSpot.name"
+              :spot-name="currentSpot.name" :place-id="currentSpot.place_id"
               :zoom="16"
             />
           </div>
@@ -284,11 +285,12 @@
               class="flex gap-4 overflow-x-auto scroll-smooth pb-2 gallery-scroll"
               @scroll="updateScrollButtons"
             >
-              <!-- Unsplash Image -->
+              <!-- Google Place Photo -->
               <div class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                <UnsplashImage 
+                <PlacePhotoImage 
                   :spot-name="currentSpot.name"
-                  :alt="`${currentSpot.name} - Unsplash画像`"
+                  :place-id="currentSpot.place_id"
+                  :alt="`${currentSpot.name} - メイン画像`"
                   image-class="hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -388,7 +390,7 @@ import { useTouristSpots } from '~/composables/useTouristSpots'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
-import UnsplashImage from '~/components/UnsplashImage.vue'
+import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 import GoogleMapEmbed from '~/components/GoogleMapEmbed.vue'
 
 // Page meta
@@ -1486,14 +1488,14 @@ const playAudioGuide = () => {
 
 // Photo gallery functions
 const getGalleryImages = () => {
-  // Get up to 2 additional images from the database (total 3 with Unsplash)
+  // Get up to 2 additional images from the database (total 3 with Google Place Photos)
   return currentSpot.value?.images?.slice(0, 2) || []
 }
 
 const getTotalImageCount = () => {
-  const unsplashCount = 1 // Always include Unsplash image
+  const placePhotoCount = 1 // Always include Google Place Photo
   const dbImages = currentSpot.value?.images?.length || 0
-  return Math.min(unsplashCount + dbImages, 3) // Maximum 3 images
+  return Math.min(placePhotoCount + dbImages, 3) // Maximum 3 images
 }
 
 const scrollLeft = () => {

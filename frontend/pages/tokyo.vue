@@ -36,24 +36,17 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-cyan-400 to-blue-500 relative">
-              <img 
-                :src="getSpotImage(spot.name)" 
+              <PlacePhotoImage 
+                :spot-name="spot.name" :place-id="spot.place_id"
                 :alt="spot.name"
-                class="w-full h-full object-cover"
-                loading="lazy"
-                @error="handleImageError"
-              />
-              <div class="absolute top-3 right-3">
-                <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                  {{ spot.category }}
-                </span>
-              </div>
-              <!-- Unsplash Credit -->
-              <div v-if="imageCredits[spot.name]" class="absolute bottom-0.5 right-0.5">
-                <span class="bg-black/40 text-white px-1 py-0.5 rounded text-xs font-light opacity-60 text-[10px]">
-                  {{ imageCredits[spot.name] }}
-                </span>
-              </div>
+                image-class="w-full h-full object-cover"
+              >
+                <div class="absolute top-3 right-3">
+                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
+                    {{ spot.category }}
+                  </span>
+                </div>
+              </PlacePhotoImage>
             </div>
             
             <!-- Spot Info -->
@@ -122,7 +115,7 @@ import type { TouristSpot, AudioGuide } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
-import { useUnsplashImages } from '~/composables/useUnsplashImages'
+import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 
 // Page meta
 definePageMeta({
@@ -142,62 +135,10 @@ const touristSpots = ref<TouristSpot[]>([])
 const currentAudioGuide = ref<AudioGuide | null>(null)
 const currentSpot = ref<TouristSpot | null>(null)
 
-// Unsplash Images
-const { getSpotImageUrl, searchImages, getImageCredit } = useUnsplashImages()
-const spotImages = ref<Record<string, string>>({})
-const imageCredits = ref<Record<string, string>>({})
 
 
-// Unsplash画像を取得する関数
-const getSpotImage = (spotName: string): string => {
-  // キャッシュされた画像があればそれを返す
-  if (spotImages.value[spotName]) {
-    return spotImages.value[spotName]
-  }
-  
-  // フォールバック画像を返す
-  return 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
-}
 
-// 画像読み込み時のエラーハンドリング
-const handleImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement
-  img.src = 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
-}
 
-// 観光地の画像とクレジット情報を事前に取得（Unsplash APIを使用）
-const preloadSpotImages = async () => {
-  const spots = ['東京スカイツリー', '浅草寺'] // 東京の主要スポット
-  
-  for (const spotName of spots) {
-    try {
-      console.log(`Loading image for ${spotName}...`)
-      
-      // 画像とクレジット情報を取得
-      const images = await searchImages(spotName)
-      if (images.length > 0) {
-        const firstImage = images[0]
-        spotImages.value[spotName] = firstImage.urls.regular
-        imageCredits.value[spotName] = getImageCredit(firstImage)
-        console.log(`Successfully loaded image for ${spotName}:`, firstImage.urls.regular)
-        console.log(`Credit: ${imageCredits.value[spotName]}`)
-      } else {
-        // フォールバック画像の場合はクレジット表記なし
-        const imageUrl = await getSpotImageUrl(spotName, 'regular')
-        spotImages.value[spotName] = imageUrl
-        console.log(`Using fallback image for ${spotName}:`, imageUrl)
-      }
-    } catch (error) {
-      console.error(`Failed to load image for ${spotName}:`, error)
-      // エラーの場合もフォールバック画像を設定
-      const imageUrl = await getSpotImageUrl(spotName, 'regular')
-      spotImages.value[spotName] = imageUrl
-    }
-  }
-  
-  console.log('Final spot images:', spotImages.value)
-  console.log('Image credits:', imageCredits.value)
-}
 
 const getSpotTags = (spot: TouristSpot) => {
   const tags = []
@@ -247,10 +188,7 @@ const goToSpotDetail = (spotId: number) => {
 
 
 // Load mock tourist spots data
-onMounted(async () => {
-  // Unsplash画像を事前に読み込み
-  await preloadSpotImages()
-  
+onMounted(() => {
   // Mock data for Tokyo tourist spots
   touristSpots.value = [
     {

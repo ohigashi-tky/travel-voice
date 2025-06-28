@@ -9,12 +9,7 @@
       @error="handleImageError"
     />
     
-    <!-- Credit表記 -->
-    <div v-if="showCredit && credit" class="absolute bottom-0.5 right-0.5">
-      <span class="bg-black/40 text-white px-1 py-0.5 rounded text-xs font-light opacity-60 text-[10px]">
-        {{ credit }}
-      </span>
-    </div>
+    <!-- Credit表記削除 -->
     
     <!-- その他のオーバーレイ -->
     <slot />
@@ -36,7 +31,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   alt: '',
   imageClass: '',
-  showCredit: true,
+  showCredit: false,
   fallbackUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=600&fit=crop&auto=format&q=80'
 })
 

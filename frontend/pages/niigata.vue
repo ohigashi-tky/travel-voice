@@ -36,8 +36,8 @@
           >
             <!-- Spot Image -->
             <div class="h-48 bg-gradient-to-br from-blue-400 to-teal-500 relative">
-              <UnsplashImage 
-                :spot-name="spot.name"
+              <PlacePhotoImage 
+                :spot-name="spot.name" :place-id="spot.place_id"
                 :alt="spot.name"
               >
                 <div class="absolute top-3 right-3">
@@ -45,7 +45,7 @@
                     {{ spot.category }}
                   </span>
                 </div>
-              </UnsplashImage>
+              </PlacePhotoImage>
             </div>
             
             <!-- Spot Info -->
@@ -89,7 +89,7 @@ import { ref, computed } from 'vue'
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import UnsplashImage from '~/components/UnsplashImage.vue'
+import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 
 // Page meta
 definePageMeta({
