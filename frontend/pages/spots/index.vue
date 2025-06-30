@@ -2,7 +2,10 @@
   <div>
     <AppHeader />
     
-    <main class="min-h-screen py-8">
+    <!-- Back Button -->
+    <BackButton />
+    
+    <main class="min-h-screen py-8 pt-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="mb-8">

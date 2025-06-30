@@ -3,17 +3,13 @@
     <!-- Header -->
     <AppHeader />
 
+    <!-- Back Button -->
+    <BackButton />
+
     <!-- Page Title -->
     <div class="bg-white dark:bg-gray-900 py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-center relative">
-          <button 
-            @click="goHome"
-            class="absolute left-0 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300 group"
-          >
-            <ArrowLeft class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
-            <span class="text-sm font-medium">戻る</span>
-          </button>
+        <div class="flex items-center justify-center">
           <h1 class="text-3xl font-bold text-gray-800 dark:text-white tracking-wide transition-colors duration-300">
             <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
               福岡県
@@ -71,7 +67,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ArrowLeft } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
@@ -114,9 +109,6 @@ const touristSpots = [
 ]
 
 // Navigation functions
-const goHome = () => {
-  navigateTo('/')
-}
 
 const goToSpotDetail = (spotId) => {
   console.log('Navigating to spot:', spotId)

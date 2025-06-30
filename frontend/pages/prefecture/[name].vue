@@ -7,21 +7,17 @@
       <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-purple-400/20 to-pink-600/20 rounded-full filter blur-3xl animate-float-delay"></div>
     </div>
 
+    <!-- Fixed Back Button (always visible) -->
+    <BackButton />
+
     <!-- Header -->
     <header class="relative z-10 p-6 pt-20">
-      <nav class="flex items-center justify-between max-w-7xl mx-auto">
-        <button @click="goBack" class="flex items-center gap-2 text-white hover:text-cyan-400 transition-colors">
-          <ArrowLeft class="w-6 h-6" />
-          <span class="font-semibold">戻る</span>
-        </button>
-        
+      <nav class="flex items-center justify-center max-w-7xl mx-auto">
         <h1 class="text-2xl font-black text-white">
           <span class="bg-gradient-to-r from-cyan-400 to-white bg-clip-text text-transparent">
             {{ prefectureName }}
           </span>
         </h1>
-        
-        <div class="w-20"></div>
       </nav>
     </header>
 
@@ -138,7 +134,6 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeft } from 'lucide-vue-next'
 import type { TouristSpot, AudioGuide } from '~/types'
 import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
 
@@ -209,9 +204,6 @@ const generateSpotImage = (spotName: string, category: string) => {
   return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
 }
 
-const goBack = () => {
-  navigateTo('/')
-}
 
 const exploreSpot = async (spot: TouristSpot) => {
   try {

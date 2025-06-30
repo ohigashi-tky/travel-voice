@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>音声テスト</title>
+</head>
+<body>
+    <h1>音声再生テスト</h1>
+    
+    <h2>1. HTML Audio要素による直接再生</h2>
+    <audio controls>
+        <source src="/storage/audio/polly/polly_audio_1f9ab6385ec68d367894d4f74c6dbef6.mp3" type="audio/mpeg">
+        お使いのブラウザは音声再生をサポートしていません。
+    </audio>
+    
+    <h2>2. JavaScript Audio オブジェクト</h2>
+    <button onclick="testJavaScriptAudio()">JavaScript再生テスト</button>
+    <div id="js-result"></div>
+    
+    <h2>3. 直接リンク</h2>
+    <a href="/storage/audio/polly/polly_audio_1f9ab6385ec68d367894d4f74c6dbef6.mp3" target="_blank">
+        音声ファイルを直接開く
+    </a>
+    
+    <script>
+        async function testJavaScriptAudio() {
+            const result = document.getElementById('js-result');
+            result.innerHTML = 'テスト中...';
+            
+            try {
+                const audio = new Audio('/storage/audio/polly/polly_audio_1f9ab6385ec68d367894d4f74c6dbef6.mp3');
+                
+                audio.addEventListener('loadeddata', () => {
+                    result.innerHTML += '<br>✅ 音声データ読み込み成功';
+                });
+                
+                audio.addEventListener('canplay', () => {
+                    result.innerHTML += '<br>✅ 再生準備完了';
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    result.innerHTML += '<br>❌ エラー: ' + e.message;
+                    console.error('Audio Error:', e, audio.error);
+                });
+                
+                await audio.play();
+                result.innerHTML += '<br>🎵 再生開始成功';
+                
+            } catch (error) {
+                result.innerHTML += '<br>❌ JavaScript エラー: ' + error.message;
+                console.error('JavaScript Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

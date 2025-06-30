@@ -28,6 +28,17 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'aws' => [
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'ap-northeast-1'),
+        'bucket' => env('AWS_BUCKET'),
+        'polly_region' => env('AWS_POLLY_REGION', 'ap-northeast-1'),
+        'polly_output_format' => env('AWS_POLLY_OUTPUT_FORMAT', 'mp3'),
+        'polly_voice_id' => env('AWS_POLLY_VOICE_ID', 'Takumi'),
+        'polly_engine' => env('AWS_POLLY_ENGINE', 'neural'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

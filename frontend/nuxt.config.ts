@@ -6,6 +6,14 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/google-fonts'
   ],
+  nitro: {
+    devProxy: {
+      '/storage': {
+        target: 'http://localhost:8000/storage',
+        changeOrigin: true
+      }
+    }
+  },
   googleFonts: {
     families: {
       'Noto+Sans+JP': [300, 400, 500, 700],

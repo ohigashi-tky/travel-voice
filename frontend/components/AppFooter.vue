@@ -1,5 +1,5 @@
 <template>
-  <footer class="fixed bottom-0 left-0 right-0 h-20 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 transition-colors duration-300 z-40">
+  <footer class="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 transition-colors duration-300 z-40">
     <div class="flex items-center justify-around h-full">
       <button 
         @click="goToTop"

@@ -4,13 +4,7 @@
     <AppHeader />
     
     <!-- Back Button (always visible) -->
-    <button 
-      @click="goBack"
-      class="fixed top-20 left-6 z-50 flex items-center gap-2 text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg"
-    >
-      <ArrowLeft class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
-      <span class="text-sm font-medium">戻る</span>
-    </button>
+    <BackButton />
 
     <!-- Hero Section -->
     <div v-if="currentSpot && !isLoading" class="relative pt-16">
@@ -59,25 +53,10 @@
       <div class="max-w-4xl mx-auto py-8" v-else-if="currentSpot && !error">
         
         <!-- Audio Guide Section -->
-        <div class="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-6 mb-8">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-              <Headphones class="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">音声ガイド</h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm">{{ currentSpot.name }}の詳しい解説を聞く</p>
-            </div>
-          </div>
-          
-          <button 
-            @click="playAudioGuide"
-            class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            <Play class="w-5 h-5" />
-            再生
-          </button>
-        </div>
+        <AudioGuideSimple 
+          :spot-id="spotId"
+          :spot-name="currentSpot?.name || ''"
+        />
 
         <!-- Overview Section -->
         <section class="mb-8">
@@ -367,13 +346,6 @@
         </div>
       </div>
 
-      <!-- Audio Player -->
-      <AudioGuidePlayer 
-        :audio-guide="currentAudioGuide"
-        :spot-name="currentSpot?.name || null"
-        :is-visible="!!currentAudioGuide"
-        @close="closePlayer"
-      />
     </main>
     
     <!-- Footer -->
@@ -384,13 +356,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
-import { ArrowLeft, Headphones, Play, Info, Star, Clock, Camera, MapPin } from 'lucide-vue-next'
-import type { AudioGuide } from '~/types'
+import { Headphones, Play, Info, Star, Clock, Camera, MapPin } from 'lucide-vue-next'
 import { useTouristSpots } from '~/composables/useTouristSpots'
 import { useGooglePlacePhotos } from '~/composables/useGooglePlacePhotos'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
+import AudioGuideSimple from '~/components/AudioGuideSimple.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 import GoogleMapEmbed from '~/components/GoogleMapEmbed.vue'
 
@@ -414,7 +385,6 @@ useHead({
 // Reactive variables
 const activeTab = ref('top')
 const currentSpot = ref<any>(null)
-const currentAudioGuide = ref<AudioGuide | null>(null)
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 
@@ -1543,32 +1513,7 @@ const allSpots = [
   }
 ]
 
-const goBack = () => {
-  // ブラウザの履歴を使って前のページに戻る
-  if (window.history.length > 1) {
-    window.history.back()
-  } else {
-    // 履歴がない場合はホームページに戻る
-    navigateTo('/')
-  }
-}
 
-const playAudioGuide = () => {
-  if (currentSpot.value) {
-    currentAudioGuide.value = {
-      id: Date.now(),
-      title: `${currentSpot.value.name}の音声ガイド`,
-      description: `${currentSpot.value.name}の歴史と魅力について詳しく解説します。`,
-      audioUrl: '/audio/sample.mp3',
-      duration: 180,
-      transcript: `${currentSpot.value.name}の詳しい音声ガイドです...`,
-      touristSpotId: currentSpot.value.id,
-      language: 'ja',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  }
-}
 
 // Photo gallery functions - all from Google Place Photos
 const loadGalleryPhotos = async () => {
@@ -1646,9 +1591,6 @@ const scrollToImage = (index: number) => {
   currentImageIndex.value = index
 }
 
-const closePlayer = () => {
-  currentAudioGuide.value = null
-}
 
 // Helper function to highlight time patterns in text
 const highlightTimes = (text: string): string => {
@@ -1727,6 +1669,39 @@ const handleSwipe = () => {
   }
 }
 
+// Generate audio guide text for text-to-speech
+const getAudioGuideText = () => {
+  if (!currentSpot.value) {
+    return ''
+  }
+
+  const spot = currentSpot.value
+  let audioText = ''
+
+  // Introduction
+  audioText += `ようこそ、${spot.name}へお越しいただき、ありがとうございます。`
+  
+  // Overview/Description
+  if (spot.overview || spot.description) {
+    audioText += `${spot.overview || spot.description}`
+  }
+
+  // History section
+  if (spot.history) {
+    audioText += `\n\n${spot.name}の歴史についてご紹介します。${spot.history}`
+  }
+
+  // Highlights section
+  if (spot.highlights && spot.highlights.length > 0) {
+    audioText += `\n\nこちらの見どころは、${spot.highlights.join('、')}となっております。`
+  }
+
+  // Closing
+  audioText += `\n\n${spot.name}での素晴らしいひとときをお楽しみください。ありがとうございました。`
+
+  return audioText
+}
+
 // Load spot data on mount
 onMounted(async () => {
   try {
@@ -1751,19 +1726,27 @@ onMounted(async () => {
     const numericId = parseInt(id)
     console.log('Numeric ID:', numericId)
     
-    // Try to fetch the specific spot from the API
+    // Use local data first, then fallback to API
     let spot = null
-    try {
-      const response = await $fetch(`http://localhost:8000/api/tourist-spots/${numericId}`)
-      spot = response
-      console.log('Fetched spot from API:', spot)
-    } catch (apiError) {
-      console.log('API fetch failed, falling back to stored data:', apiError)
-      // Find the spot from stored API data first, then fallback to local data
+    
+    // First try local data (allSpots array)
+    spot = allSpots.find(s => s.id === numericId)
+    console.log('Found spot in local data:', spot)
+    
+    // If not found in local data, try stored API data
+    if (!spot) {
       spot = getSpotById(numericId)
-      if (!spot) {
-        // Fallback to local data
-        spot = allSpots.find(s => s.id === numericId)
+      console.log('Found spot in stored API data:', spot)
+    }
+    
+    // If still not found, try API as last resort
+    if (!spot) {
+      try {
+        const response = await $fetch(`http://localhost:8000/api/tourist-spots/${numericId}`)
+        spot = response
+        console.log('Fetched spot from API:', spot)
+      } catch (apiError) {
+        console.log('API fetch failed:', apiError)
       }
     }
     console.log('Found spot:', spot)
