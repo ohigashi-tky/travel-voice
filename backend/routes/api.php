@@ -22,6 +22,7 @@ Route::get('/tourist-spots/{touristSpot}', [TouristSpotController::class, 'show'
 Route::get('/tourist-spots/prefecture/{prefecture}', [TouristSpotController::class, 'byPrefecture']);
 
 Route::get('/popular-spots', [PopularSpotsController::class, 'getPopularSpots']);
+Route::delete('/popular-spots/cache', [PopularSpotsController::class, 'clearCache']);
 
 Route::get('/guides/{guide}', [GuideController::class, 'show']);
 

@@ -1,6 +1,6 @@
-# 🎧 Travel Voice
+# 🏠 おうち旅行
 
-モダンなデザインと音声ガイドで日本の観光を楽しむアプリケーション
+穏やかな音声で日本を巡る、家にいながら楽しめる旅行体験アプリ
 
 [![Laravel](https://img.shields.io/badge/Laravel-11.x-red.svg)](https://laravel.com/)
 [![Nuxt.js](https://img.shields.io/badge/Nuxt.js-3.x-green.svg)](https://nuxt.com/)
@@ -10,16 +10,7 @@
 
 ## 🌟 概要
 
-Travel Voice は、音声ガイド付きで日本各地の観光スポットを紹介するモダンな観光アプリです。白背景をベースとしたクリーンなデザインとダークモード対応で、快適な観光体験を提供します。
-
-### ✨ 主な機能
-
-- 🎧 **音声ガイド** - 各観光スポットの詳細な音声解説
-- 🌓 **ダークモード** - ライト/ダークテーマの切り替え
-- 🔐 **認証システム** - ログイン/登録/ログアウト機能
-- 📱 **レスポンシブ対応** - PC・タブレット・スマートフォン対応
-- ⚡ **高速パフォーマンス** - Nuxt 3による最適化
-- 🎨 **モダンUI** - グラデーションとアニメーション
+おうち旅行は、家に居ながら日本各地の観光スポットを音声で巡るバーチャル旅行体験アプリです。穏やかで自然な音声ガイドにより、リラックスしながら歴史や文化を学べる、新しい形の観光体験を提供します。
 
 ## 🚀 クイックスタート
 
@@ -34,7 +25,13 @@ NUXT_OPENROUTER_MODEL=google/gemini-2.5-flash-lite-preview-06-17
 NUXT_API_BASE_URL=http://localhost:8000/api
 NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID=your_google_maps_map_id_here
+
+# AWS Polly設定
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_DEFAULT_REGION=ap-northeast-1
 ```
+
 **注意:** `frontend`ディレクトリではなく、プロジェクトのルートにファイルを作成してください。
 
 ### 2. アプリケーションの起動
@@ -56,7 +53,7 @@ docker compose exec backend php artisan migrate --seed
 ### 🔑 テストアカウント
 
 - **Email**: demo@example.com
-- **Password**: password
+- **Password**: TravelGuide2024!
 
 ## 🏗️ 技術スタック
 
@@ -74,9 +71,14 @@ docker compose exec backend php artisan migrate --seed
 - **Laravel Sanctum** - API認証システム
 - **SQLite** - 軽量データベース
 
+### AI・音声技術
+- **Amazon Polly Neural Engine**
+- **Google Gemini 2.5 Flash**
+- **OpenRouter API**
+
 ### Infrastructure
-- **Docker** - コンテナ化によるポータブルな開発環境
-- **Docker Compose** - 複数サービス統合管理
+- **Docker**
+- **Docker Compose**
 
 ## 📁 プロジェクト構造
 
@@ -85,49 +87,36 @@ travel-voice/
 ├── 🔧 docker-compose.yml     # Docker設定
 ├── 🌐 frontend/              # Nuxt.js アプリケーション
 │   ├── 📄 pages/            # ページコンポーネント
-│   │   ├── index.vue        # メインページ（都道府県選択）
+│   │   ├── index.vue        # メインページ（人気スポット・都道府県選択）
 │   │   ├── login.vue        # ログインページ
-│   │   ├── tokyo.vue        # 東京ガイドページ
+│   │   ├── spots/[id].vue   # 観光地詳細・音声ガイドページ
 │   │   └── prefecture/      # 都道府県別ページ
 │   ├── 🧩 components/       # 共通コンポーネント
 │   │   ├── AppHeader.vue    # ヘッダー（プロフィール・設定）
-│   │   └── AppFooter.vue    # フッター（タブナビゲーション）
+│   │   ├── AppFooter.vue    # フッター（タブナビゲーション）
+│   │   └── AudioGuide*.vue  # 音声ガイド関連コンポーネント
 │   ├── 🔧 composables/      # Vue Composition関数
-│   │   ├── auth.ts          # 認証必須ページ用
-│   │   └── guest.ts         # ゲスト用（ログイン済みは除外）
+│   │   ├── useAuth.ts       # 認証管理
+│   │   ├── useAudioGuide.ts # 音声ガイド機能
+│   │   └── useTouristSpots.ts # 観光地データ管理
 │   ├── 🗄️ stores/          # Pinia ストア
 │   │   └── auth.ts          # 認証状態管理
 │   └── 📝 types/            # TypeScript型定義
 ├── ⚙️ backend/               # Laravel API
-│   ├── 🎯 app/Http/         # コントローラー・ミドルウェア
+│   ├── 🎯 app/Http/Controllers/Api/ # APIコントローラー
+│   │   ├── AudioGuideController.php # 音声ガイド生成
+│   │   └── PopularSpotsController.php # AI推薦機能
+│   ├── 🎵 app/Services/     # サービスクラス
+│   │   └── PollyService.php # Amazon Polly連携
+│   ├── 🧪 tests/           # テストスイート
+│   │   ├── Feature/AudioGuideQualityTest.php # 品質テスト
+│   │   └── Unit/AudioGuideDataTest.php # データテスト
 │   ├── 📊 database/         # マイグレーション・シーダー
 │   └── 🛣️ routes/           # API ルート定義
 └── 📚 docs/                 # プロジェクトドキュメント
+    ├── app-concept-v2.md    # アプリコンセプト提案
+    └── AUDIO_GUIDE_TESTING.md # 音声ガイド品質テストガイド
 ```
-
-## 🎯 現在対応の観光スポット
-
-### 🗼 東京都 (3箇所)
-
-| スポット | カテゴリ | 特徴 |
-|---|---|---|
-| **東京スカイツリー** | 展望台 | 高さ634mの世界最高クラスの電波塔 |
-| **浅草寺** | 寺院 | 東京最古の寺院、雷門と仲見世通りで有名 |
-| **明治神宮** | 神社 | 都心にありながら豊かな森に囲まれた神聖な空間 |
-
-## 🎨 デザインシステム
-
-### カラーパレット
-- **Primary Gradient**: Cyan → Blue → Purple (`from-cyan-600 via-blue-600 to-purple-600`)
-- **Background**: White / Dark Gray (`bg-white dark:bg-gray-900`)
-- **Surface**: Light Gray / Dark Gray (`bg-gray-50 dark:bg-gray-800`)
-- **Text**: Gray 800 / White (`text-gray-800 dark:text-white`)
-
-### UI特徴
-- **ダークモード**: VueUseのuseDarkによる完全対応
-- **固定フッター**: スクロール時も常に表示
-- **モーダル設計**: 設定・プロフィール用
-- **レスポンシブ**: Tailwind CSSによる完全対応
 
 ## 🔧 開発コマンド
 
@@ -138,9 +127,9 @@ docker compose down          # 全サービス停止
 docker compose logs -f       # ログ確認
 
 # ⚙️ Laravel操作
-docker compose exec backend php artisan migrate     # マイグレーション
-docker compose exec backend php artisan db:seed     # シーダー実行
-docker compose exec backend php artisan make:model Example  # モデル作成
+docker compose exec backend php artisan migrate --seed     # DB初期化
+docker compose exec backend php artisan audio-guide:quality-check  # 音声品質チェック
+docker compose exec backend ./vendor/bin/phpunit tests/    # テスト実行
 
 # 🌐 Nuxt操作
 docker compose exec frontend npm run dev           # 開発サーバー
@@ -157,66 +146,34 @@ docker compose exec frontend npm run type-check    # 型チェック
 | `POST` | `/api/logout` | ログアウト | ✅ |
 | `GET` | `/api/tourist-spots` | 観光スポット一覧 | ❌ |
 | `GET` | `/api/tourist-spots/{id}` | スポット詳細 | ❌ |
-| `GET` | `/api/tourist-spots/prefecture/{prefecture}` | 都道府県別 | ❌ |
+| `GET` | `/api/popular-spots` | 人気スポット | ❌ |
+| `POST` | `/api/audio-guide/tourist-spot` | 音声ガイド生成 | ❌ |
+| `DELETE` | `/api/popular-spots/cache` | キャッシュクリア | ❌ |
+
+## 🎯 音声ガイド品質管理
+
+### 品質基準
+- **最小文字数**: 200文字以上の詳細な解説
+- **エピソード数**: 2個以上の具体的な歴史エピソード
+- **具体性**: 年代、人名、数値などの具体的情報
+- **汎用テンプレート検出**: AI分析による品質保証
+
+### テスト実行
+```bash
+# 全観光地の品質チェック
+./vendor/bin/phpunit tests/Feature/AudioGuideQualityTest.php
+
+# Artisanコマンドでの品質チェック
+php artisan audio-guide:quality-check --export-report
+```
 
 ## 🎯 認証フロー
 
 ### ルート保護
-- **認証必須**: `/` (メインページ), `/tokyo` (東京ガイド)
+- **認証必須**: `/` (メインページ), `/spots/*` (観光地詳細)
 - **ゲスト限定**: `/login` (ログインページ)
 
 ### 認証状態管理
 - **Pinia Store**: 認証状態をグローバル管理
 - **localStorage**: ユーザー情報の永続化
 - **Middleware**: Nuxt 3のミドルウェアによる自動リダイレクト
-
-## 🔮 ロードマップ
-
-### ✅ Phase 1 (完了)
-- ✅ モダンUI/UXデザイン（白背景+ダークモード）
-- ✅ 認証システム（ログイン/登録/ログアウト）
-- ✅ 東京都観光スポット
-- ✅ 音声ガイド機能
-- ✅ 共通コンポーネント化
-- ✅ レスポンシブデザイン
-
-### 🚀 Phase 2 (計画中)
-- 🔄 他都道府県対応（大阪、京都、北海道等）
-- 🔄 音声プレーヤー機能強化
-- 🔄 ユーザーレビュー機能
-- 🔄 お気に入り機能
-
-### 🌟 Phase 3 (構想中)
-- 💡 AI音声ガイド生成
-- 💡 多言語対応（英語、中国語等）
-- 💡 オフライン機能
-- 💡 プッシュ通知
-
-## 🤝 コントリビューション
-
-プロジェクトへの貢献を歓迎します！
-
-1. **Fork** このリポジトリ
-2. **Feature Branch** を作成 (`git checkout -b feature/amazing-feature`)
-3. **Commit** 変更内容 (`git commit -m 'Add amazing feature'`)
-4. **Push** ブランチ (`git push origin feature/amazing-feature`)
-5. **Pull Request** を作成
-
-## 📄 ライセンス
-
-このプロジェクトは **MIT License** の下で公開されています。
-
-## 💬 サポート
-
-- 🐛 **バグ報告**: [GitHub Issues](https://github.com/ohigashi-tky/travel-voice/issues)
-- 💡 **機能提案**: [GitHub Discussions](https://github.com/ohigashi-tky/travel-voice/discussions)
-
----
-
-<div align="center">
-
-**🎧 音声ガイドで観光を楽しもう 🗾**
-
-Made with ❤️ by Claude Code
-
-</div>

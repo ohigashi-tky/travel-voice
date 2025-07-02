@@ -7,13 +7,13 @@
     <div class="flex-1 relative z-10 pb-24 pt-16">
       <div class="p-6">
         <div class="max-w-7xl mx-auto text-center">
-          <h1 class="text-7xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider text-center transition-colors duration-300">
+          <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider text-center transition-colors duration-300">
             <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">
-              {{ t('Travel Voice') }}
+              おうち旅行
             </span>
           </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-300 font-medium max-w-2xl mx-auto mb-6 tracking-wide transition-colors duration-300">
-            {{ t('音声ガイドで観光を楽しもう') }}
+          <p class="text-lg text-gray-600 dark:text-gray-300 font-medium max-w-2xl mx-auto mb-6 tracking-wide transition-colors duration-300">
+            穏やかな音声で日本を巡ろう
           </p>
         </div>
         
@@ -335,9 +335,9 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Travel Voice - 音声で楽しむ日本全国の魅力',
+  title: 'おうち旅行 - 穏やかな音声で日本全国を巡る旅行体験',
   meta: [
-    { name: 'description', content: '日本全国47都道府県の観光スポットを音声ガイドで楽しもう。地図から簡単アクセス、プロのガイドで深く学べる日本の歴史と文化。' }
+    { name: 'description', content: '穏やかな音声で日本全国を巡るおうち旅行。歴史やエピソードを聞きながら、家にいながら本格的な旅行気分を味わえます。' }
   ]
 })
 

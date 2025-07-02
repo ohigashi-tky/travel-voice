@@ -5,13 +5,13 @@
       <div class="w-full max-w-md">
         <!-- App Title -->
         <div class="text-center mb-8">
-          <h1 class="text-6xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider transition-colors duration-300">
+          <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider transition-colors duration-300">
             <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">
-              Travel Voice
+              おうち旅行
             </span>
           </h1>
           <p class="text-lg text-gray-600 dark:text-gray-300 font-medium tracking-wide transition-colors duration-300">
-            音声ガイドで観光を楽しもう
+            穏やかな音声で日本を巡ろう
           </p>
         </div>
 
@@ -160,9 +160,9 @@ definePageMeta({
 
 // SEO
 useHead({
-  title: 'ログイン - Travel Voice',
+  title: 'ログイン - おうち旅行',
   meta: [
-    { name: 'description', content: 'Travel Voiceにログインして、音声ガイド付きの観光体験をお楽しみください。' }
+    { name: 'description', content: 'おうち旅行にログインして、穏やかな音声で日本を巡る旅行体験をお楽しみください。' }
   ]
 })
 </script>

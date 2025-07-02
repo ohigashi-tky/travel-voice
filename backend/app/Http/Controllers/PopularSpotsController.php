@@ -47,11 +47,8 @@ class PopularSpotsController extends Controller
         } catch (\Exception $e) {
             Log::error('Error getting popular spots: ' . $e->getMessage());
             
-            // Fallback to random selection
-            $fallbackSpots = TouristSpot::where('is_active', true)
-                ->inRandomOrder()
-                ->limit(5)
-                ->get();
+            // Fallback to random selection (ensure unique spots)
+            $fallbackSpots = $this->getUniqueRandomSpots(5);
 
             return response()->json([
                 'success' => true,
@@ -132,12 +129,24 @@ class PopularSpotsController extends Controller
                 // Parse AI response and extract popular spot IDs
                 $popularSpotIds = $this->parseAIResponse($analysis);
                 
-                // Get the popular spots in order
-                $popularSpots = collect($popularSpotIds)->map(function ($id) use ($spots) {
-                    return $spots->firstWhere('id', $id);
-                })->filter()->values();
+                // Get the popular spots in order (ensure uniqueness)
+                $popularSpots = collect($popularSpotIds)
+                    ->unique()  // Remove any duplicate IDs
+                    ->map(function ($id) use ($spots) {
+                        return $spots->firstWhere('id', $id);
+                    })
+                    ->filter()  // Remove null values
+                    ->values()
+                    ->take(5);
 
-                return $popularSpots->take(5);
+                // If we don't have enough unique spots from AI, supplement with random ones
+                if ($popularSpots->count() < 5) {
+                    $existingIds = $popularSpots->pluck('id')->toArray();
+                    $additionalSpots = $this->getUniqueRandomSpots(5 - $popularSpots->count(), $existingIds);
+                    $popularSpots = $popularSpots->concat($additionalSpots);
+                }
+
+                return $popularSpots;
             }
 
             $errorResponse = $response->body();
@@ -169,13 +178,17 @@ class PopularSpotsController extends Controller
 4. 国内外観光客への総合的な訴求力
 5. 季節を通じた魅力度
 
+重要な注意事項：
+- 必ず異なる5つの観光スポットを選択してください（重複は絶対に避けてください）
+- IDの重複がないことを確認してください
+
 観光スポットデータ：
 {$spotsJson}
 
 回答は人気度順の観光スポットIDのJSON配列のみで返してください：
 [123, 456, 789, 101, 202]
 
-説明や追加のテキストは含めず、JSON配列のみを返してください。";
+説明や追加のテキストは含めず、重複のない5つのIDのJSON配列のみを返してください。";
     }
 
     /**
@@ -192,7 +205,9 @@ class PopularSpotsController extends Controller
             $spotIds = json_decode($response, true);
             
             if (is_array($spotIds)) {
-                return array_map('intval', $spotIds);
+                // Convert to integers and ensure uniqueness
+                $uniqueIds = array_unique(array_map('intval', $spotIds));
+                return array_values($uniqueIds); // Re-index array
             }
             
             throw new \Exception('Invalid AI response format');
@@ -200,6 +215,51 @@ class PopularSpotsController extends Controller
         } catch (\Exception $e) {
             Log::error('Error parsing AI response: ' . $e->getMessage());
             throw $e;
+        }
+    }
+
+    /**
+     * Get unique random tourist spots
+     */
+    private function getUniqueRandomSpots(int $count, array $excludeIds = []): \Illuminate\Support\Collection
+    {
+        $query = TouristSpot::where('is_active', true);
+        
+        // Exclude already selected IDs
+        if (!empty($excludeIds)) {
+            $query->whereNotIn('id', $excludeIds);
+        }
+        
+        // Get all available spots and shuffle them
+        $availableSpots = $query->get();
+        
+        if ($availableSpots->isEmpty()) {
+            return collect();
+        }
+        
+        // Shuffle and take the required count
+        return $availableSpots->shuffle()->take($count);
+    }
+
+    /**
+     * Clear popular spots cache (for debugging/testing)
+     */
+    public function clearCache(): JsonResponse
+    {
+        try {
+            Cache::forget('ai_popular_spots');
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Popular spots cache cleared successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error clearing popular spots cache: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to clear cache'
+            ], 500);
         }
     }
 
