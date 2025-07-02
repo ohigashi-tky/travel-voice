@@ -319,6 +319,9 @@
     <!-- Footer -->
     <AppFooter v-model="activeTab" />
     
+    <!-- PWA Install Prompt -->
+    <PWAInstallPrompt />
+    
   </div>
 </template>
 
@@ -331,6 +334,7 @@ import { useTouristSpots } from '~/composables/useTouristSpots'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
+import PWAInstallPrompt from '~/components/PWAInstallPrompt.vue'
 
 // Page meta
 definePageMeta({

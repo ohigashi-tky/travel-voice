@@ -1,0 +1,57 @@
+<svg width="640" height="1136" viewBox="0 0 640 1136" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="640" height="1136" fill="#f8fafc"/>
+  
+  <!-- Header -->
+  <rect width="640" height="100" fill="url(#headerGradient)"/>
+  <defs>
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0891b2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="320" y="60" text-anchor="middle" fill="white" font-size="32" font-weight="bold">おうち旅行</text>
+  
+  <!-- Search bar -->
+  <rect x="40" y="130" width="560" height="50" fill="white" rx="25" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="70" y="160" fill="#64748b" font-size="16">観光地を検索...</text>
+  
+  <!-- Popular spots section -->
+  <text x="40" y="220" fill="#1e293b" font-size="20" font-weight="600">人気スポット</text>
+  
+  <!-- Spot cards -->
+  <rect x="40" y="240" width="560" height="120" fill="white" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+  <rect x="60" y="260" width="100" height="80" fill="#ddd6fe" rx="8"/>
+  <text x="180" y="285" fill="#1e293b" font-size="18" font-weight="600">東京スカイツリー</text>
+  <text x="180" y="305" fill="#64748b" font-size="14">高さ634mの世界最高クラスの電波塔</text>
+  <text x="180" y="325" fill="#3b82f6" font-size="12">東京都 • 展望台</text>
+  
+  <rect x="40" y="380" width="560" height="120" fill="white" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+  <rect x="60" y="400" width="100" height="80" fill="#fecaca" rx="8"/>
+  <text x="180" y="425" fill="#1e293b" font-size="18" font-weight="600">大阪城</text>
+  <text x="180" y="445" fill="#64748b" font-size="14">豊臣秀吉が築城した名城</text>
+  <text x="180" y="465" fill="#3b82f6" font-size="12">大阪府 • 歴史建造物</text>
+  
+  <!-- Prefecture section -->
+  <text x="40" y="550" fill="#1e293b" font-size="20" font-weight="600">都道府県から探す</text>
+  
+  <!-- Prefecture grid -->
+  <rect x="40" y="570" width="130" height="100" fill="white" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="105" y="605" text-anchor="middle" font-size="32">🗼</text>
+  <text x="105" y="635" text-anchor="middle" fill="#1e293b" font-size="14">東京都</text>
+  
+  <rect x="190" y="570" width="130" height="100" fill="white" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="255" y="605" text-anchor="middle" font-size="32">🏯</text>
+  <text x="255" y="635" text-anchor="middle" fill="#1e293b" font-size="14">大阪府</text>
+  
+  <rect x="340" y="570" width="130" height="100" fill="white" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="405" y="605" text-anchor="middle" font-size="32">⛩️</text>
+  <text x="405" y="635" text-anchor="middle" fill="#1e293b" font-size="14">京都府</text>
+  
+  <rect x="490" y="570" width="130" height="100" fill="white" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="555" y="605" text-anchor="middle" font-size="32">🐄</text>
+  <text x="555" y="635" text-anchor="middle" fill="#1e293b" font-size="14">北海道</text>
+</svg>

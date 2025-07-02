@@ -13,11 +13,13 @@
     "@nuxt/icon": "^1.13.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@types/node": "^22.10.2",
-    "nuxt": "^3.17.5"
+    "nuxt": "^3.17.5",
+    "sharp": "^0.34.2"
   },
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.0.2",
     "@pinia/nuxt": "^0.5.1",
+    "@vite-pwa/nuxt": "^1.0.4",
     "@vueuse/nuxt": "^11.0.0",
     "lucide-vue-next": "^0.400.0",
     "pinia": "^2.1.0",
