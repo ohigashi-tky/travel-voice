@@ -72,10 +72,13 @@
                   class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                 >
                   <div class="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-lg flex-shrink-0 overflow-hidden">
-                    <img 
-                      :src="suggestion.imageUrl" 
+                    <PlacePhotoImage 
+                      :spot-name="suggestion.name"
+                      :place-id="suggestion.place_id"
                       :alt="suggestion.name"
-                      class="w-full h-full object-cover"
+                      image-class="rounded-lg"
+                      :width="32"
+                      :height="32"
                     />
                   </div>
                   <div class="flex-1 min-w-0">

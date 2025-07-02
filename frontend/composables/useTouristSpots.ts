@@ -115,6 +115,20 @@ export const useTouristSpots = () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
+  // データの重複を除去するヘルパー関数
+  const deduplicateSpots = (spotsList: TouristSpot[]) => {
+    const seen = new Map()
+    return spotsList.filter(spot => {
+      // 名前と都道府県の組み合わせで重複判定
+      const key = `${spot.name}_${spot.prefecture}`
+      if (seen.has(key)) {
+        return false
+      }
+      seen.set(key, true)
+      return true
+    })
+  }
+
   // APIから観光スポットデータを取得
   const fetchSpots = async () => {
     loading.value = true
@@ -123,13 +137,15 @@ export const useTouristSpots = () => {
     try {
       const response = await $fetch('http://localhost:8000/api/tourist-spots')
       
-      spots.value = response
+      // APIデータとローカルデータをマージして重複除去
+      const allSpots = [...response, ...TOURIST_SPOTS_DATA]
+      spots.value = deduplicateSpots(allSpots)
     } catch (err) {
       error.value = 'Failed to fetch tourist spots'
       console.error('Error fetching tourist spots:', err)
       
-      // フォールバック: エラー時はモックデータを使用
-      spots.value = TOURIST_SPOTS_DATA
+      // フォールバック: エラー時はモックデータを使用（重複除去済み）
+      spots.value = deduplicateSpots(TOURIST_SPOTS_DATA)
     } finally {
       loading.value = false
     }
@@ -195,7 +211,8 @@ export const useTouristSpots = () => {
       }>(`${baseURL}/popular-spots`)
 
       if (response.success) {
-        popularSpots.value = response.data
+        // 人気スポットも重複除去
+        popularSpots.value = deduplicateSpots(response.data)
         if (response.fallback) {
           console.warn('Using fallback popular spots:', response.message)
         }
@@ -206,7 +223,7 @@ export const useTouristSpots = () => {
       console.error('Failed to fetch popular spots:', err)
       popularSpotsError.value = 'Failed to fetch popular spots'
       
-      // Fallback to random spots
+      // Fallback to random spots (重複除去済みのデータから)
       popularSpots.value = getRandomSpots(5)
     } finally {
       popularSpotsLoading.value = false
