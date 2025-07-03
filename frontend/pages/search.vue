@@ -226,7 +226,7 @@ const allSpots = [
     description: '高さ634mの世界最高クラスの電波塔。展望デッキからは東京の絶景を一望できます。',
     category: '展望台',
     prefecture: '東京都',
-    imageUrl: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 2,
@@ -234,7 +234,7 @@ const allSpots = [
     description: '東京最古の寺院。雷門と仲見世通りで有名な東京を代表する観光地です。',
     category: '寺院',
     prefecture: '東京都',
-    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 101,
@@ -242,7 +242,7 @@ const allSpots = [
     description: '豊臣秀吉が築城した名城。美しい天守閣と桜の名所として親しまれています。',
     category: '歴史建造物',
     prefecture: '大阪府',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 201,
@@ -250,7 +250,7 @@ const allSpots = [
     description: '778年開創の京都最古の寺院。有名な清水の舞台と美しい景色で知られています。',
     category: '寺院',
     prefecture: '京都府',
-    imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 301,
@@ -258,7 +258,7 @@ const allSpots = [
     description: '旧札幌農学校演武場として1878年に建設された北海道のシンボル的建造物です。',
     category: '歴史建造物',
     prefecture: '北海道',
-    imageUrl: 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 202,
@@ -266,7 +266,7 @@ const allSpots = [
     description: '足利義満の別荘として建てられた金箔で覆われた美しい楼閣。世界文化遺産です。',
     category: '寺院',
     prefecture: '京都府',
-    imageUrl: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 401,
@@ -274,7 +274,7 @@ const allSpots = [
     description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
     category: '歴史建造物',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 402,
@@ -282,7 +282,7 @@ const allSpots = [
     description: '三種の神器の一つ草薙剣を祀る由緒ある神社。1900年の歴史を誇る格式高い神宮です。',
     category: '神社',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 403,
@@ -290,7 +290,7 @@ const allSpots = [
     description: 'トヨタグループ発祥の地に建つ産業技術博物館。自動車産業の歴史と技術を学べます。',
     category: '博物館',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 501,
@@ -298,7 +298,7 @@ const allSpots = [
     description: '学問の神様菅原道真公を祀る由緒ある神社。受験合格や学業成就を願う多くの参拝者が訪れます。',
     category: '神社',
     prefecture: '福岡県',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 502,
@@ -306,7 +306,7 @@ const allSpots = [
     description: '黒田長政が築城した福岡藩の居城跡。現在は舞鶴公園として桜の名所にもなっています。',
     category: '歴史建造物',
     prefecture: '福岡県',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 503,
@@ -314,7 +314,7 @@ const allSpots = [
     description: '九州の玄関口として知られる福岡の中心駅。周辺にはグルメや買い物スポットが充実しています。',
     category: '観光エリア',
     prefecture: '福岡県',
-    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   }
 ]
 

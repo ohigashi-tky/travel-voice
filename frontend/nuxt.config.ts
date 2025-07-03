@@ -60,17 +60,6 @@ export default defineNuxtConfig({
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       runtimeCaching: [
         {
-          urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'unsplash-images-cache',
-            expiration: {
-              maxEntries: 100,
-              maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-            }
-          }
-        },
-        {
           urlPattern: /^https:\/\/maps\.googleapis\.com\/.*/i,
           handler: 'StaleWhileRevalidate',
           options: {

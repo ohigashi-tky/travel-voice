@@ -26,7 +26,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 35.710063,
                 'longitude' => 139.810700,
                 'category' => '展望台',
-                'images' => ['https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=600&h=400&fit=crop&auto=format'],
+                'images' => [],
                 'access_info' => '東武スカイツリーライン「とうきょうスカイツリー駅」すぐ',
                 'public_transport' => [
                     ['type' => '電車', 'route' => '東武スカイツリーライン', 'station' => 'とうきょうスカイツリー駅', 'time' => '直結'],
@@ -57,7 +57,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 35.714765,
                 'longitude' => 139.796742,
                 'category' => '寺院',
-                'images' => ['https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&auto=format'],
+                'images' => [],
                 'access_info' => '東京メトロ銀座線「浅草駅」徒歩5分',
                 'public_transport' => [
                     ['type' => '地下鉄', 'route' => '東京メトロ銀座線', 'station' => '浅草駅', 'time' => '徒歩5分'],
@@ -90,13 +90,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 34.687315,
                 'longitude' => 135.526201,
                 'category' => '歴史建造物',
-                'images' => [
-                    'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => 'JR大阪環状線「大阪城公園駅」徒歩3分',
                 'public_transport' => [
                     ['type' => 'JR', 'route' => '大阪環状線', 'station' => '大阪城公園駅', 'time' => '徒歩3分'],
@@ -129,11 +123,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 34.994857,
                 'longitude' => 135.784985,
                 'category' => '寺院',
-                'images' => [
-                    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => '京阪本線「清水五条駅」徒歩25分',
                 'public_transport' => [
                     ['type' => 'バス', 'route' => '京都市バス206系統', 'station' => '清水道バス停', 'time' => '徒歩10分'],
@@ -164,11 +154,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 35.039705,
                 'longitude' => 135.728898,
                 'category' => '寺院',
-                'images' => [
-                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => '京都市バス「金閣寺道」徒歩3分',
                 'public_transport' => [
                     ['type' => 'バス', 'route' => '京都市バス101系統', 'station' => '金閣寺道バス停', 'time' => '徒歩3分'],
@@ -201,11 +187,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 43.063968,
                 'longitude' => 141.353735,
                 'category' => '歴史建造物',
-                'images' => [
-                    'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => 'JR札幌駅徒歩10分',
                 'public_transport' => [
                     ['type' => 'JR', 'route' => '函館本線', 'station' => '札幌駅', 'time' => '徒歩10分'],
@@ -238,11 +220,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 35.185043,
                 'longitude' => 136.899180,
                 'category' => '歴史建造物',
-                'images' => [
-                    'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => '地下鉄名城線「市役所駅」徒歩5分',
                 'public_transport' => [
                     ['type' => '地下鉄', 'route' => '名古屋市営地下鉄名城線', 'station' => '市役所駅', 'time' => '徒歩5分'],
@@ -275,11 +253,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 33.519585,
                 'longitude' => 130.533234,
                 'category' => '神社',
-                'images' => [
-                    'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => '西鉄太宰府線「太宰府駅」徒歩5分',
                 'public_transport' => [
                     ['type' => '電車', 'route' => '西鉄太宰府線', 'station' => '太宰府駅', 'time' => '徒歩5分'],
@@ -312,11 +286,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 34.395483,
                 'longitude' => 132.453592,
                 'category' => '歴史建造物',
-                'images' => [
-                    'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => '広島電鉄「原爆ドーム前駅」すぐ',
                 'public_transport' => [
                     ['type' => '路面電車', 'route' => '広島電鉄2号線', 'station' => '原爆ドーム前駅', 'time' => '徒歩1分'],
@@ -347,11 +317,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 34.296051,
                 'longitude' => 132.319829,
                 'category' => '神社',
-                'images' => [
-                    'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => 'JR宮島口駅→宮島フェリー→宮島桟橋徒歩12分',
                 'public_transport' => [
                     ['type' => 'JR+フェリー', 'route' => 'JR山陽本線+宮島フェリー', 'station' => '宮島口駅→宮島桟橋', 'time' => '徒歩12分'],
@@ -384,11 +350,7 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 33.851918,
                 'longitude' => 132.785891,
                 'category' => '温泉',
-                'images' => [
-                    'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=600&h=400&fit=crop&auto=format',
-                    'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&h=400&fit=crop&auto=format'
-                ],
+                'images' => [],
                 'access_info' => '伊予鉄道「道後温泉駅」徒歩5分',
                 'public_transport' => [
                     ['type' => '路面電車', 'route' => '伊予鉄道城南線', 'station' => '道後温泉駅', 'time' => '徒歩5分'],

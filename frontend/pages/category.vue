@@ -138,7 +138,7 @@ const allSpots = [
     category: '展望台',
     prefecture: '東京都',
     place_id: 'ChIJ35ov0dCOGGARKvdDH7NPHX0',
-    imageUrl: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 2,
@@ -147,7 +147,7 @@ const allSpots = [
     category: '寺院',
     prefecture: '東京都',
     place_id: 'ChIJ8T1GpMGOGGARDYGSgpooDWw',
-    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 3,
@@ -156,7 +156,7 @@ const allSpots = [
     category: '神社',
     prefecture: '東京都',
     place_id: 'ChIJ5SZMmreMGGARcz8QSTiJyo8',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 4,
@@ -192,7 +192,7 @@ const allSpots = [
     category: '歴史建造物',
     prefecture: '大阪府',
     place_id: 'ChIJ_TooXM3gAGARQR6hXH3QAQ8',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 102,
@@ -201,7 +201,7 @@ const allSpots = [
     category: '展望台',
     prefecture: '大阪府',
     place_id: 'ChIJ_0Lgd2DnAGARV0X03lbPy-U',
-    imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 103,
@@ -210,7 +210,7 @@ const allSpots = [
     category: '水族館',
     prefecture: '大阪府',
     place_id: 'ChIJzakNjPToAGARzCwIriDFg28',
-    imageUrl: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 104,
@@ -245,7 +245,7 @@ const allSpots = [
     description: '778年開創の京都最古の寺院。有名な清水の舞台と美しい景色で知られています。',
     category: '寺院',
     prefecture: '京都府',
-    imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 202,
@@ -253,7 +253,7 @@ const allSpots = [
     description: '足利義満の別荘として建てられた金箔で覆われた美しい楼閣。世界文化遺産です。',
     category: '寺院',
     prefecture: '京都府',
-    imageUrl: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 203,
@@ -261,7 +261,7 @@ const allSpots = [
     description: '全国の稲荷神社の総本宮。千本鳥居の美しい朱色のトンネルで有名です。',
     category: '神社',
     prefecture: '京都府',
-    imageUrl: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 301,
@@ -269,7 +269,7 @@ const allSpots = [
     description: '旧札幌農学校演武場として1878年に建設された北海道のシンボル的建造物です。',
     category: '歴史建造物',
     prefecture: '北海道',
-    imageUrl: 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 302,
@@ -277,7 +277,7 @@ const allSpots = [
     description: '世界三大夜景の一つに数えられる美しい夜景スポット。津軽海峡を一望できます。',
     category: '展望台',
     prefecture: '北海道',
-    imageUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 303,
@@ -285,7 +285,7 @@ const allSpots = [
     description: '1923年完成の歴史ある運河。石造倉庫群とガス灯が織りなすロマンチックな景観です。',
     category: '歴史的景観',
     prefecture: '北海道',
-    imageUrl: 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 401,
@@ -293,7 +293,7 @@ const allSpots = [
     description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
     category: '歴史建造物',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 402,
@@ -301,7 +301,7 @@ const allSpots = [
     description: '三種の神器の一つ草薙剣を祀る由緒ある神社。1900年の歴史を誇る格式高い神宮です。',
     category: '神社',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 403,
@@ -309,7 +309,7 @@ const allSpots = [
     description: 'トヨタグループ発祥の地に建つ産業技術博物館。自動車産業の歴史と技術を学べます。',
     category: '博物館',
     prefecture: '愛知県',
-    imageUrl: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 501,
@@ -317,7 +317,7 @@ const allSpots = [
     description: '学問の神様菅原道真公を祀る由緒ある神社。受験合格や学業成就を願う多くの参拝者が訪れます。',
     category: '神社',
     prefecture: '福岡県',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 502,
@@ -325,7 +325,7 @@ const allSpots = [
     description: '黒田長政が築城した福岡藩の居城跡。現在は舞鶴公園として桜の名所にもなっています。',
     category: '歴史建造物',
     prefecture: '福岡県',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 503,
@@ -333,7 +333,7 @@ const allSpots = [
     description: '九州の玄関口として知られる福岡の中心駅。周辺にはグルメや買い物スポットが充実しています。',
     category: '観光エリア',
     prefecture: '福岡県',
-    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   // 広島県
   {
@@ -342,7 +342,7 @@ const allSpots = [
     description: '平和の象徴として世界中に知られる広島の代表的なランドマーク。ユネスコ世界文化遺産です。',
     category: '歴史建造物',
     prefecture: '広島県',
-    imageUrl: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 602,
@@ -350,7 +350,7 @@ const allSpots = [
     description: '海に浮かぶ朱色の大鳥居で有名な日本三景の一つ。満潮時の美しさは格別です。',
     category: '神社',
     prefecture: '広島県',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 603,
@@ -358,7 +358,7 @@ const allSpots = [
     description: '毛利輝元が築いた名城。現在は歴史博物館として広島の歴史を学ぶことができます。',
     category: '歴史建造物',
     prefecture: '広島県',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   // 愛媛県
   {
@@ -367,7 +367,7 @@ const allSpots = [
     description: '日本最古の温泉の一つ。千と千尋の神隠しのモデルとしても有名な歴史ある温泉地です。',
     category: '温泉',
     prefecture: '愛媛県',
-    imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 802,
@@ -375,7 +375,7 @@ const allSpots = [
     description: '松山市の中心部、勝山山頂に建つ現存12天守の一つ。美しい桜の名所としても知られています。',
     category: '歴史建造物',
     prefecture: '愛媛県',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 803,
@@ -383,7 +383,7 @@ const allSpots = [
     description: '瀬戸内海に面した水城として築かれた美しい城。藤堂高虎が築城した海岸平城です。',
     category: '歴史建造物',
     prefecture: '愛媛県',
-    imageUrl: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 804,
@@ -391,7 +391,7 @@ const allSpots = [
     description: '江戸時代から明治時代の町並みが美しく保存された重要伝統的建造物群保存地区です。',
     category: '歴史的景観',
     prefecture: '愛媛県',
-    imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 805,
@@ -399,7 +399,7 @@ const allSpots = [
     description: '西日本最高峰の霊峰。四季折々の美しい自然と登山が楽しめる愛媛県のシンボルです。',
     category: '自然',
     prefecture: '愛媛県',
-    imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   },
   {
     id: 806,
@@ -407,7 +407,7 @@ const allSpots = [
     description: '本州と四国を結ぶ美しい橋の連続。サイクリングの聖地として世界的に有名です。',
     category: '観光エリア',
     prefecture: '愛媛県',
-    imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop&auto=format'
+    imageUrl: ''
   }
 ]
 

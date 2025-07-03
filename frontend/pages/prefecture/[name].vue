@@ -157,17 +157,17 @@ const currentSpot = ref<TouristSpot | null>(null)
 
 const prefectureImage = computed(() => {
   const imageMap: Record<string, string> = {
-    '東京都': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&h=400&fit=crop&auto=format',
-    '大阪府': 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=400&fit=crop&auto=format',
-    '京都府': 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&h=400&fit=crop&auto=format',
-    '北海道': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format',
-    '奈良県': 'https://images.unsplash.com/photo-1548407260-da850faa41e3?w=600&h=400&fit=crop&auto=format',
-    '広島県': 'https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=600&h=400&fit=crop&auto=format',
-    '福岡県': 'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=600&h=400&fit=crop&auto=format',
-    '沖縄県': 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&auto=format'
+    '東京都': '',
+    '大阪府': '',
+    '京都府': '',
+    '北海道': '',
+    '奈良県': '',
+    '広島県': '',
+    '福岡県': '',
+    '沖縄県': ''
   }
   
-  return imageMap[prefectureName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&h=400&fit=crop&auto=format`
+  return imageMap[prefectureName] || ''
 })
 
 const prefectureDescription = computed(() => {
@@ -187,21 +187,21 @@ const prefectureDescription = computed(() => {
 const generateSpotImage = (spotName: string, category: string) => {
   // 観光地ごとの実際の画像URLを返す
   const imageMap: Record<string, string> = {
-    '東京スカイツリー': 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=400&h=300&fit=crop&auto=format',
-    '浅草寺': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format',
-    '明治神宮': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
-    '大阪城': 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
-    '通天閣': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format',
-    '海遊館': 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=400&h=300&fit=crop&auto=format',
-    '清水寺': 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400&h=300&fit=crop&auto=format',
-    '金閣寺': 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&h=300&fit=crop&auto=format',
-    '伏見稲荷大社': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&h=300&fit=crop&auto=format',
-    '札幌時計台': 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format',
-    '函館山': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop&auto=format',
-    '小樽運河': 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=400&h=300&fit=crop&auto=format'
+    '東京スカイツリー': '',
+    '浅草寺': '',
+    '明治神宮': '',
+    '大阪城': '',
+    '通天閣': '',
+    '海遊館': '',
+    '清水寺': '',
+    '金閣寺': '',
+    '伏見稲荷大社': '',
+    '札幌時計台': '',
+    '函館山': '',
+    '小樽運河': ''
   }
   
-  return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
+  return imageMap[spotName] || ''
 }
 
 

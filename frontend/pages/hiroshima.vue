@@ -152,11 +152,11 @@ const goToSpotDetail = (spotId) => {
 const generateSpotImage = (name, category) => {
   // カテゴリに基づいた画像URL生成
   const imageMap = {
-    '原爆ドーム': 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=300&fit=crop&auto=format',
-    '厳島神社': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
-    '広島城': 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format'
+    '原爆ドーム': '',
+    '厳島神社': '',
+    '広島城': ''
   }
   
-  return imageMap[name] || `https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format`
+  return imageMap[name] || ''
 }
 </script>

@@ -132,15 +132,15 @@ const currentSpot = ref<TouristSpot | null>(null)
 const generateSpotImage = (spotName: string, category: string) => {
   // 観光地ごとの確実に表示される画像URLを返す
   const imageMap: Record<string, string> = {
-    '浅草寺': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=300&fit=crop&auto=format',
-    '明治神宮': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=300&fit=crop&auto=format',
-    '大阪城': 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=300&fit=crop&auto=format',
-    '札幌時計台': 'https://images.unsplash.com/photo-1607619662634-3ac55ec0e216?w=400&h=300&fit=crop&auto=format',
-    '函館山': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop&auto=format',
-    '小樽運河': 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=400&h=300&fit=crop&auto=format'
+    '浅草寺': '',
+    '明治神宮': '',
+    '大阪城': '',
+    '札幌時計台': '',
+    '函館山': '',
+    '小樽運河': ''
   }
   
-  return imageMap[spotName] || `https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop&auto=format`
+  return imageMap[spotName] || ''
 }
 
 const getSpotTags = (spot: TouristSpot) => {
