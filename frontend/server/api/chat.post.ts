@@ -21,9 +21,9 @@ export default defineEventHandler(async (event) => {
     console.log('Processing message:', message)
 
     // OpenRouter API設定
-    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
+    const OPENROUTER_API_KEY = process.env.NUXT_OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
-    const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash-lite-preview-06-17'
+    const MODEL = process.env.NUXT_OPENROUTER_MODEL || process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash-lite-preview-06-17'
 
     if (!OPENROUTER_API_KEY) {
       console.error('OPENROUTER_API_KEY is not set')

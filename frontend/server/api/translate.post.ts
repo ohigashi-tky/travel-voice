@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
     if (!translations['ja-en'][text] && target === 'en') {
       try {
         // OpenRouter APIを使用した翻訳
-        const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
+        const OPENROUTER_API_KEY = process.env.NUXT_OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY
         const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
         
         if (!OPENROUTER_API_KEY) {
