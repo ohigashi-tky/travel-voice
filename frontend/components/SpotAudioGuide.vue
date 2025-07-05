@@ -59,16 +59,17 @@ const audioUrl = ref<string | null>(null)
 const audioElement = ref<HTMLAudioElement | null>(null)
 
 const loadAudioGuide = async () => {
-  if (!process.client) return
-  
   isLoading.value = true
   error.value = null
 
   try {
-    const voiceId = localStorage.getItem('audioGuideVoice') || 'Takumi'
+    const voiceId = process.client ? localStorage.getItem('audioGuideVoice') || 'Takumi' : 'Takumi'
     
     const config = useRuntimeConfig()
-    const response = await $fetch(`${config.public.apiBase}/audio-guide/tourist-spot`, {
+    // Use server-side API URL if running on server, client-side URL if running on client
+    const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+    
+    const response = await $fetch(`${apiBaseUrl}/api/audio-guide/tourist-spot`, {
       method: 'POST',
       body: {
         spot_id: props.spotId,
@@ -90,11 +91,9 @@ const loadAudioGuide = async () => {
   }
 }
 
-// クライアントサイドでのみ実行
+// サーバーサイドとクライアントサイドの両方で実行
 onMounted(() => {
-  if (process.client) {
-    loadAudioGuide()
-  }
+  loadAudioGuide()
 })
 
 const setupPlaybackRate = () => {

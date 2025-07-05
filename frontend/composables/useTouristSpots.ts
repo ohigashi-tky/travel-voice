@@ -135,7 +135,9 @@ export const useTouristSpots = () => {
     error.value = null
     
     try {
-      const response = await $fetch('http://localhost:8000/api/tourist-spots')
+      const config = useRuntimeConfig()
+      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      const response = await $fetch(`${apiBaseUrl}/api/tourist-spots`)
       
       // APIデータとローカルデータをマージして重複除去
       const allSpots = [...response, ...TOURIST_SPOTS_DATA]
@@ -157,7 +159,9 @@ export const useTouristSpots = () => {
     error.value = null
     
     try {
-      const response = await $fetch(`http://localhost:8000/api/tourist-spots/prefecture/${encodeURIComponent(prefecture)}`)
+      const config = useRuntimeConfig()
+      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      const response = await $fetch(`${apiBaseUrl}/api/tourist-spots/prefecture/${encodeURIComponent(prefecture)}`)
       
       return response
     } catch (err) {
@@ -201,14 +205,14 @@ export const useTouristSpots = () => {
 
     try {
       const config = useRuntimeConfig()
-      const baseURL = config.public.apiBaseUrl || 'http://localhost:8000/api'
+      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
       
       const response = await $fetch<{
         success: boolean
         data: TouristSpot[]
         fallback?: boolean
         message?: string
-      }>(`${baseURL}/popular-spots`)
+      }>(`${apiBaseUrl}/api/popular-spots`)
 
       if (response.success) {
         // 人気スポットも重複除去

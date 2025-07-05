@@ -89,11 +89,11 @@
                 
                 <!-- Action Button -->
                 <button 
-                  @click="exploreSpot(spot)"
+                  @click="goToSpotDetail(spot.id)"
                   class="w-full mt-6 py-4 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
                 >
-                  <Icon name="lucide:play" class="w-5 h-5" />
-                  音声ガイドを開始
+                  <Icon name="lucide:eye" class="w-5 h-5" />
+                  詳細を見る
                   <Icon name="lucide:arrow-right" class="w-5 h-5" />
                 </button>
               </div>
@@ -134,8 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TouristSpot, AudioGuide } from '~/types'
-import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
+import type { TouristSpot } from '~/types'
 
 const route = useRoute()
 const prefectureName = decodeURIComponent(route.params.name as string)
@@ -152,8 +151,6 @@ useHead({
 // Removed useImageGeneration composable
 
 const touristSpots = ref<TouristSpot[]>([])
-const currentAudioGuide = ref<AudioGuide | null>(null)
-const currentSpot = ref<TouristSpot | null>(null)
 
 const prefectureImage = computed(() => {
   const imageMap: Record<string, string> = {
@@ -205,29 +202,8 @@ const generateSpotImage = (spotName: string, category: string) => {
 }
 
 
-const exploreSpot = async (spot: TouristSpot) => {
-  try {
-    // Navigate to the spot detail page instead of just playing audio
-    await navigateTo(`/spots/${spot.id}`)
-  } catch (error) {
-    console.error('Error navigating to spot detail:', error)
-    // Fallback to audio guide if navigation fails
-    currentSpot.value = spot
-    currentAudioGuide.value = {
-      id: spot.id,
-      title: `${spot.name}の音声ガイド`,
-      audio_url: '/sample-audio.mp3',
-      duration: 180,
-      language: 'ja',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-  }
-}
-
-const closePlayer = () => {
-  currentAudioGuide.value = null
-  currentSpot.value = null
+const goToSpotDetail = (spotId: number) => {
+  navigateTo(`/spots/${spotId}`)
 }
 
 // Fetch tourist spots for this prefecture

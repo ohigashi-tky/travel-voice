@@ -64,14 +64,6 @@
                 </span>
               </div>
               
-              <!-- Audio Guide Button -->
-              <button 
-                @click.stop="playAudioGuide(spot)"
-                class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:from-purple-700 hover:via-pink-700 hover:to-red-700 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <Headphones class="w-4 h-4" />
-                音声ガイドを聞く
-              </button>
             </div>
           </div>
         </div>
@@ -88,13 +80,6 @@
         </div>
       </div>
 
-      <!-- Audio Player -->
-      <AudioGuidePlayer 
-        :audio-guide="currentAudioGuide"
-        :spot-name="currentSpot?.name || null"
-        :is-visible="!!currentAudioGuide"
-        @close="closePlayer"
-      />
     </main>
     
     <!-- Footer -->
@@ -105,11 +90,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Headphones } from 'lucide-vue-next'
-import type { TouristSpot, AudioGuide } from '~/types'
+import type { TouristSpot } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import AudioGuidePlayer from '~/components/AudioGuidePlayer.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 
 // Page meta
@@ -125,8 +108,6 @@ useHead({
 const activeTab = ref('top')
 
 const touristSpots = ref<TouristSpot[]>([])
-const currentAudioGuide = ref<AudioGuide | null>(null)
-const currentSpot = ref<TouristSpot | null>(null)
 
 
 const generateSpotImage = (spotName: string, category: string) => {
@@ -154,28 +135,6 @@ const getSpotTags = (spot: TouristSpot) => {
   return tags.slice(0, 3)
 }
 
-const playAudioGuide = async (spot: TouristSpot) => {
-  currentSpot.value = spot
-  
-  // Mock audio guide data
-  currentAudioGuide.value = {
-    id: Date.now(),
-    title: `${spot.name}の音声ガイド`,
-    description: `${spot.name}の歴史と魅力について詳しく解説します。`,
-    audioUrl: '/audio/sample.mp3', // This would be a real audio file
-    duration: 180, // 3 minutes
-    transcript: `${spot.name}は京都の代表的な観光スポットの一つです...`,
-    touristSpotId: spot.id,
-    language: 'ja',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-}
-
-const closePlayer = () => {
-  currentAudioGuide.value = null
-  currentSpot.value = null
-}
 
 
 const goToSpotDetail = (spotId: number) => {

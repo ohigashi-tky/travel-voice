@@ -23,6 +23,7 @@ export interface Voice {
 }
 
 export const useAudioGuide = () => {
+  const config = useRuntimeConfig()
   const isLoading = ref(false)
   const isPlaying = ref(false)
   const currentAudio = ref<HTMLAudioElement | null>(null)
@@ -38,7 +39,8 @@ export const useAudioGuide = () => {
     error.value = null
 
     try {
-      const response = await $fetch<AudioGuideResponse>('http://localhost:8000/api/audio-guide/synthesize', {
+      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      const response = await $fetch<AudioGuideResponse>(`${apiBaseUrl}/api/audio-guide/synthesize`, {
         method: 'POST',
         body: {
           text,
@@ -65,7 +67,8 @@ export const useAudioGuide = () => {
     error.value = null
 
     try {
-      const response = await $fetch<AudioGuideResponse>('http://localhost:8000/api/audio-guide/tourist-spot', {
+      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      const response = await $fetch<AudioGuideResponse>(`${apiBaseUrl}/api/audio-guide/tourist-spot`, {
         method: 'POST',
         body: {
           spot_id: spotId,
@@ -86,7 +89,8 @@ export const useAudioGuide = () => {
   // 利用可能な音声一覧を取得
   const fetchAvailableVoices = async (): Promise<Voice[]> => {
     try {
-      const response = await $fetch<{ success: boolean; data: Voice[] }>('http://localhost:8000/api/audio-guide/voices')
+      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      const response = await $fetch<{ success: boolean; data: Voice[] }>(`${apiBaseUrl}/api/audio-guide/voices`)
       if (response.success) {
         availableVoices.value = response.data
         return response.data

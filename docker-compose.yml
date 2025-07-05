@@ -20,6 +20,7 @@ services:
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_KEY=base64:YourAppKeyHere
+      - APP_URL=http://localhost:8000
     depends_on:
       - mysql
     networks:
@@ -45,7 +46,8 @@ services:
       - NODE_ENV=development
       - HOST=0.0.0.0
       - PORT=3000
-      - NUXT_API_BASE_URL=http://backend:8000/api
+      - NUXT_API_BASE_URL=http://backend:8000
+      - NUXT_PUBLIC_API_BASE_URL=http://localhost:8000
       - NUXT_OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - NUXT_OPENROUTER_MODEL=${OPENROUTER_MODEL}
       - NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
