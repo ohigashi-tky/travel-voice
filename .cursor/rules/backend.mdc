@@ -1,0 +1,27 @@
+---
+description: Laravelバックエンド開発におけるルール
+globs: ["backend/**/*"]
+alwaysApply: false
+---
+
+# Laravelバックエンド開発ルール
+
+- コントローラーはapp/Http/Controllers/配下に配置し、API用はApi/サブディレクトリに配置
+- モデルはapp/Models/配下に配置し、Eloquentのリレーションを適切に定義
+- ビジネスロジックはapp/Services/配下に配置し、単一責任の原則に従う
+- マイグレーションはdatabase/migrations/配下に配置し、命名規則に従う
+- シーダーはdatabase/seeders/配下に配置し、初期データの投入を管理
+- テストはtests/Feature/（統合テスト）、tests/Unit/（単体テスト）に分けて配置
+- APIレスポンスは一貫した形式で返し、エラーハンドリングを適切に実装
+- 認証はLaravel Sanctumを使用し、SPA認証に対応
+- 音声ファイルはstorage/app/public/audio/配下に保存し、適切な権限設定を行う
+- ルーティングはroutes/api.php（API用）、routes/web.php（Web用）に分けて管理
+- 環境設定は.envファイルで管理し、機密情報は適切に保護する
+- ログはstorage/logs/配下に出力し、適切なログレベルを使用する
+
+@backend/routes/api.php
+@backend/app/Http/Controllers/Api/AudioGuideController.php
+@backend/app/Services/PollyService.php
+@backend/app/Models/TouristSpot.php
+@backend/database/migrations/
+@backend/tests/Feature/

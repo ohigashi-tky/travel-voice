@@ -1,0 +1,29 @@
+---
+description: Nuxt3フロントエンド開発におけるルール
+globs: ["frontend/**/*"]
+alwaysApply: false
+---
+
+# Nuxt3フロントエンド開発ルール
+
+- ページコンポーネントはpages/配下に配置し、ファイルベースルーティングに従う
+- UIコンポーネントはcomponents/配下に配置し、再利用可能な設計にする
+- ロジック共通化はcomposables/配下に配置し、useXxx命名規則に従う
+- 状態管理はstores/配下にPiniaストアを配置
+- 型定義はtypes/配下に配置し、TypeScriptの型安全性を確保
+- API通信はplugins/api.client.tsを経由し、認証トークンを適切に管理
+- スタイリングはTailwindCSSを使用し、カスタムCSSはassets/css/配下に配置
+- サーバーサイドAPI拡張はserver/api/配下に配置し、BFFとして機能
+- 定数はconstants/配下に配置し、ハードコーディングを避ける
+- PWA対応のため、public/配下に適切なアイコン・マニフェストを配置
+- ミドルウェアはmiddleware/配下に配置し、認証・ガード処理を実装
+- レイアウトはlayouts/配下に配置し、共通UIフレームを管理
+- 環境設定はnuxt.config.tsで管理し、ランタイム設定はuseRuntimeConfig()を使用
+
+@frontend/nuxt.config.ts
+@frontend/composables/useTouristSpots.ts
+@frontend/stores/auth.ts
+@frontend/types/index.ts
+@frontend/components/TouristSpotCard.vue
+@frontend/pages/index.vue
+@frontend/plugins/api.client.ts

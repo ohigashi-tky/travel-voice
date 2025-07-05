@@ -1,0 +1,22 @@
+---
+description: guide-app全体の開発・保守における共通ルール
+globs: 
+alwaysApply: true
+---
+
+# guide-app 共通プロジェクトルール
+
+- バックエンドはLaravel, フロントエンドはNuxt3/TypeScriptで実装すること
+- API設計はRESTfulを基本とし、docs/api.mdの仕様に準拠すること
+- UI/UXはdocs/app-concept-v2.md, docs/architecture.mdの方針に従うこと
+- コードの命名規則・ディレクトリ構成は既存実装に倣い、原則として英語・キャメルケース/スネークケースを使い分ける
+- バックエンドのビジネスロジックはService層に集約し、Controllerは薄く保つ
+- フロントエンドの状態管理はPinia、ロジック共通化はcomposablesで行う
+- テストはFeature/Unit両方を用意し、CI/CDで自動実行すること
+- 新規APIやモデル追加時は必ず型定義・テスト・ドキュメントを更新すること
+- ルールや設計方針を変更した場合は、必ずこのファイルを更新し履歴管理すること
+
+@docs/README.md
+@docs/api.md
+@docs/architecture.md
+@docs/app-concept-v2.md
