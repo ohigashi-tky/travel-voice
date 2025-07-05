@@ -450,7 +450,6 @@ const sendMessage = async () => {
 
 // 関連質問を抽出する関数
 const extractRelatedQuestions = (content: string) => {
-  console.log('Extracting from content:', content)
   const questions = []
   
   // より確実な正規表現でのマッチング
@@ -470,13 +469,10 @@ const extractRelatedQuestions = (content: string) => {
         const question = trimmedLine.replace('- ', '').trim()
         if (question && question.length > 0) {
           questions.push(question)
-          console.log('Added question:', question)
         }
       }
     }
   } else {
-    console.log('No related questions section found with regex, trying line-by-line')
-    
     // フォールバック: 行ごとの処理
     const lines = content.split('\n')
     let inRelatedSection = false
@@ -494,7 +490,6 @@ const extractRelatedQuestions = (content: string) => {
         const question = line.replace('- ', '').trim()
         if (question) {
           questions.push(question)
-          console.log('Added question:', question)
         }
       }
     }
