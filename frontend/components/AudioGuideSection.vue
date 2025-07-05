@@ -155,6 +155,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
+const config = useRuntimeConfig()
+
 interface Props {
   spotId: number
   spotName: string
@@ -228,7 +230,7 @@ const generateAudioText = async (): Promise<string> => {
   }
 
   // AIで音声ガイドテキストを生成（実際にはAPIから取得）
-  const response = await $fetch(`http://localhost:8000/api/audio-guide/tourist-spot`, {
+  const response = await $fetch(`${config.public.apiBase}/api/audio-guide/tourist-spot`, {
     method: 'POST',
     body: {
       spot_id: props.spotId,
@@ -246,7 +248,7 @@ const generateAudioText = async (): Promise<string> => {
 }
 
 const synthesizeSpeech = async (text: string): Promise<string> => {
-  const response = await $fetch(`http://localhost:8000/api/audio-guide/synthesize`, {
+  const response = await $fetch(`${config.public.apiBase}/api/audio-guide/synthesize`, {
     method: 'POST',
     body: {
       text,
@@ -257,7 +259,7 @@ const synthesizeSpeech = async (text: string): Promise<string> => {
   if (response.success && response.data.audio_url) {
     return response.data.audio_url.startsWith('http') 
       ? response.data.audio_url 
-      : `http://localhost:8000${response.data.audio_url}`
+      : `${config.public.apiBase}${response.data.audio_url}`
   }
 
   throw new Error('音声合成に失敗しました')

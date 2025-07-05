@@ -146,6 +146,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAudioGuide } from '~/composables/useAudioGuide'
 
+const config = useRuntimeConfig()
+
 interface Props {
   spotId: number
   spotName: string
@@ -198,7 +200,7 @@ const generateAudio = async () => {
     if (response?.success && response.data) {
       audioUrl.value = response.data.audio_url.startsWith('http') 
         ? response.data.audio_url 
-        : `http://localhost:8000${response.data.audio_url}`
+        : `${config.public.apiBase}${response.data.audio_url}`
       
       cacheHit.value = response.data.cache_hit
 

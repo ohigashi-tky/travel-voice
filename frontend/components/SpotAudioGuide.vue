@@ -67,7 +67,8 @@ const loadAudioGuide = async () => {
   try {
     const voiceId = localStorage.getItem('audioGuideVoice') || 'Takumi'
     
-    const response = await $fetch(`http://localhost:8000/api/audio-guide/tourist-spot`, {
+    const config = useRuntimeConfig()
+    const response = await $fetch(`${config.public.apiBase}/audio-guide/tourist-spot`, {
       method: 'POST',
       body: {
         spot_id: props.spotId,

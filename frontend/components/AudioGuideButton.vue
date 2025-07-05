@@ -115,6 +115,8 @@
 import { ref } from 'vue'
 import { useAudioGuide } from '~/composables/useAudioGuide'
 
+const config = useRuntimeConfig()
+
 interface Props {
   text: string
   spotId?: number
@@ -172,7 +174,7 @@ const handlePlay = async () => {
       // 音声URLを完全なURLに変換
       const audioUrl = response.data.audio_url.startsWith('http') 
         ? response.data.audio_url 
-        : `http://localhost:8000${response.data.audio_url}`
+        : `${config.public.apiBase}${response.data.audio_url}`
       
       await playAudio(audioUrl)
     }

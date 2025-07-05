@@ -371,6 +371,7 @@ definePageMeta({
 })
 
 const route = useRoute()
+const config = useRuntimeConfig()
 const spotId = computed(() => {
   const id = route.params.id as string
   console.log('Computing spotId from route.params.id:', id)
@@ -1742,7 +1743,7 @@ onMounted(async () => {
     // If still not found, try API as last resort
     if (!spot) {
       try {
-        const response = await $fetch(`http://localhost:8000/api/tourist-spots/${numericId}`)
+        const response = await $fetch(`${config.public.apiBase}/api/tourist-spots/${numericId}`)
         spot = response
         console.log('Fetched spot from API:', spot)
       } catch (apiError) {
