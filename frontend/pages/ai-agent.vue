@@ -4,7 +4,7 @@
     <AppHeader />
 
     <!-- Main Content -->
-    <main class="flex-1 relative z-10 flex flex-col pb-32 pt-16">
+    <main class="flex-1 relative z-10 flex flex-col pb-0 pt-16">
       <!-- Chat Container - Full Height -->
       <div class="flex-1 bg-white dark:bg-gray-800 flex flex-col">
         
@@ -12,7 +12,7 @@
         <div 
           ref="chatContainer"
           class="overflow-y-auto p-4 space-y-4"
-          style="height: calc(100vh - 240px); min-height: 400px; scroll-behavior: smooth;"
+          style="height: calc(100vh - 128px); min-height: 400px; scroll-behavior: smooth;"
         >
           <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full">
             <Bot class="w-16 h-16 text-gray-300 mb-4" />
@@ -120,28 +120,29 @@
     </main>
     
     <!-- Fixed Input Area -->
-    <div class="fixed bottom-20 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-30">
-      <form @submit.prevent="sendMessage" class="flex gap-2 max-w-4xl mx-auto">
-        <input
-          v-model="userInput"
-          type="text"
-          placeholder="観光について質問してください..."
-          class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          :disabled="isLoading"
-        />
-        <button
-          type="submit"
-          :disabled="!userInput.trim() || isLoading"
-          class="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-2"
-        >
-          <Send class="w-4 h-4" />
-          送信
-        </button>
-      </form>
+    <div class="fixed left-0 right-0 bottom-16 z-30 flex justify-center pointer-events-none">
+      <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 max-w-sm w-full pointer-events-auto">
+        <form @submit.prevent="sendMessage" class="flex gap-2" style="background:transparent;">
+          <input
+            v-model="userInput"
+            type="text"
+            placeholder="質問してください..."
+            class="flex-1 px-2 py-1 rounded-lg bg-transparent text-base text-gray-900 dark:text-white outline-none focus:outline-none"
+            :disabled="isLoading"
+          />
+          <button
+            type="submit"
+            :disabled="!userInput.trim() || isLoading"
+            class="min-w-[36px] h-8 px-4 rounded-full bg-blue-600 shadow flex items-center justify-center transition-transform duration-150 hover:scale-105 disabled:opacity-50"
+          >
+            <Send class="w-4 h-4 text-white" />
+          </button>
+        </form>
+      </div>
     </div>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" />
+    <AppFooter v-model="activeTab" :default-open="true" />
   </div>
 </template>
 
@@ -167,6 +168,8 @@ const userInput = ref('')
 const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
+
+
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -496,11 +499,15 @@ const navigateToSpot = (spotId: number) => {
   navigateTo(`/spots/${spotId}`)
 }
 
+
+
 // グローバルウィンドウに関数を追加
 onMounted(() => {
   // グローバル関数として観光地詳細への遷移を設定
   if (typeof window !== 'undefined') {
     (window as any).navigateToSpot = navigateToSpot
+    
+
     
     // ウィンドウリサイズ時に動的スペーサー高さを再計算
     const handleResize = () => {

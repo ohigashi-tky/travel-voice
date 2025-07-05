@@ -47,7 +47,7 @@
     </main>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" />
+    <AppFooter v-model="activeTab" :default-open="true" />
 
   </div>
 </template>

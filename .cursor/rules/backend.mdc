@@ -18,6 +18,9 @@ alwaysApply: false
 - ルーティングはroutes/api.php（API用）、routes/web.php（Web用）に分けて管理
 - 環境設定は.envファイルで管理し、機密情報は適切に保護する
 - ログはstorage/logs/配下に出力し、適切なログレベルを使用する
+- 開発サーバー起動はdocker composeを使用し、docker compose exec backend php artisan serveで起動する
+- データベース操作はdocker compose exec backend php artisanコマンドで実行する
+- コンテナ内での作業はdocker compose exec backend bashでコンテナに入る
 
 @backend/routes/api.php
 @backend/app/Http/Controllers/Api/AudioGuideController.php
@@ -25,3 +28,4 @@ alwaysApply: false
 @backend/app/Models/TouristSpot.php
 @backend/database/migrations/
 @backend/tests/Feature/
+@docker-compose.yml

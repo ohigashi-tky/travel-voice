@@ -19,6 +19,9 @@ alwaysApply: false
 - ミドルウェアはmiddleware/配下に配置し、認証・ガード処理を実装
 - レイアウトはlayouts/配下に配置し、共通UIフレームを管理
 - 環境設定はnuxt.config.tsで管理し、ランタイム設定はuseRuntimeConfig()を使用
+- 開発サーバー起動はdocker composeを使用し、docker compose exec frontend npm run devで起動する
+- パッケージ管理はdocker compose exec frontend npmコマンドで実行する
+- コンテナ内での作業はdocker compose exec frontend bashでコンテナに入る
 
 @frontend/nuxt.config.ts
 @frontend/composables/useTouristSpots.ts
@@ -27,3 +30,4 @@ alwaysApply: false
 @frontend/components/TouristSpotCard.vue
 @frontend/pages/index.vue
 @frontend/plugins/api.client.ts
+@docker-compose.yml
