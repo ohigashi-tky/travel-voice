@@ -95,6 +95,8 @@ export default defineNuxtConfig({
       orientation: 'portrait',
       scope: '/',
       start_url: '/',
+      navigation_scope: '/',
+      display_override: ['standalone', 'minimal-ui'],
       icons: [
         {
           src: '/icon-192x192.png',
