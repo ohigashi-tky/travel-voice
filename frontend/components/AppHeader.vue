@@ -1,79 +1,80 @@
 <template>
   <header class="fixed top-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300" style="height: calc(4rem + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px);">
     <div class="h-16 px-4 flex items-center justify-between">
-    <!-- User Icon / Profile Button -->
-    <button 
-      @click="authStore.isAuthenticated ? showProfileModal = true : navigateTo('/login')" 
-      class="w-10 h-10 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-full flex items-center justify-center"
-    >
-      <User class="w-6 h-6 text-white" />
-    </button>
-    
-    <!-- Right side icons -->
-    <div class="flex items-center space-x-3">
-      <!-- Settings Gear Icon with Dropdown -->
-      <div class="relative">
-        <button 
-          @click="toggleSettingsDropdown" 
-          data-settings-trigger
-          class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-        >
-          <Settings class="w-5 h-5 text-gray-600 dark:text-gray-300" />
-        </button>
-        
-        <!-- Settings Dropdown -->
-        <div 
-          v-if="showSettingsDropdown"
-          ref="settingsDropdown"
-          class="absolute right-0 top-12 w-72 sm:w-80 max-w-[calc(100vw-2rem)] max-h-96 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 transition-colors duration-300 transform-gpu"
-        >
-          <div class="p-4">
-            <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4 tracking-wide transition-colors duration-300">{{ t('設定') }}</h3>
-            
-            <!-- Voice Settings Section -->
-            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 mb-3">
-              <VoiceSettings />
-            </div>
-            
-            <!-- Dark Mode Section -->
-            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 mb-3">
-              <div class="flex items-center justify-between">
-                <span class="text-gray-700 dark:text-gray-300 font-medium tracking-wide transition-colors duration-300">{{ t('ダークモード') }}</span>
-                <button 
-                  @click="toggleDarkMode"
-                  :class="[
-                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-                    isDark ? 'bg-blue-600' : 'bg-gray-300'
-                  ]"
-                >
-                  <span 
-                    :class="[
-                      'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-                      isDark ? 'translate-x-6' : 'translate-x-1'
-                    ]"
-                  />
-                </button>
+      <!-- User Icon / Profile Button -->
+      <button 
+        @click="authStore.isAuthenticated ? showProfileModal = true : navigateTo('/login')" 
+        class="w-10 h-10 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-full flex items-center justify-center"
+      >
+        <User class="w-6 h-6 text-white" />
+      </button>
+      
+      <!-- Right side icons -->
+      <div class="flex items-center space-x-3">
+        <!-- Settings Gear Icon with Dropdown -->
+        <div class="relative">
+          <button 
+            @click="toggleSettingsDropdown" 
+            data-settings-trigger
+            class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+          >
+            <Settings class="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </button>
+          
+          <!-- Settings Dropdown -->
+          <div 
+            v-if="showSettingsDropdown"
+            ref="settingsDropdown"
+            class="absolute right-0 top-12 w-72 sm:w-80 max-w-[calc(100vw-2rem)] max-h-96 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 transition-colors duration-300 transform-gpu"
+          >
+            <div class="p-4">
+              <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4 tracking-wide transition-colors duration-300">{{ t('設定') }}</h3>
+              
+              <!-- Voice Settings Section -->
+              <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 mb-3">
+                <VoiceSettings />
               </div>
-            </div>
-            
-            <!-- Language Section -->
-            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-              <div class="flex items-center justify-between">
-                <span class="text-gray-700 dark:text-gray-300 font-medium tracking-wide transition-colors duration-300">{{ t('言語') }}</span>
-                <div class="flex gap-2">
-                  <button
-                    v-for="locale in availableLocales"
-                    :key="locale.code"
-                    @click="selectLanguage(locale.code)"
+              
+              <!-- Dark Mode Section -->
+              <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 mb-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700 dark:text-gray-300 font-medium tracking-wide transition-colors duration-300">{{ t('ダークモード') }}</span>
+                  <button 
+                    @click="toggleDarkMode"
                     :class="[
-                      'px-3 py-1 rounded-lg text-sm font-medium transition-all duration-200',
-                      currentLocale === locale.code
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                      isDark ? 'bg-blue-600' : 'bg-gray-300'
                     ]"
                   >
-                    {{ t(locale.name) }}
+                    <span 
+                      :class="[
+                        'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                        isDark ? 'translate-x-6' : 'translate-x-1'
+                      ]"
+                    />
                   </button>
+                </div>
+              </div>
+              
+              <!-- Language Section -->
+              <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700 dark:text-gray-300 font-medium tracking-wide transition-colors duration-300">{{ t('言語') }}</span>
+                  <div class="flex gap-2">
+                    <button
+                      v-for="locale in availableLocales"
+                      :key="locale.code"
+                      @click="selectLanguage(locale.code)"
+                      :class="[
+                        'px-3 py-1 rounded-lg text-sm font-medium transition-all duration-200',
+                        currentLocale === locale.code
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ]"
+                    >
+                      {{ t(locale.name) }}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -102,7 +103,6 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script setup>
