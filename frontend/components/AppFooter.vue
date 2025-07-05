@@ -69,7 +69,7 @@ const emit = defineEmits(['update:modelValue'])
 const activeTab = ref(props.modelValue)
 const isVisible = ref(true)
 const lastScrollY = ref(0)
-const scrollThreshold = 50 // スクロール検知の閾値
+const scrollThreshold = 80 // スクロール検知の閾値を大きく
 
 // Navigation functions
 const goToTop = () => {
@@ -93,8 +93,15 @@ watch(() => props.modelValue, (newValue) => {
 const handleScroll = () => {
   const currentScrollY = window.scrollY
   const scrollDelta = currentScrollY - lastScrollY.value
-  
-  // 上にスクロールした時（または下にスクロールした時）
+
+  // ほぼ最下部ならフッターを常に表示
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
+    isVisible.value = true
+    lastScrollY.value = currentScrollY
+    return
+  }
+
+  // スクロール閾値を大きく
   if (Math.abs(scrollDelta) > scrollThreshold) {
     if (scrollDelta < 0) {
       // 上にスクロール：フッターを非表示
