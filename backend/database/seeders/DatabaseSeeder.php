@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TouristSpotSeeder::class,
             GuideSeeder::class,
-            AudioGuideSeeder::class,
         ]);
     }
 }
