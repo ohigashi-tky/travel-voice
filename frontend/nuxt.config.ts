@@ -62,7 +62,9 @@ export default defineNuxtConfig({
     registerType: 'autoUpdate',
     workbox: {
       navigateFallback: '/',
+      navigateFallbackAllowlist: [/^(?!\/__).*/],
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      navigationPreload: true,
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/maps\.googleapis\.com\/.*/i,
@@ -98,8 +100,8 @@ export default defineNuxtConfig({
       orientation: 'portrait',
       scope: '/',
       start_url: '/',
-      navigation_scope: '/',
       display_override: ['standalone', 'minimal-ui'],
+      prefer_related_applications: false,
       icons: [
         {
           src: '/icon-192x192.png',

@@ -20,11 +20,18 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const handleBack = () => {
-  // ブラウザの履歴を使って前のページに戻る
-  if (window.history.length > 1) {
-    window.history.back()
-  } else {
-    // 履歴がない場合はfallbackRouteに戻る
+  // PWA対応: Nuxtのナビゲーション機能を使用
+  try {
+    // Nuxtのルーター履歴を使用
+    const router = useRouter()
+    if (router.options.history.state.back) {
+      router.back()
+    } else {
+      // 履歴がない場合はfallbackRouteに戻る
+      navigateTo(props.fallbackRoute)
+    }
+  } catch (error) {
+    // エラー時のフォールバック
     navigateTo(props.fallbackRoute)
   }
 }
