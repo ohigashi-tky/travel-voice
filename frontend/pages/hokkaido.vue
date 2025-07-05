@@ -93,7 +93,7 @@ import { ref, onMounted } from 'vue'
 import type { TouristSpot } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
+import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta
 definePageMeta({
@@ -124,13 +124,6 @@ const generateSpotImage = (spotName: string, category: string) => {
   return imageMap[spotName] || ''
 }
 
-const getSpotTags = (spot: TouristSpot) => {
-  const tags = []
-  if (spot.name.includes('札幌時計台')) tags.push('歴史', 'ランドマーク')
-  if (spot.name.includes('函館山')) tags.push('夜景', '展望台')
-  if (spot.name.includes('小樽運河')) tags.push('歴史', 'ノスタルジー')
-  return tags.slice(0, 3)
-}
 
 
 

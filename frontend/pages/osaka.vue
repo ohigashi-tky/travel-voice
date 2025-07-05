@@ -24,48 +24,12 @@
       <div class="max-w-7xl mx-auto py-6">
         <!-- Tourist Spots Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
+          <TouristSpotCard 
             v-for="spot in touristSpots" 
             :key="spot.id"
-            @click="goToSpotDetail(spot.id)"
-            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer"
-          >
-            <!-- Spot Image -->
-            <div class="h-48 bg-gradient-to-br from-orange-400 to-red-500 relative">
-              <PlacePhotoImage 
-                :spot-name="spot.name" :place-id="spot.place_id"
-                :alt="spot.name"
-              >
-                <div class="absolute top-3 right-3">
-                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.category }}
-                  </span>
-                </div>
-              </PlacePhotoImage>
-            </div>
-            
-            <!-- Spot Info -->
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
-                {{ spot.name }}
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2 transition-colors duration-300">
-                {{ spot.description }}
-              </p>
-              
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-1 mb-3">
-                <span 
-                  v-for="tag in getSpotTags(spot)" 
-                  :key="tag"
-                  class="bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 rounded-md text-xs transition-colors duration-300"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-              
-            </div>
-          </div>
+            :spot="spot"
+            :show-tags="true"
+          />
         </div>
 
         <!-- Empty State -->
@@ -93,7 +57,7 @@ import { ref, onMounted } from 'vue'
 import type { TouristSpot } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
+import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta
 definePageMeta({
@@ -129,16 +93,6 @@ const generateSpotImage = (spotName: string, category: string) => {
   return imageMap[spotName] || ''
 }
 
-const getSpotTags = (spot: TouristSpot) => {
-  const tags = []
-  if (spot.name.includes('大阪城')) tags.push('歴史', '桜の名所')
-  if (spot.name.includes('通天閣')) tags.push('展望台', 'レトロ')
-  if (spot.name.includes('海遊館')) tags.push('水族館', 'ファミリー')
-  if (spot.name.includes('道頓堀')) tags.push('グルメ', 'ネオン', '繁華街')
-  if (spot.name.includes('新世界')) tags.push('レトロ', 'グルメ', '下町')
-  if (spot.name.includes('梅田') || spot.name.includes('大阪駅')) tags.push('ショッピング', '交通', 'ビジネス')
-  return tags.slice(0, 3)
-}
 
 
 

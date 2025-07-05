@@ -700,7 +700,6 @@ const selectPrefectureFromModal = async (prefecture) => {
 }
 
 const selectCategory = (category) => {
-  console.log('Category selected:', category.name)
   navigateTo(`/category?name=${encodeURIComponent(category.name)}`)
 }
 
@@ -715,7 +714,6 @@ const onSearchInput = () => {
 }
 
 const selectSuggestion = (suggestion) => {
-  console.log('Suggestion selected:', suggestion.name)
   navigateTo(`/spots/${suggestion.id}`)
 }
 
@@ -734,7 +732,6 @@ const onInputBlur = () => {
 
 const performSearch = () => {
   if (searchQuery.value.trim()) {
-    console.log('Performing search for:', searchQuery.value)
     navigateTo(`/search?q=${encodeURIComponent(searchQuery.value.trim())}`)
   }
 }

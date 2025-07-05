@@ -35,53 +35,14 @@
 
         <!-- Tourist Spots Grid -->
         <div v-else-if="filteredSpots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <div 
+          <TouristSpotCard 
             v-for="spot in filteredSpots" 
             :key="spot.id"
-            @click="goToSpotDetail(spot.id)"
-            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer group"
-          >
-            <!-- Spot Image -->
-            <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
-              <PlacePhotoImage 
-                :spot-name="spot.name" :place-id="spot.place_id"
-                :alt="spot.name"
-                image-class="group-hover:scale-105 transition-transform duration-300"
-              >
-                <div class="absolute top-3 right-3">
-                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.prefecture }}
-                  </span>
-                </div>
-                <div class="absolute top-3 left-3">
-                  <span class="bg-blue-500/90 text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.category }}
-                  </span>
-                </div>
-              </PlacePhotoImage>
-            </div>
-
-            <!-- Spot Info -->
-            <div class="p-4">
-              <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                {{ spot.name }}
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
-                {{ spot.description }}
-              </p>
-              
-              <!-- Audio Guide Indicator -->
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400">
-                  <span>🎧</span>
-                  <span>音声ガイド対応</span>
-                </div>
-                <div class="text-gray-400 text-xs">
-                  詳細を見る →
-                </div>
-              </div>
-            </div>
-          </div>
+            :spot="spot"
+            :show-prefecture="true"
+            :show-both-tags="true"
+            :show-tags="false"
+          />
         </div>
 
         <!-- Empty State -->
@@ -110,10 +71,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
+import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta
 definePageMeta({
