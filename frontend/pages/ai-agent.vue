@@ -121,21 +121,33 @@
     
     <!-- Fixed Input Area -->
     <div class="fixed left-0 right-0 bottom-16 z-30 flex justify-center pointer-events-none">
-      <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 max-w-sm w-full pointer-events-auto">
+      <div :class="[
+        'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
+        isActive ? 'max-w-sm' : 'max-w-[150px]'
+      ]">
         <form @submit.prevent="sendMessage" class="flex gap-2" style="background:transparent;">
           <input
             v-model="userInput"
             type="text"
             placeholder="質問してください..."
-            class="flex-1 px-2 py-1 rounded-lg bg-transparent text-base text-gray-900 dark:text-white outline-none focus:outline-none"
+            @focus="handleFocus"
+            @blur="handleBlur"
+            :class="[
+              'flex-1 rounded-lg bg-transparent outline-none focus:outline-none transition-all duration-500 ease-in-out',
+              isActive ? 'px-2 py-1 text-base' : 'px-1 py-0.5 text-sm'
+            ]"
             :disabled="isLoading"
           />
           <button
+            v-if="isActive || userInput"
             type="submit"
             :disabled="!userInput.trim() || isLoading"
-            class="min-w-[36px] h-8 px-4 rounded-full bg-blue-600 shadow flex items-center justify-center transition-transform duration-150 hover:scale-105 disabled:opacity-50"
+            :class="[
+              'rounded-full bg-blue-600 shadow flex items-center justify-center transition-transform duration-150 hover:scale-105 disabled:opacity-50',
+              isActive ? 'h-8 min-w-[36px] px-4' : 'h-7 min-w-[28px] px-2'
+            ]"
           >
-            <Send class="w-4 h-4 text-white" />
+            <Send :class="isActive ? 'w-4 h-4 text-white' : 'w-3 h-3 text-white'" />
           </button>
         </form>
       </div>
@@ -147,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, computed, watch } from 'vue'
 import { ArrowLeft, Bot, User, Send } from 'lucide-vue-next'
 // marked import removed - using custom markdown parser
 import AppHeader from '~/components/AppHeader.vue'
@@ -168,8 +180,7 @@ const userInput = ref('')
 const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
-
-
+const isActive = ref(false)
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -499,15 +510,22 @@ const navigateToSpot = (spotId: number) => {
   navigateTo(`/spots/${spotId}`)
 }
 
-
+function handleFocus() {
+  isActive.value = true
+}
+function handleBlur() {
+  if (!userInput.value) isActive.value = false
+}
+watch(userInput, (val) => {
+  if (val) isActive.value = true
+  else isActive.value = false
+})
 
 // グローバルウィンドウに関数を追加
 onMounted(() => {
   // グローバル関数として観光地詳細への遷移を設定
   if (typeof window !== 'undefined') {
     (window as any).navigateToSpot = navigateToSpot
-    
-
     
     // ウィンドウリサイズ時に動的スペーサー高さを再計算
     const handleResize = () => {
