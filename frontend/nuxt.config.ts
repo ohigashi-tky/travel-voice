@@ -42,11 +42,15 @@ export default defineNuxtConfig({
   app: {
     head: {
       meta: [
+        { name: 'theme-color', content: '#fff', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#111827', media: '(prefers-color-scheme: dark)' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
         { name: 'apple-mobile-web-app-title', content: 'おうち旅行' },
-        { name: 'theme-color', content: '#2563eb' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-title', content: 'おうち旅行' },
+        { name: 'theme-color', content: '#ffffff' },
         { name: 'mobile-web-app-capable', content: 'yes' }
       ],
       link: [
@@ -94,7 +98,7 @@ export default defineNuxtConfig({
       name: 'おうち旅行 - 穏やかな音声で日本を巡る',
       short_name: 'おうち旅行',
       description: '穏やかな音声で日本全国を巡るバーチャル旅行体験アプリ。歴史やエピソードを聞きながら、家にいながら本格的な旅行気分を味わえます。',
-      theme_color: '#2563eb',
+      theme_color: '#ffffff',
       background_color: '#ffffff',
       display: 'standalone',
       orientation: 'portrait',

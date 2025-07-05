@@ -120,7 +120,7 @@
     </main>
     
     <!-- Fixed Input Area -->
-    <div class="fixed left-0 right-0 bottom-16 z-30 flex justify-center pointer-events-none">
+    <div :class="['fixed left-0 right-0 z-30 flex justify-center pointer-events-none transition-all duration-500', footerVisible ? 'bottom-16' : 'bottom-0']">
       <div :class="[
         'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
         isActive ? 'max-w-sm' : 'max-w-[150px]'
@@ -154,7 +154,7 @@
     </div>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" :default-open="true" />
+    <AppFooter v-model="activeTab" :default-open="true" @visible="footerVisible = $event" />
   </div>
 </template>
 
@@ -181,6 +181,7 @@ const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
 const isActive = ref(false)
+const footerVisible = ref(true)
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -386,21 +387,19 @@ const sendMessage = async () => {
     })
 
     // Add AI response
-    if (response.content) {
-      // console.log('AI Response content:', response.content)
-      
+    if (typeof response === 'object' && response !== null && 'content' in response && response.content) {
       // AI回答から音声ガイド対応観光地を検出
-      const detectedSpots = detectAudioGuideSpots(response.content)
+      const detectedSpots = detectAudioGuideSpots(response.content as string)
       
       // AI回答を追加
       messages.value.push({
         role: 'assistant',
-        content: response.content,
+        content: response.content as string,
         audioGuideSpots: detectedSpots
       })
 
       // 関連質問を抽出して独立したメッセージとして追加
-      const relatedQuestions = extractRelatedQuestions(response.content)
+      const relatedQuestions = extractRelatedQuestions(response.content as string)
       console.log('Extracted related questions:', relatedQuestions)
       
       // 関連質問が見つからない場合はより具体的な質問を使用
@@ -430,10 +429,10 @@ const sendMessage = async () => {
       console.log('Added questions message to chat:', questionsMessage)
       console.log('Total messages:', messages.value.length)
       
-    } else if (response.error) {
+    } else if (typeof response === 'object' && response !== null && 'error' in response && response.error) {
       messages.value.push({
         role: 'assistant',
-        content: `エラー: ${response.error}${response.details ? ` (${response.details})` : ''}`
+        content: `エラー: ${response.error}${'details' in response && response.details ? ` (${response.details})` : ''}`
       })
     }
 

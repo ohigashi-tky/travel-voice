@@ -63,7 +63,7 @@ const props = defineProps({
 })
 
 // Emits
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'visible'])
 
 // Reactive variables
 const activeTab = ref(props.modelValue)
@@ -127,5 +127,9 @@ onUnmounted(() => {
   if (!props.disableScrollDetection) {
     window.removeEventListener('scroll', handleScroll)
   }
+})
+
+watch(isVisible, (val) => {
+  emit('visible', val)
 })
 </script>

@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html, body, #__nuxt, #app {
+    background: #fff !important;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+  
   html {
     scroll-behavior: smooth;
     min-height: 100vh;
