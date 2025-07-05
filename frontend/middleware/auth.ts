@@ -16,10 +16,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     
     // Check if user is authenticated after initialization
     if (!authStore.isAuthenticated) {
-      console.log('User not authenticated, redirecting to login')
       return navigateTo('/login')
-    } else {
-      console.log('User authenticated, allowing access to:', to.path)
     }
   }
 })

@@ -94,13 +94,11 @@ export const useAuthStore = defineStore('auth', () => {
           const parsedUser = JSON.parse(savedUser)
           if (parsedUser && parsedUser.id) {
             user.value = parsedUser
-            console.log('認証状態を復元しました:', parsedUser.name)
           } else {
             localStorage.removeItem('user')
           }
         }
       } catch (error) {
-        console.error('認証状態の復元エラー:', error)
         localStorage.removeItem('user')
       }
     }

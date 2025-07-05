@@ -38,10 +38,8 @@ export const useGooglePlacePhotos = () => {
       const cached = photoCache.get(cacheKey)!
       const now = Date.now()
       if (now - cached.timestamp < CACHE_DURATION) {
-        console.log('📦 Using cached photos for:', spotName)
         return cached.data
       } else {
-        console.log('⏰ Cache expired for:', spotName, 'removing...')
         photoCache.delete(cacheKey)
       }
     }
@@ -64,7 +62,6 @@ export const useGooglePlacePhotos = () => {
           data: response,
           timestamp: Date.now()
         })
-        console.log('💾 Cached photos for:', spotName, 'Count:', response.photos?.length || 0)
       } else {
         console.warn('⚠️ No photos found for:', spotName)
       }
@@ -99,20 +96,16 @@ export const useGooglePlacePhotos = () => {
    */
   const getPhotosWithFallback = async (spotName: string, placeId?: string): Promise<PlacePhoto[]> => {
     try {
-      console.log('🔄 getPhotosWithFallback called with:', { spotName, placeId })
       const response = await getPlacePhotos(spotName, placeId)
       
       if (response.success && response.photos.length > 0) {
-        console.log('✅ Photos found:', response.photos.length, 'photos')
         return response.photos
       }
       
       // No fallback - show placeholder or error state
-      console.warn(`⚠️ No Google Photos found for ${spotName}`)
       return []
       
     } catch (err) {
-      console.error('❌ Error fetching Google Place photos:', err)
       return []
     }
   }

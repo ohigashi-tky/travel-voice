@@ -81,7 +81,6 @@ const loadImage = async () => {
     
     // Check if we have either spotName or placeId
     if (!props.spotName && !props.placeId) {
-      console.warn('⚠️ Neither spotName nor placeId provided')
       error.value = true
       loading.value = false
       return
@@ -94,11 +93,9 @@ const loadImage = async () => {
       error.value = false
     } else {
       // No photos available - show error state
-      console.warn('⚠️ No photos found for:', props.spotName)
       error.value = true
     }
   } catch (err) {
-    console.error('❌ Error loading place photo:', err)
     error.value = true
   } finally {
     loading.value = false
@@ -107,11 +104,6 @@ const loadImage = async () => {
 
 // Load image on mount
 onMounted(() => {
-  console.log('🚀 PlacePhotoImage mounted with props:', { 
-    spotName: props.spotName, 
-    placeId: props.placeId,
-    alt: props.alt 
-  })
   loadImage()
 })
 
