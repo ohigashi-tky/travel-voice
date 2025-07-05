@@ -121,7 +121,7 @@
     </main>
     
     <!-- Fixed Input Area -->
-    <div :class="['fixed left-0 right-0 z-30 flex justify-center pointer-events-none transition-all duration-500', footerVisible ? 'bottom-16' : 'bottom-0']">
+    <div class="fixed left-0 right-0 bottom-16 z-30 flex justify-center pointer-events-none transition-all duration-500">
       <div :class="[
         'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
         isActive ? 'max-w-sm' : 'max-w-[150px]'
@@ -155,7 +155,7 @@
     </div>
     
     <!-- Footer -->
-    <AppFooter ref="footerRef" v-model="activeTab" :default-open="true" @visible="footerVisible = $event" />
+    <AppFooter v-model="activeTab" :default-open="true" />
   </div>
 </template>
 
@@ -182,8 +182,6 @@ const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
 const isActive = ref(false)
-const footerVisible = ref(true)
-const footerRef = ref()
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -360,9 +358,6 @@ const askRelatedQuestion = (question: string) => {
 
 const sendMessage = async () => {
   if (!userInput.value.trim() || isLoading.value) return
-
-  // フッターをAppFooterのメソッドで表示
-  footerRef.value?.showFooter()
 
   const userMessage = userInput.value.trim()
   userInput.value = ''
