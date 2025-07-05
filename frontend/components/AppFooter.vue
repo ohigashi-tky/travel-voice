@@ -116,7 +116,7 @@ onMounted(() => {
           lastScrollY.value = el.scrollTop ?? 0
           bindScrollListener(el)
         }
-      }, { immediate: true })
+      }, { immediate: false, deep: true })
     } else if (props.scrollTarget) {
       lastScrollY.value = props.scrollTarget.scrollTop ?? 0
       bindScrollListener(props.scrollTarget)
@@ -140,11 +140,21 @@ const handleScroll = () => {
   } else {
     target = window
   }
+  
   const currentScrollY = target === window ? window.scrollY : target.scrollTop
   const scrollDelta = currentScrollY - lastScrollY.value
 
-  // ほぼ最下部ならフッターを常に表示
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
+  let isNearBottom = false
+  if (target === window) {
+    isNearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
+  } else {
+    const element = target
+    if (element && typeof element.scrollTop === 'number' && typeof element.clientHeight === 'number' && typeof element.scrollHeight === 'number') {
+      isNearBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 10
+    }
+  }
+
+  if (isNearBottom) {
     isVisible.value = true
     lastScrollY.value = currentScrollY
     return
@@ -152,10 +162,8 @@ const handleScroll = () => {
 
   if (Math.abs(scrollDelta) > scrollThreshold) {
     if (scrollDelta > 0) {
-      // 下にスクロール：フッターを非表示
       isVisible.value = false
     } else {
-      // 上にスクロール：フッターを表示
       isVisible.value = true
     }
     lastScrollY.value = currentScrollY
@@ -168,8 +176,25 @@ watch(isVisible, (val) => {
 
 function showFooter() {
   isVisible.value = true
-  lastScrollY.value = window.scrollY
+  if (isRef(props.scrollTarget)) {
+    const target = props.scrollTarget.value
+    if (target) {
+      lastScrollY.value = target.scrollTop ?? 0
+    }
+  } else if (props.scrollTarget) {
+    lastScrollY.value = props.scrollTarget.scrollTop ?? 0
+  } else {
+    lastScrollY.value = window.scrollY
+  }
 }
 
-defineExpose({ showFooter })
+function bindScrollToTarget(target) {
+  unbindScrollListener()
+  if (target) {
+    lastScrollY.value = target.scrollTop ?? 0
+    bindScrollListener(target)
+  }
+}
+
+defineExpose({ showFooter, bindScrollToTarget })
 </script>

@@ -675,7 +675,6 @@ const selectPrefecture = async (prefecture) => {
     return
   }
 
-  console.log(`Navigating to ${prefecture.name} guide...`)
   try {
     await navigateTo(route)
   } catch (error) {

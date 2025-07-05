@@ -33,6 +33,9 @@
                 </button>
               </div>
             </div>
+            
+            <!-- スクロールテスト用のスペーサー -->
+            <div class="h-96"></div>
           </div>
           
           <div 
@@ -121,7 +124,7 @@
     </main>
     
     <!-- Fixed Input Area -->
-    <div class="fixed left-0 right-0 bottom-16 z-30 flex justify-center pointer-events-none transition-all duration-500">
+    <div class="fixed left-0 right-0 z-30 flex justify-center pointer-events-none transition-all duration-500" :style="{ bottom: footerVisible ? '4rem' : '0' }">
       <div :class="[
         'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
         isActive ? 'max-w-sm' : 'max-w-[150px]'
@@ -155,12 +158,18 @@
     </div>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" :default-open="true" :scroll-target="chatContainer" />
+    <AppFooter 
+      ref="footerRef"
+      v-model="activeTab" 
+      :default-open="true" 
+      :scroll-target="chatContainer"
+      @visible="handleFooterVisibilityChange"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted, computed, watch } from 'vue'
+import { ref, nextTick, onMounted, computed, watch, onUnmounted } from 'vue'
 import { ArrowLeft, Bot, User, Send } from 'lucide-vue-next'
 // marked import removed - using custom markdown parser
 import AppHeader from '~/components/AppHeader.vue'
@@ -182,6 +191,8 @@ const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
 const isActive = ref(false)
+const footerRef = ref<InstanceType<typeof AppFooter>>()
+const footerVisible = ref(true)
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -347,12 +358,20 @@ const scrollToUserQuestion = () => {
 
 const askSampleQuestion = (question: string) => {
   userInput.value = question
+  // サンプル質問送信時にフッターを表示状態にリセット
+  if (footerRef.value) {
+    footerRef.value.showFooter()
+  }
   sendMessage()
 }
 
 // 関連質問クリック処理のグローバル関数
 const askRelatedQuestion = (question: string) => {
   userInput.value = question
+  // 関連質問送信時にフッターを表示状態にリセット
+  if (footerRef.value) {
+    footerRef.value.showFooter()
+  }
   sendMessage()
 }
 
@@ -361,6 +380,12 @@ const sendMessage = async () => {
 
   const userMessage = userInput.value.trim()
   userInput.value = ''
+
+  // 質問送信時にフッターを表示状態にリセット
+  await nextTick()
+  if (footerRef.value) {
+    footerRef.value.showFooter()
+  }
 
   // Add user message
   messages.value.push({
@@ -400,7 +425,6 @@ const sendMessage = async () => {
 
       // 関連質問を抽出して独立したメッセージとして追加
       const relatedQuestions = extractRelatedQuestions(response.content as string)
-      console.log('Extracted related questions:', relatedQuestions)
       
       // 関連質問が見つからない場合はより具体的な質問を使用
       const fallbackQuestions = [
@@ -426,8 +450,6 @@ const sendMessage = async () => {
       }
       
       messages.value.push(questionsMessage)
-      console.log('Added questions message to chat:', questionsMessage)
-      console.log('Total messages:', messages.value.length)
       
     } else if (typeof response === 'object' && response !== null && 'error' in response && response.error) {
       messages.value.push({
@@ -437,7 +459,6 @@ const sendMessage = async () => {
     }
 
   } catch (error) {
-    console.error('AI Chat Error:', error)
     messages.value.push({
       role: 'assistant',
       content: '申し訳ございません。現在AIサービスに接続できません。しばらく経ってから再度お試しください。'
@@ -457,9 +478,7 @@ const extractRelatedQuestions = (content: string) => {
   const match = content.match(relatedQuestionsPattern)
   
   if (match && match[1]) {
-    console.log('Found related questions section with regex')
     const questionsText = match[1].trim()
-    console.log('Questions text:', questionsText)
     
     // 各行を処理
     const lines = questionsText.split('\n')
@@ -482,7 +501,6 @@ const extractRelatedQuestions = (content: string) => {
       
       if (line.includes('🤔') && line.includes('関連質問')) {
         inRelatedSection = true
-        console.log('Found related questions section at line:', i)
         continue
       }
       
@@ -495,7 +513,6 @@ const extractRelatedQuestions = (content: string) => {
     }
   }
   
-  console.log('Final questions array:', questions)
   return questions
 }
 
@@ -515,8 +532,13 @@ watch(userInput, (val) => {
   else isActive.value = false
 })
 
+// フッターの表示状態変更ハンドラー（デバッグ用）
+const handleFooterVisibilityChange = (isVisible: boolean) => {
+  footerVisible.value = isVisible
+}
+
 // グローバルウィンドウに関数を追加
-onMounted(() => {
+onMounted(async () => {
   // グローバル関数として観光地詳細への遷移を設定
   if (typeof window !== 'undefined') {
     (window as any).navigateToSpot = navigateToSpot
@@ -532,6 +554,12 @@ onMounted(() => {
     onUnmounted(() => {
       window.removeEventListener('resize', handleResize)
     })
+  }
+  
+  // chatContainerがセットされた後にAppFooterのスクロール検知を明示的にバインド
+  await nextTick()
+  if (chatContainer.value && footerRef.value?.bindScrollToTarget) {
+    footerRef.value.bindScrollToTarget(chatContainer.value)
   }
 })
 </script>
