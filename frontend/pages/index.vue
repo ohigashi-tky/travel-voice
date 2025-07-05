@@ -4,7 +4,7 @@
     <AppHeader />
     
     <!-- Main Content -->
-    <div class="flex-1 relative z-10 pb-24 pt-16">
+    <div class="flex-1 relative z-10 safe-area-content">
       <div class="p-6">
         <div class="max-w-7xl mx-auto text-center">
           <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider text-center transition-colors duration-300">
