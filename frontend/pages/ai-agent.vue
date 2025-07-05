@@ -87,6 +87,7 @@
                   <span>{{ question }}</span>
                 </span>
               </button>
+              <div class="h-24"></div>
             </div>
             
             <!-- User Avatar -->
@@ -154,7 +155,7 @@
     </div>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" :default-open="true" @visible="footerVisible = $event" />
+    <AppFooter ref="footerRef" v-model="activeTab" :default-open="true" @visible="footerVisible = $event" />
   </div>
 </template>
 
@@ -182,6 +183,7 @@ const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
 const isActive = ref(false)
 const footerVisible = ref(true)
+const footerRef = ref()
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -359,8 +361,8 @@ const askRelatedQuestion = (question: string) => {
 const sendMessage = async () => {
   if (!userInput.value.trim() || isLoading.value) return
 
-  // フッターを必ず表示状態にリセット
-  footerVisible.value = true
+  // フッターをAppFooterのメソッドで表示
+  footerRef.value?.showFooter()
 
   const userMessage = userInput.value.trim()
   userInput.value = ''

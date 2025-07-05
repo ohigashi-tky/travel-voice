@@ -69,7 +69,7 @@ const emit = defineEmits(['update:modelValue', 'visible'])
 const activeTab = ref(props.modelValue)
 const isVisible = ref(true)
 const lastScrollY = ref(0)
-const scrollThreshold = 80 // スクロール検知の閾値を大きく
+const scrollThreshold = 20 // スクロール検知の閾値を小さく
 
 // Navigation functions
 const goToTop = () => {
@@ -101,13 +101,12 @@ const handleScroll = () => {
     return
   }
 
-  // スクロール閾値を大きく
   if (Math.abs(scrollDelta) > scrollThreshold) {
-    if (scrollDelta < 0) {
-      // 上にスクロール：フッターを非表示
+    if (scrollDelta > 0) {
+      // 下にスクロール：フッターを非表示
       isVisible.value = false
     } else {
-      // 下にスクロール：フッターを表示
+      // 上にスクロール：フッターを表示
       isVisible.value = true
     }
     lastScrollY.value = currentScrollY
@@ -132,4 +131,11 @@ onUnmounted(() => {
 watch(isVisible, (val) => {
   emit('visible', val)
 })
+
+function showFooter() {
+  isVisible.value = true
+  lastScrollY.value = window.scrollY
+}
+
+defineExpose({ showFooter })
 </script>
