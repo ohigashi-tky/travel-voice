@@ -23,7 +23,6 @@
         <span class="text-xs font-thin tracking-wide">AIエージェント</span>
       </button>
     </div>
-    </div>
   </footer>
 </template>
 

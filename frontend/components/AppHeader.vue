@@ -81,7 +81,6 @@
         </div>
       </div>
     </div>
-    </div>
   </header>
   
   <!-- Profile Modal -->
