@@ -155,7 +155,7 @@
     </div>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" :default-open="true" />
+    <AppFooter v-model="activeTab" :default-open="true" :scroll-target="chatContainer" />
   </div>
 </template>
 

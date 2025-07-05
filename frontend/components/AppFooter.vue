@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, isRef } from 'vue'
 import { Home, Bot } from 'lucide-vue-next'
 
 // Props
@@ -59,6 +59,10 @@ const props = defineProps({
   disableScrollDetection: {
     type: Boolean,
     default: false
+  },
+  scrollTarget: {
+    type: [Object, Function], // ref or HTMLElement
+    default: null
   }
 })
 
@@ -70,6 +74,7 @@ const activeTab = ref(props.modelValue)
 const isVisible = ref(true)
 const lastScrollY = ref(0)
 const scrollThreshold = 20 // スクロール検知の閾値を小さく
+let scrollTargetEl = null
 
 // Navigation functions
 const goToTop = () => {
@@ -89,9 +94,53 @@ watch(() => props.modelValue, (newValue) => {
   activeTab.value = newValue
 })
 
-// Scroll detection function
+function bindScrollListener(target) {
+  if (target) {
+    target.addEventListener('scroll', handleScroll, { passive: true })
+    scrollTargetEl = target
+  }
+}
+function unbindScrollListener() {
+  if (scrollTargetEl) {
+    scrollTargetEl.removeEventListener('scroll', handleScroll)
+    scrollTargetEl = null
+  }
+}
+
+onMounted(() => {
+  if (!props.disableScrollDetection) {
+    if (isRef(props.scrollTarget)) {
+      watch(props.scrollTarget, (el) => {
+        unbindScrollListener()
+        if (el) {
+          lastScrollY.value = el.scrollTop ?? 0
+          bindScrollListener(el)
+        }
+      }, { immediate: true })
+    } else if (props.scrollTarget) {
+      lastScrollY.value = props.scrollTarget.scrollTop ?? 0
+      bindScrollListener(props.scrollTarget)
+    } else {
+      lastScrollY.value = window.scrollY
+      bindScrollListener(window)
+    }
+  }
+})
+
+onUnmounted(() => {
+  unbindScrollListener()
+})
+
 const handleScroll = () => {
-  const currentScrollY = window.scrollY
+  let target = null
+  if (isRef(props.scrollTarget)) {
+    target = props.scrollTarget.value
+  } else if (props.scrollTarget) {
+    target = props.scrollTarget
+  } else {
+    target = window
+  }
+  const currentScrollY = target === window ? window.scrollY : target.scrollTop
   const scrollDelta = currentScrollY - lastScrollY.value
 
   // ほぼ最下部ならフッターを常に表示
@@ -112,21 +161,6 @@ const handleScroll = () => {
     lastScrollY.value = currentScrollY
   }
 }
-
-// Initialize scroll detection
-onMounted(() => {
-  if (!props.disableScrollDetection) {
-    lastScrollY.value = window.scrollY
-    window.addEventListener('scroll', handleScroll, { passive: true })
-  }
-})
-
-// Cleanup scroll listener
-onUnmounted(() => {
-  if (!props.disableScrollDetection) {
-    window.removeEventListener('scroll', handleScroll)
-  }
-})
 
 watch(isVisible, (val) => {
   emit('visible', val)
