@@ -100,13 +100,6 @@ const handleError = () => {
   console.log('Map loading error, switching to view mode')
   usePlace.value = false
 }
-
-// デバッグ用
-console.log('🗺️ Loading map for:', props.spotName)
-console.log('📍 Coordinates:', coordinates.value)
-console.log('🔑 API Key available:', !!apiKey.value)
-console.log('🌐 Place URL:', placeMapUrl.value)
-console.log('🌐 View URL:', viewMapUrl.value)
 </script>
 
 <style scoped>

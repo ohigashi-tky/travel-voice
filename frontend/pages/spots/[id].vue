@@ -374,7 +374,6 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const spotId = computed(() => {
   const id = route.params.id as string
-  console.log('Computing spotId from route.params.id:', id)
   return parseInt(id)
 })
 
@@ -1520,12 +1519,9 @@ const allSpots = [
 const loadGalleryPhotos = async () => {
   if (currentSpot.value?.name) {
     try {
-      console.log('🖼️ Loading gallery photos for:', currentSpot.value.name)
       const photos = await getGalleryPhotos(currentSpot.value.name, currentSpot.value.place_id)
       galleryPhotos.value = photos
-      console.log('✅ Gallery photos loaded:', photos.length, 'photos')
     } catch (error) {
-      console.error('❌ Error loading gallery photos:', error)
       galleryPhotos.value = []
     }
   }
@@ -1708,36 +1704,29 @@ onMounted(async () => {
   try {
     isLoading.value = true
     error.value = null
-    console.log('onMounted called')
-    console.log('Route params:', route.params)
     
     // First fetch the spots data
     await fetchSpots()
     
     // Get the ID from route params
     const id = route.params.id as string
-    console.log('Route ID:', id)
     
     if (!id) {
-      console.log('No ID in route params')
       error.value = 'No spot ID provided'
       return
     }
     
     const numericId = parseInt(id)
-    console.log('Numeric ID:', numericId)
     
     // Use local data first, then fallback to API
     let spot = null
     
     // First try local data (allSpots array)
     spot = allSpots.find(s => s.id === numericId)
-    console.log('Found spot in local data:', spot)
     
     // If not found in local data, try stored API data
     if (!spot) {
       spot = getSpotById(numericId)
-      console.log('Found spot in stored API data:', spot)
     }
     
     // If still not found, try API as last resort
@@ -1745,16 +1734,13 @@ onMounted(async () => {
       try {
         const response = await $fetch(`${config.public.apiBase}/api/tourist-spots/${numericId}`)
         spot = response
-        console.log('Fetched spot from API:', spot)
       } catch (apiError) {
         console.log('API fetch failed:', apiError)
       }
     }
-    console.log('Found spot:', spot)
     
     if (spot) {
       currentSpot.value = spot
-      console.log('Current spot set to:', currentSpot.value.name)
       
       // Load gallery photos from Google Places API
       await loadGalleryPhotos()
@@ -1772,8 +1758,6 @@ onMounted(async () => {
         title: `${spot.name} - Travel Voice`
       })
     } else {
-      console.log('Spot not found for ID:', numericId)
-      console.log('Available spots:', allSpots.map(s => ({ id: s.id, name: s.name })))
       error.value = 'Spot not found'
     }
   } catch (err) {
@@ -1787,7 +1771,6 @@ onMounted(async () => {
 // Also watch for route changes
 watch(() => route.params.id, async (newId) => {
   if (newId) {
-    console.log('Route ID changed to:', newId)
     const numericId = parseInt(newId as string)
     const spot = allSpots.find(s => s.id === numericId)
     if (spot) {
