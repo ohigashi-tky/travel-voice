@@ -1,6 +1,6 @@
 <template>
-  <footer class="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 transition-colors duration-300 z-40 safe-area-footer">
-    <div class="flex items-center justify-around h-full">
+  <footer class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 transition-colors duration-300 z-40" style="height: calc(4rem + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px);">
+    <div class="h-16 flex items-center justify-around">
       <button 
         @click="goToTop"
         :class="[
@@ -22,6 +22,7 @@
         <Bot class="w-6 h-6 mb-1" />
         <span class="text-xs font-thin tracking-wide">AIエージェント</span>
       </button>
+    </div>
     </div>
   </footer>
 </template>

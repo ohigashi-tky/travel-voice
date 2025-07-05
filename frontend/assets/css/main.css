@@ -31,8 +31,8 @@
   }
   
   .safe-area-content {
-    margin-top: calc(64px + var(--safe-area-inset-top));
-    margin-bottom: calc(80px + var(--safe-area-inset-bottom));
+    padding-top: calc(64px + var(--safe-area-inset-top));
+    padding-bottom: calc(64px + var(--safe-area-inset-bottom));
   }
   
   /* Glass Card Effects */
