@@ -66,8 +66,16 @@ const loadAudioGuide = async () => {
     const voiceId = process.client ? localStorage.getItem('audioGuideVoice') || 'Takumi' : 'Takumi'
     
     const config = useRuntimeConfig()
-    // Use server-side API URL if running on server, client-side URL if running on client
-    const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+    
+    // Simple rule: Use localhost only when accessing from localhost:3000, otherwise use Railway
+    let apiBaseUrl
+    if (process.server) {
+      apiBaseUrl = config.apiBaseServer
+    } else {
+      // Client-side: check if we're on localhost:3000 (local development)
+      const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+      apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+    }
     
     const response = await $fetch(`${apiBaseUrl}/api/audio-guide/tourist-spot`, {
       method: 'POST',

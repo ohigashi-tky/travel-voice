@@ -39,7 +39,13 @@ export const useAudioGuide = () => {
     error.value = null
 
     try {
-      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      let apiBaseUrl
+      if (process.server) {
+        apiBaseUrl = config.apiBaseServer
+      } else {
+        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+      }
       const response = await $fetch<AudioGuideResponse>(`${apiBaseUrl}/api/audio-guide/synthesize`, {
         method: 'POST',
         body: {
@@ -67,7 +73,13 @@ export const useAudioGuide = () => {
     error.value = null
 
     try {
-      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      let apiBaseUrl
+      if (process.server) {
+        apiBaseUrl = config.apiBaseServer
+      } else {
+        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+      }
       const response = await $fetch<AudioGuideResponse>(`${apiBaseUrl}/api/audio-guide/tourist-spot`, {
         method: 'POST',
         body: {
@@ -89,7 +101,13 @@ export const useAudioGuide = () => {
   // 利用可能な音声一覧を取得
   const fetchAvailableVoices = async (): Promise<Voice[]> => {
     try {
-      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      let apiBaseUrl
+      if (process.server) {
+        apiBaseUrl = config.apiBaseServer
+      } else {
+        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+      }
       const response = await $fetch<{ success: boolean; data: Voice[] }>(`${apiBaseUrl}/api/audio-guide/voices`)
       if (response.success) {
         availableVoices.value = response.data

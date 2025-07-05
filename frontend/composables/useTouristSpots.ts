@@ -136,7 +136,13 @@ export const useTouristSpots = () => {
     
     try {
       const config = useRuntimeConfig()
-      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      let apiBaseUrl
+      if (process.server) {
+        apiBaseUrl = config.apiBaseServer
+      } else {
+        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+      }
       const response = await $fetch(`${apiBaseUrl}/api/tourist-spots`)
       
       // APIデータとローカルデータをマージして重複除去
@@ -160,7 +166,13 @@ export const useTouristSpots = () => {
     
     try {
       const config = useRuntimeConfig()
-      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      let apiBaseUrl
+      if (process.server) {
+        apiBaseUrl = config.apiBaseServer
+      } else {
+        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+      }
       const response = await $fetch(`${apiBaseUrl}/api/tourist-spots/prefecture/${encodeURIComponent(prefecture)}`)
       
       return response
@@ -205,7 +217,13 @@ export const useTouristSpots = () => {
 
     try {
       const config = useRuntimeConfig()
-      const apiBaseUrl = process.server ? config.apiBaseServer : config.public.apiBase
+      let apiBaseUrl
+      if (process.server) {
+        apiBaseUrl = config.apiBaseServer
+      } else {
+        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+      }
       
       const response = await $fetch<{
         success: boolean
