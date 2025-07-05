@@ -25,6 +25,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private keys (only available on server-side)
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    openrouterApiKey: process.env.NUXT_OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY,
+    openrouterModel: process.env.NUXT_OPENROUTER_MODEL || process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash-lite-preview-06-17',
     public: {
       apiBase: process.env.NUXT_API_BASE_URL || 'http://localhost:8000/api',
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID

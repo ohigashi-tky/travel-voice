@@ -13,7 +13,7 @@
             </span>
           </h1>
           <p class="text-lg text-gray-600 dark:text-gray-300 font-medium max-w-2xl mx-auto mb-6 tracking-wide transition-colors duration-300">
-            穏やかな音声で日本を巡ろう
+            音声ガイドで日本を巡ろう
           </p>
         </div>
         
