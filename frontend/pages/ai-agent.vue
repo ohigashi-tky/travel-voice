@@ -359,6 +359,9 @@ const askRelatedQuestion = (question: string) => {
 const sendMessage = async () => {
   if (!userInput.value.trim() || isLoading.value) return
 
+  // フッターを必ず表示状態にリセット
+  footerVisible.value = true
+
   const userMessage = userInput.value.trim()
   userInput.value = ''
 
