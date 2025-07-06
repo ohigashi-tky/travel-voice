@@ -45,7 +45,7 @@
           <div class="relative">
             <div 
               ref="galleryContainer"
-              class="flex gap-4 overflow-x-auto scroll-smooth pb-2 gallery-scroll"
+              class="flex gap-4 overflow-x-auto scroll-smooth gallery-scroll"
               @scroll="updateScrollButtons"
             >
               <!-- Google Place Photo -->
@@ -130,8 +130,8 @@
         </div>
 
         <!-- Google Map Section -->
-        <section class="">
-          <div class="rounded-lg p-4 mb-6">
+        <section class="mb-8">
+          <div class="px-4 sm:px-6 lg:px-8 mb-6">
             <GoogleMapEmbed 
               :spot-name="currentSpot.name" :place-id="currentSpot.place_id"
               :zoom="16"
@@ -139,7 +139,7 @@
           </div>
           
           <!-- Unified Access Information Card -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div class="mx-4 sm:mx-6 lg:mx-8 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
             <!-- Tab Navigation -->
             <div class="flex border-b border-gray-200 dark:border-gray-700">
               <button

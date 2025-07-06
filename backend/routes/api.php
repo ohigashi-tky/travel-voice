@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TouristSpotController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\PopularSpotsController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Api\AudioGuideController;
 use App\Http\Controllers\Api\TestPollyController;
 
@@ -26,8 +27,26 @@ Route::delete('/popular-spots/cache', [PopularSpotsController::class, 'clearCach
 
 Route::get('/guides/{guide}', [GuideController::class, 'show']);
 
-// Test Route
+// Events API Routes
+Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/{id}', [EventController::class, 'show']);
+Route::get('/events/prefecture/{prefecture}', [EventController::class, 'byPrefecture']);
+Route::get('/events/meta/prefectures', [EventController::class, 'prefectures']);
+Route::get('/events/meta/tags', [EventController::class, 'tags']);
+Route::post('/events/refresh-cache', [EventController::class, 'refreshCache']);
+Route::delete('/events/cache', [EventController::class, 'clearCache']);
+
+// Test Routes
 Route::get('/test-polly', [TestPollyController::class, 'test']);
+Route::get('/test-events', function () {
+    $service = new \App\Services\EventGeneratorService();
+    $events = $service->getEvents();
+    return response()->json([
+        'success' => true,
+        'count' => count($events),
+        'data' => $events
+    ]);
+});
 
 // Audio Guide API Routes
 Route::prefix('audio-guide')->group(function () {

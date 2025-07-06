@@ -18,8 +18,43 @@
         </div>
         
         <div class="max-w-6xl mx-auto">
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 mb-3"></div>
+          
+          <!-- Navigation Links Section -->
+          <div class="mb-3 overflow-x-auto scrollbar-hide">
+            <ul class="list-none whitespace-nowrap">
+              <li class="inline text-gray-400 dark:text-gray-500 mx-2">|</li>
+              <li class="inline">
+                <button
+                  @click="navigateToEvents"
+                  class="text-gray-800 dark:text-white text-sm"
+                >
+                  イベント情報
+                </button>
+              </li>
+              <li class="inline text-gray-400 dark:text-gray-500 mx-2 text-sm">|</li>
+              <li class="inline">
+                <span class="text-gray-400 dark:text-gray-500 cursor-default text-sm">特集</span>
+              </li>
+              <li class="inline text-gray-400 dark:text-gray-500 mx-2 text-sm">|</li>
+              <li class="inline">
+                <span class="text-gray-400 dark:text-gray-500 cursor-default text-sm">穴場スポット</span>
+              </li>
+              <li class="inline text-gray-400 dark:text-gray-500 mx-2 text-sm">|</li>
+              <li class="inline">
+                <span class="text-gray-400 dark:text-gray-500 cursor-default text-sm">天気</span>
+              </li>
+              <li class="inline text-gray-400 dark:text-gray-500 mx-2 text-sm">|</li>
+              <li class="inline">
+                <span class="text-gray-400 dark:text-gray-500 cursor-default text-sm">クイズ</span>
+              </li>
+              <li class="inline text-gray-400 dark:text-gray-500 mx-2 text-sm">|</li>
+            </ul>
+          </div>
+
           <!-- Search Section -->
-          <div class="mb-6">
+          <div class="mb-3">
             <!-- Search Input with Suggestions -->
             <div class="relative max-w-md mx-auto">
               <div class="relative">
@@ -93,9 +128,9 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Popular Spots Section -->
-          <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-6 transition-colors duration-300">
+          <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl py-4 px-2 mb-6 transition-colors duration-300">
             <div class="text-center mb-4">
               <div class="flex items-center justify-center gap-3">
                 <div class="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
@@ -699,6 +734,10 @@ const selectCategory = (category) => {
   navigateTo(`/category?name=${encodeURIComponent(category.name)}`)
 }
 
+const navigateToEvents = () => {
+  navigateTo('/events')
+}
+
 // Search functionality
 const onSearchInput = () => {
   if (searchQuery.value.trim().length > 0) {
@@ -766,3 +805,13 @@ const getPlaceholderStyle = (index) => {
 
 </script>
 
+<style scoped>
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+</style>
