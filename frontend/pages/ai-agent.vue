@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col transition-colors duration-300">
+  <div class="min-h-screen bg-white dark:bg-gray-900 relative flex flex-col transition-colors duration-300">
     <!-- Header -->
     <AppHeader />
 
     <!-- Main Content -->
-    <main class="flex-1 relative z-10 flex flex-col pb-0 pt-16">
+    <main class="flex-1 relative z-10 flex flex-col pb-0">
       <!-- Chat Container - Full Height -->
       <div class="flex-1 bg-white dark:bg-gray-800 flex flex-col">
         
         <!-- Chat Messages -->
         <div 
           ref="chatContainer"
-          class="overflow-y-auto p-4 space-y-4"
-          style="height: calc(100vh - 128px); min-height: 400px; scroll-behavior: smooth;"
+          class="flex-1 p-4 space-y-4"
+          style="scroll-behavior: smooth;"
         >
           <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full">
             <Bot class="w-16 h-16 text-gray-300 mb-4" />
