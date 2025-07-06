@@ -4,44 +4,30 @@
     <AppHeader />
     
     <!-- Back Button (always visible) -->
-    <BackButton />
+    <!-- <BackButton /> -->
 
-    <!-- Hero Section -->
-    <div v-if="currentSpot && !isLoading" class="relative pt-16">
-      <!-- Main Image -->
-      <div class="h-64 md:h-80 relative overflow-hidden">
-        <PlacePhotoImage 
-          :spot-name="currentSpot?.name"
-          :place-id="currentSpot?.place_id"
-          :alt="currentSpot?.name"
-          image-class="w-full h-full object-cover"
-        />
-        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-        
-        <!-- Spot Title Overlay -->
-        <div class="absolute bottom-6 left-6 right-6">
-          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg p-4">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded-md text-xs">
-                {{ currentSpot?.category }}
-              </span>
-              <span class="text-gray-500 dark:text-gray-400 text-xs">{{ currentSpot?.prefecture }}</span>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
-              {{ currentSpot?.name }}
-            </h1>
-            <p class="text-gray-600 dark:text-gray-300 text-sm">
-              {{ currentSpot?.description }}
-            </p>
-          </div>
+    <!-- Title Section -->
+    <div v-if="currentSpot && !isLoading" class="pt-20 pb-6 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded-md text-xs">
+            {{ currentSpot?.category }}
+          </span>
+          <span class="text-gray-500 dark:text-gray-400 text-xs">{{ currentSpot?.prefecture }}</span>
         </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
+          {{ currentSpot?.name }}
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 text-sm">
+          {{ currentSpot?.description }}
+        </p>
       </div>
     </div>
 
     <!-- Main Content -->
-    <main class="flex-1 relative z-10 px-4 sm:px-6 lg:px-8 pb-24">
+    <main class="flex-1 relative z-10 pb-24">
       <!-- Loading State -->
-      <div v-if="isLoading" class="flex items-center justify-center min-h-screen">
+      <div v-if="isLoading" class="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
         <div class="text-center">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">観光スポット情報を読み込み中...</h3>
@@ -50,38 +36,102 @@
       </div>
 
       <!-- Content when loaded -->
-      <div class="max-w-4xl mx-auto py-8" v-else-if="currentSpot && !error">
+      <div class="max-w-4xl mx-auto" v-else-if="currentSpot && !error">
         
-        <!-- Audio Guide Section -->
-        <AudioGuideSimple 
-          :spot-id="spotId"
-          :spot-name="currentSpot?.name || ''"
-        />
-
-        <!-- Overview Section -->
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-3">
-            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-              <Info class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        <!-- Images Gallery -->
+        <section class="mb-2 px-4">
+          
+          <!-- Horizontal Scrollable Gallery -->
+          <div class="relative">
+            <div 
+              ref="galleryContainer"
+              class="flex gap-4 overflow-x-auto scroll-smooth pb-2 gallery-scroll"
+              @scroll="updateScrollButtons"
+            >
+              <!-- Google Place Photo -->
+              <div class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+                <PlacePhotoImage 
+                  :spot-name="currentSpot.name"
+                  :place-id="currentSpot.place_id"
+                  :alt="`${currentSpot.name} - メイン画像`"
+                  image-class="hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <!-- Additional images from Google Place Photos -->
+              <div 
+                v-for="(photo, index) in getGalleryImages()" 
+                :key="index"
+                class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                <img 
+                  :src="photo.url" 
+                  :alt="`${currentSpot.name} - 画像 ${index + 2}`"
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
             </div>
-            概要
-          </h2>
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
-            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-              {{ currentSpot.overview }}
-            </p>
+            
+            <!-- Scroll Buttons -->
+            <button 
+              v-if="showLeftButton"
+              @click="scrollLeft"
+              class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300"
+            >
+              <svg class="w-5 h-5 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button 
+              v-if="showRightButton"
+              @click="scrollRight"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300"
+            >
+              <svg class="w-5 h-5 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
           </div>
+          
+          <!-- Image Indicators -->
+          <div class="flex justify-center mt-4 space-x-2">
+            <button
+              v-for="(_, index) in getTotalImageCount()"
+              :key="index"
+              @click="() => { scrollToImage(index); restartAutoScrollAfterDelay(); }"
+              :class="[
+                'w-2 h-2 rounded-full transition-all duration-300',
+                getCurrentImageIndex() === index
+                  ? 'bg-blue-600 dark:bg-blue-400'
+                  : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+              ]"
+            />
+          </div>
+          
         </section>
 
-        <!-- Google Map Section -->
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-3">
-            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-              <MapPin class="w-5 h-5 text-green-600 dark:text-green-400" />
+        <!-- Audio Guide Section -->
+        <div class="px-4 sm:px-6 lg:px-8">
+          <AudioGuideSimple 
+            :spot-id="spotId"
+            :spot-name="currentSpot?.name || ''"
+          />
+
+          <!-- Combined Overview and History Section -->
+          <section class="mb-6">
+            <div class="space-y-4">
+              <p v-if="currentSpot.overview" class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {{ currentSpot.overview }}
+              </p>
+              <p v-if="currentSpot.history" class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {{ currentSpot.history }}
+              </p>
             </div>
-            アクセス・周辺情報
-          </h2>
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
+          </section>
+        </div>
+
+        <!-- Google Map Section -->
+        <section class="">
+          <div class="rounded-lg p-4 mb-6">
             <GoogleMapEmbed 
               :spot-name="currentSpot.name" :place-id="currentSpot.place_id"
               :zoom="16"
@@ -213,122 +263,12 @@
           </div>
         </section>
 
-        <!-- Highlights Section -->
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-3">
-            <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
-              <Star class="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-            </div>
-            見どころ
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div 
-              v-for="highlight in currentSpot.highlights" 
-              :key="highlight"
-              class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 flex items-center gap-3"
-            >
-              <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-              <span class="text-gray-700 dark:text-gray-300">{{ highlight }}</span>
-            </div>
-          </div>
-        </section>
 
-        <!-- History Section -->
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-3">
-            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-              <Clock class="w-5 h-5 text-green-600 dark:text-green-400" />
-            </div>
-            歴史
-          </h2>
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
-            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-              {{ currentSpot.history }}
-            </p>
-          </div>
-        </section>
-
-        <!-- Images Gallery -->
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-3">
-            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-              <Camera class="w-5 h-5 text-purple-600 dark:text-purple-400" />
-            </div>
-            フォトギャラリー
-          </h2>
-          
-          <!-- Horizontal Scrollable Gallery -->
-          <div class="relative">
-            <div 
-              ref="galleryContainer"
-              class="flex gap-4 overflow-x-auto scroll-smooth pb-2 gallery-scroll"
-              @scroll="updateScrollButtons"
-            >
-              <!-- Google Place Photo -->
-              <div class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                <PlacePhotoImage 
-                  :spot-name="currentSpot.name"
-                  :place-id="currentSpot.place_id"
-                  :alt="`${currentSpot.name} - メイン画像`"
-                  image-class="hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <!-- Additional images from Google Place Photos -->
-              <div 
-                v-for="(photo, index) in getGalleryImages()" 
-                :key="index"
-                class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-              >
-                <img 
-                  :src="photo.url" 
-                  :alt="`${currentSpot.name} - 画像 ${index + 2}`"
-                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            </div>
-            
-            <!-- Scroll Buttons -->
-            <button 
-              v-if="showLeftButton"
-              @click="scrollLeft"
-              class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300"
-            >
-              <svg class="w-5 h-5 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-            </button>
-            <button 
-              v-if="showRightButton"
-              @click="scrollRight"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300"
-            >
-              <svg class="w-5 h-5 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
-          </div>
-          
-          <!-- Image Indicators -->
-          <div class="flex justify-center mt-4 space-x-2">
-            <button
-              v-for="(_, index) in getTotalImageCount()"
-              :key="index"
-              @click="scrollToImage(index)"
-              :class="[
-                'w-2 h-2 rounded-full transition-all duration-300',
-                getCurrentImageIndex() === index
-                  ? 'bg-blue-600 dark:bg-blue-400'
-                  : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-              ]"
-            />
-          </div>
-          
-        </section>
 
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error || (!currentSpot && !isLoading)" class="flex items-center justify-center min-h-screen">
+      <div v-else-if="error || (!currentSpot && !isLoading)" class="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
         <div class="text-center">
           <MapPin class="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">
@@ -355,7 +295,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import { Headphones, Play, Info, Star, Clock, Camera, MapPin } from 'lucide-vue-next'
 import { useTouristSpots } from '~/composables/useTouristSpots'
 import { useGooglePlacePhotos } from '~/composables/useGooglePlacePhotos'
@@ -402,6 +342,7 @@ const galleryContainer = ref<HTMLElement | null>(null)
 const showLeftButton = ref(false)
 const showRightButton = ref(false)
 const currentImageIndex = ref(0)
+let galleryInterval: NodeJS.Timeout | null = null
 
 // Tourist spots data
 const { spots, fetchSpots, getSpotById } = useTouristSpots()
@@ -410,7 +351,17 @@ const { spots, fetchSpots, getSpotById } = useTouristSpots()
 const { getGalleryPhotos } = useGooglePlacePhotos()
 const galleryPhotos = ref<any[]>([])
 
-// All spots data (same as in index.vue)
+// Fetch spot details from API
+const fetchSpotFromAPI = async (id: number) => {
+  try {
+    const response = await $fetch(`${config.public.apiBase}/api/tourist-spots/${id}`)
+    return response.data || response
+  } catch (error) {
+    return null
+  }
+}
+
+// Mock data for development (to be replaced with API)
 const allSpots = [
   {
     id: 1,
@@ -1544,6 +1495,7 @@ const scrollLeft = () => {
       left: -containerWidth, // Full width of container
       behavior: 'smooth'
     })
+    restartAutoScrollAfterDelay()
   }
 }
 
@@ -1554,6 +1506,7 @@ const scrollRight = () => {
       left: containerWidth, // Full width of container
       behavior: 'smooth'
     })
+    restartAutoScrollAfterDelay()
   }
 }
 
@@ -1581,11 +1534,40 @@ const scrollToImage = (index: number) => {
   if (!galleryContainer.value) return
   
   const containerWidth = galleryContainer.value.clientWidth
+  const gap = 16 // gap-4 = 16px
   galleryContainer.value.scrollTo({
-    left: index * containerWidth,
+    left: index * (containerWidth + gap),
     behavior: 'smooth'
   })
   currentImageIndex.value = index
+}
+
+// Auto-scroll functions
+const startGalleryAutoScroll = () => {
+  if (galleryInterval) return
+  
+  galleryInterval = setInterval(() => {
+    const totalImages = getTotalImageCount()
+    if (totalImages <= 1) return
+    
+    const nextIndex = (currentImageIndex.value + 1) % totalImages
+    scrollToImage(nextIndex)
+  }, 4000) // 4秒ごとに切り替え
+}
+
+const stopGalleryAutoScroll = () => {
+  if (galleryInterval) {
+    clearInterval(galleryInterval)
+    galleryInterval = null
+  }
+}
+
+// Restart auto-scroll after user interaction
+const restartAutoScrollAfterDelay = () => {
+  stopGalleryAutoScroll()
+  setTimeout(() => {
+    startGalleryAutoScroll()
+  }, 5000) // 5秒後に再開
 }
 
 
@@ -1721,22 +1703,17 @@ onMounted(async () => {
     // Use local data first, then fallback to API
     let spot = null
     
-    // First try local data (allSpots array)
-    spot = allSpots.find(s => s.id === numericId)
+    // Try API first for real data
+    spot = await fetchSpotFromAPI(numericId)
     
-    // If not found in local data, try stored API data
+    // Fallback to local data if API fails
     if (!spot) {
-      spot = getSpotById(numericId)
+      spot = allSpots.find(s => s.id === numericId)
     }
     
-    // If still not found, try API as last resort
+    // Last fallback to stored API data
     if (!spot) {
-      try {
-        const response = await $fetch(`${config.public.apiBase}/api/tourist-spots/${numericId}`)
-        spot = response
-      } catch (apiError) {
-        console.log('API fetch failed:', apiError)
-      }
+      spot = getSpotById(numericId)
     }
     
     if (spot) {
@@ -1747,6 +1724,11 @@ onMounted(async () => {
       
       // Initialize access tabs
       initializeTabs()
+      
+      // Start auto-scroll for gallery
+      nextTick(() => {
+        startGalleryAutoScroll()
+      })
       
       // Initialize photo gallery scroll buttons
       nextTick(() => {
@@ -1766,6 +1748,11 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  stopGalleryAutoScroll()
 })
 
 // Also watch for route changes

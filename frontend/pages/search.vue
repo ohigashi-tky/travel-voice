@@ -356,7 +356,6 @@ const goHome = () => {
 }
 
 const goToSpotDetail = (spotId) => {
-  console.log('Navigating to spot:', spotId)
   navigateTo(`/spots/${spotId}`)
 }
 

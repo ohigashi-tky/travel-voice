@@ -62,8 +62,6 @@ const initMap = () => {
 
   const coordinates = spotCoordinates[props.spotName] || { lat: 35.6762, lng: 139.6993 }
   
-  console.log('📍 Fallback map for:', props.spotName)
-  console.log('📍 Coordinates:', coordinates)
 
   // シンプルな静的地図表示（常に動作する）
   mapElement.value.innerHTML = `
@@ -109,7 +107,6 @@ const initMap = () => {
     </div>
   `
   
-  console.log('✅ Fallback map loaded')
 }
 
 onMounted(() => {

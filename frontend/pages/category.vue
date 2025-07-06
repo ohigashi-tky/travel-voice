@@ -34,14 +34,13 @@
         </div>
 
         <!-- Tourist Spots Grid -->
-        <div v-else-if="filteredSpots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div v-else-if="filteredSpots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <TouristSpotCard 
             v-for="spot in filteredSpots" 
             :key="spot.id"
             :spot="spot"
             :show-prefecture="true"
-            :show-both-tags="true"
-            :show-tags="false"
+            :show-tags="true"
           />
         </div>
 
@@ -238,6 +237,7 @@ const allSpots = [
     description: '世界三大夜景の一つに数えられる美しい夜景スポット。津軽海峡を一望できます。',
     category: '展望台',
     prefecture: '北海道',
+    place_id: 'ChIJqUkGjFXynl8Rvj6P2613ojo',
     imageUrl: ''
   },
   {
@@ -401,9 +401,8 @@ useHead(() => ({
 
 // Navigation functions
 
-const goToSpotDetail = (spotId) => {
-  console.log('Navigating to spot:', spotId)
-  navigateTo(`/spots/${spotId}`)
+const goHome = () => {
+  navigateTo('/')
 }
 
 // Load category data on mount

@@ -62,8 +62,6 @@ const initMap = async () => {
 
   const coordinates = spotCoordinates[props.spotName] || { lat: 35.6762, lng: 139.6993 }
   
-  console.log('📍 Loading OpenStreetMap for:', props.spotName)
-  console.log('📍 Coordinates:', coordinates)
 
   try {
     // OpenStreetMapのiframe埋め込み
@@ -92,7 +90,6 @@ const initMap = async () => {
       </div>
     `
     
-    console.log('✅ OpenStreetMap loaded successfully')
     
   } catch (error) {
     console.error('❌ Map loading failed:', error)

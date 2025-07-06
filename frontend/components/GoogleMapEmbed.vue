@@ -97,7 +97,6 @@ const viewMapUrl = computed(() => {
 })
 
 const handleError = () => {
-  console.log('Map loading error, switching to view mode')
   usePlace.value = false
 }
 </script>

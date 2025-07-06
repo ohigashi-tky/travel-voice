@@ -1,16 +1,9 @@
 <template>
   <!-- 音声ガイドセクション -->
-  <div class="mb-6">
-    <!-- ヘッダー -->
-    <div class="flex items-center gap-3 mb-4">
-      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-        <span class="text-white text-sm">🎧</span>
-      </div>
-      <h3 class="text-2xl font-bold text-gray-900 dark:text-white">音声ガイド</h3>
-    </div>
+  <div class="mb-3">
     
     <!-- 音声プレイヤー -->
-    <div class="bg-sky-50 dark:bg-sky-900/20 rounded-2xl">
+    <div class="rounded-2xl">
       <div v-if="isLoading" class="flex items-center justify-center py-4">
         <span class="animate-spin inline-block w-6 h-6 mr-2">⏳</span>
         <span class="text-gray-600 dark:text-gray-300">音声を生成中...</span>

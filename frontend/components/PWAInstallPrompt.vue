@@ -144,9 +144,9 @@ const installPWA = async () => {
     const result = await deferredPrompt.userChoice
     
     if (result.outcome === 'accepted') {
-      console.log('PWA installation accepted')
+      // PWA installation accepted
     } else {
-      console.log('PWA installation declined')
+      // PWA installation declined
     }
   } catch (error) {
     console.error('Error during PWA installation:', error)

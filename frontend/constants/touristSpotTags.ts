@@ -40,6 +40,7 @@ export const TOURIST_SPOT_TAG_MAPPINGS: SpotTagMapping[] = [
   { spotKeywords: ['寺院'], tags: ['歴史', '文化', '精神的'] },
   { spotKeywords: ['神社'], tags: ['伝統', 'パワースポット', '文化'] },
   { spotKeywords: ['城'], tags: ['歴史', '城郭', '文化財'] },
+  { spotKeywords: ['展望台'], tags: ['景色', '展望台', 'パノラマ'] },
   { spotKeywords: ['温泉'], tags: ['リラクゼーション', '健康', '自然'] },
   { spotKeywords: ['博物館'], tags: ['文化', '学習', '展示'] },
   { spotKeywords: ['水族館'], tags: ['ファミリー', '海洋生物', 'エンターテイメント'] }
@@ -102,6 +103,8 @@ export function getTagColorClasses(tag: string): string {
     'グルメ': 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
     'ショッピング': 'bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300',
     '展望台': 'bg-sky-100 dark:bg-sky-900/30 text-sky-800 dark:text-sky-300',
+    '景色': 'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300',
+    'パノラマ': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300',
     'ファミリー': 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300'
   }
 

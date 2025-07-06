@@ -106,18 +106,14 @@ const initializeMap = async () => {
   if (import.meta.server || !mapContainer.value) return
 
   try {
-    console.log('🗺️ Initializing Google Maps for:', props.spotName)
-    console.log('🔑 API Key:', apiKey ? 'Set' : 'Not set')
     
     await loadGoogleMaps()
-    console.log('✅ Google Maps API loaded successfully')
 
     // 座標を取得（props優先、次に座標データ、最後にデフォルト）
     const coordinates = props.latitude && props.longitude 
       ? { lat: props.latitude, lng: props.longitude }
       : spotCoordinates[props.spotName] || { lat: 35.6762, lng: 139.6993 } // 東京駅をデフォルト
 
-    console.log('📍 Coordinates for', props.spotName, ':', coordinates)
 
     // マップを初期化
     map = new google.maps.Map(mapContainer.value, {
@@ -133,7 +129,6 @@ const initializeMap = async () => {
       ]
     })
 
-    console.log('🗺️ Map initialized successfully')
 
     // 観光地にマーカーを追加
     const marker = new google.maps.Marker({

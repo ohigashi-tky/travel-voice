@@ -463,7 +463,6 @@ const nextSpot = () => {
 
 // Navigate to spot detail page
 const goToSpotDetail = (spotId) => {
-  console.log('Navigating to spot:', spotId) // Debug log
   // Only navigate if not dragging
   if (!isDragging.value) {
     stopCarousel() // Stop auto-scroll when navigating
@@ -661,8 +660,6 @@ const prefectureRouteMap = {
 }
 
 const selectPrefecture = async (prefecture) => {
-  console.log('Prefecture selected:', prefecture.name)
-  
   if (!prefecture.available) {
     alert(`${prefecture.name}のガイドは準備中です。しばらくお待ちください。`)
     return

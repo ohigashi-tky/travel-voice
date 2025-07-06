@@ -93,17 +93,12 @@ const initMap = async () => {
     return
   }
   
-  console.log('📍 Loading map for:', props.spotName)
-  console.log('🔑 API Key:', apiKey)
-
   const coordinates = spotCoordinates[props.spotName] || { lat: 35.6762, lng: 139.6993 }
-  console.log('📍 Coordinates:', coordinates)
 
   // Google Maps 埋め込みを試す
   try {
     // 座標を直接使用してシンプルに
     const mapUrl = `https://www.google.com/maps/embed/v1/view?key=${apiKey}&center=${coordinates.lat},${coordinates.lng}&zoom=${props.zoom}&maptype=roadmap`
-    console.log('🌐 Map URL:', mapUrl)
     
     mapElement.value.innerHTML = `
       <iframe
@@ -116,8 +111,6 @@ const initMap = async () => {
       </iframe>
     `
     
-    console.log('✅ Map iframe created')
-    
     // 10秒後にフォールバックをチェック
     setTimeout(() => {
       const iframe = mapElement.value?.querySelector('iframe')
@@ -125,18 +118,16 @@ const initMap = async () => {
         try {
           // iframeが正常に読み込まれているかチェック
           if (!iframe.contentWindow) {
-            console.log('⚠️ Map loading timeout, showing fallback')
             showFallback()
           }
         } catch (e) {
-          console.log('⚠️ Map access error, showing fallback')
           showFallback()
         }
       }
     }, 10000)
     
   } catch (error) {
-    console.error('❌ Map loading failed:', error)
+    console.error('Map loading failed:', error)
     showFallback()
   }
 }

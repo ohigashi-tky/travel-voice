@@ -24,48 +24,12 @@
       <div class="max-w-7xl mx-auto py-6">
         <!-- Tourist Spots Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
+          <TouristSpotCard 
             v-for="spot in touristSpots" 
             :key="spot.id"
-            @click="goToSpotDetail(spot.id)"
-            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer"
-          >
-            <!-- Spot Image -->
-            <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-500 relative">
-              <PlacePhotoImage 
-                :spot-name="spot.name" :place-id="spot.place_id"
-                :alt="spot.name"
-              >
-                <div class="absolute top-3 right-3">
-                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.category }}
-                  </span>
-                </div>
-              </PlacePhotoImage>
-            </div>
-            
-            <!-- Spot Info -->
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
-                {{ spot.name }}
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2 transition-colors duration-300">
-                {{ spot.description }}
-              </p>
-              
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-1 mb-3">
-                <span 
-                  v-for="tag in getSpotTags(spot)" 
-                  :key="tag"
-                  class="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-2 py-1 rounded-md text-xs transition-colors duration-300"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-              
-            </div>
-          </div>
+            :spot="spot"
+            :show-tags="true"
+          />
         </div>
 
         <!-- Empty State -->
@@ -110,29 +74,6 @@ const activeTab = ref('top')
 const touristSpots = ref<TouristSpot[]>([])
 
 
-const generateSpotImage = (spotName: string, category: string) => {
-  // 観光地ごとの確実に表示される画像URLを返す
-  const imageMap: Record<string, string> = {
-    '浅草寺': '',
-    '明治神宮': '',
-    '大阪城': '',
-    '清水寺': '',
-    '金閣寺': '',
-    '伏見稲荷大社': '',
-    '札幌時計台': '',
-    '函館山': '',
-    '小樽運河': ''
-  }
-  
-  return imageMap[spotName] || ''
-}
-
-
-
-
-const goToSpotDetail = (spotId: number) => {
-  navigateTo(`/spots/${spotId}`)
-}
 
 
 // Load mock tourist spots data for Kyoto

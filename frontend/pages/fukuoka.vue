@@ -111,7 +111,6 @@ const touristSpots = [
 // Navigation functions
 
 const goToSpotDetail = (spotId) => {
-  console.log('Navigating to spot:', spotId)
   navigateTo(`/spots/${spotId}`)
 }
 
