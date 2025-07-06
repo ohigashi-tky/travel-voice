@@ -1,22 +1,10 @@
 <template>
-  <div class="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col transition-colors duration-300">
+  <div class="min-h-screen bg-white dark:bg-gray-900 relative flex flex-col transition-colors duration-300">
     <!-- Header -->
     <AppHeader />
     
-    <!-- Main Content -->
-    <div class="flex-1 relative z-10 safe-area-content">
-      <div class="p-6">
-        <div class="max-w-7xl mx-auto text-center">
-          <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4 tracking-wider text-center transition-colors duration-300">
-            <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">
-              おうち旅行
-            </span>
-          </h1>
-          <p class="text-lg text-gray-600 dark:text-gray-300 font-medium max-w-2xl mx-auto mb-6 tracking-wide transition-colors duration-300">
-            音声ガイドで日本を巡ろう
-          </p>
-        </div>
-        
+    <!-- Main Content (above the image with no gap) -->
+    <div class="relative z-10">
         <div class="max-w-6xl mx-auto">
           <!-- Divider -->
           <div class="border-t border-gray-200 dark:border-gray-700 mb-3"></div>
@@ -52,6 +40,28 @@
               <li class="inline text-gray-400 dark:text-gray-500 mx-2 text-sm">|</li>
             </ul>
           </div>
+
+        </div>
+      
+      <!-- Hero Image Fade Slider (full width, no margin) -->
+      <div class="w-full h-64 md:h-80 lg:h-96 relative overflow-hidden mb-6">
+        <div 
+          v-for="(image, index) in heroImages" 
+          :key="index"
+          class="absolute inset-0 transition-opacity duration-[4000ms] ease-in-out"
+          :style="{ opacity: currentHeroIndex === index ? 1 : 0 }"
+        >
+          <img 
+            :src="image"
+            :alt="`ヒーローイメージ ${index + 1}`"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+        </div>
+      </div>
+      
+      <div class="px-4">
+        <div class="max-w-6xl mx-auto">
 
           <!-- Search Section -->
           <div class="mb-3">
@@ -271,7 +281,7 @@
           </div>
           
           <!-- Category Selection -->
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-colors duration-300 mt-8">
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-colors duration-300 mt-8 mb-24">
             <div class="text-center mb-4">
               <div class="flex items-center justify-center gap-3">
                 <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
@@ -350,7 +360,7 @@
         </div>
       </div>
     </div>
-
+    
     <!-- Footer -->
     <AppFooter v-model="activeTab" :default-open="true" />
     
@@ -408,6 +418,15 @@ const recommendedSpots = ref([])
 const showPrefectureModal = ref(false)
 let carouselInterval = null
 
+// Hero image slider variables
+const currentHeroIndex = ref(0)
+const heroImages = [
+  '/top_image_1.jpg',
+  '/top_image_2.jpg', 
+  '/top_image_3.jpg'
+]
+let heroInterval = null
+
 // Search related variables
 const searchQuery = ref('')
 const showSuggestions = ref(false)
@@ -434,11 +453,13 @@ onMounted(async () => {
   await selectPopularSpots() // AI分析による人気スポット選択
   startCarousel()
   startPlaceholderRotation()
+  startHeroSlider()
 })
 
 onUnmounted(() => {
   stopCarousel()
   stopPlaceholderRotation()
+  stopHeroSlider()
 })
 
 // Select popular spots using AI analysis
@@ -488,6 +509,20 @@ const stopPlaceholderRotation = () => {
   if (placeholderInterval) {
     clearInterval(placeholderInterval)
     placeholderInterval = null
+  }
+}
+
+// Hero slider functions
+const startHeroSlider = () => {
+  heroInterval = setInterval(() => {
+    currentHeroIndex.value = (currentHeroIndex.value + 1) % heroImages.length
+  }, 10000) // 10秒ごとに切り替え（非常にゆっくり）
+}
+
+const stopHeroSlider = () => {
+  if (heroInterval) {
+    clearInterval(heroInterval)
+    heroInterval = null
   }
 }
 

@@ -11,7 +11,7 @@
     <BackButton />
 
     <!-- Header -->
-    <header class="relative z-10 p-6 pt-20">
+    <header class="relative z-10 p-6 pt-6">
       <nav class="flex items-center justify-center max-w-7xl mx-auto">
         <h1 class="text-2xl font-black text-white">
           <span class="bg-gradient-to-r from-cyan-400 to-white bg-clip-text text-transparent">

@@ -7,7 +7,7 @@
     <BackButton />
 
     <!-- Title Section -->
-    <div class="pt-20 pb-6 px-4 sm:px-6 lg:px-8">
+    <div class="pt-0 pb-6 px-4 sm:px-6 lg:px-8">
       <div class="max-w-6xl mx-auto">
         <div class="text-center">
           <div class="flex items-center justify-center gap-3 mb-4">
@@ -77,12 +77,24 @@
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     日付
                   </label>
-                  <input
-                    v-model="selectedDate"
-                    @input="filterEvents"
-                    type="date"
-                    class="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-gray-300 dark:focus:border-gray-600"
-                  />
+                  <div class="relative">
+                    <input
+                      v-model="selectedDate"
+                      @input="filterEvents"
+                      type="date"
+                      class="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-gray-300 dark:focus:border-gray-600 appearance-none date-input"
+                      style="min-height: 38px;"
+                    />
+                    <!-- Calendar icon for visual consistency -->
+                    <svg 
+                      class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
                 </div>
 
                 <!-- Category Filter -->
@@ -300,6 +312,66 @@
     <AppFooter />
   </div>
 </template>
+
+<style scoped>
+/* Date input styling for mobile browsers */
+.date-input {
+  /* Remove default browser styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Webkit browsers (Safari, Chrome on iOS) */
+.date-input::-webkit-datetime-edit {
+  padding: 0;
+  color: inherit;
+}
+
+.date-input::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+.date-input::-webkit-datetime-edit-text {
+  color: inherit;
+}
+
+.date-input::-webkit-datetime-edit-month-field,
+.date-input::-webkit-datetime-edit-day-field,
+.date-input::-webkit-datetime-edit-year-field {
+  color: inherit;
+}
+
+.date-input::-webkit-inner-spin-button,
+.date-input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Dark mode support for date input */
+.dark .date-input::-webkit-datetime-edit,
+.dark .date-input::-webkit-datetime-edit-text,
+.dark .date-input::-webkit-datetime-edit-month-field,
+.dark .date-input::-webkit-datetime-edit-day-field,
+.dark .date-input::-webkit-datetime-edit-year-field {
+  color: white;
+}
+
+/* Firefox */
+.date-input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* Ensure consistent height across browsers */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific */
+  .date-input {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+</style>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
