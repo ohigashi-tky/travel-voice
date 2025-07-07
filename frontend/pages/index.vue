@@ -134,19 +134,12 @@
         </div>
       </div>
       
-      <div class="px-4">
+      <div class="px-4 -mt-3">
         <div class="max-w-6xl mx-auto">
-
-
           <!-- Popular Spots Section -->
-          <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl py-4 px-2 mb-6 transition-colors duration-300 relative z-10">
-            <div class="text-center mb-4">
-              <div class="flex items-center justify-center gap-3">
-                <div class="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
-                  <Sparkles class="w-5 h-5 text-white" />
-                </div>
-                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">{{ t('人気スポット') }}</h3>
-              </div>
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-4 transition-all duration-300 relative z-10 shadow-lg">
+            <div class="text-center mb-2">
+              <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('人気スポット') }}</h3>
             </div>
             
             <!-- Carousel Container -->
@@ -169,46 +162,40 @@
                   <div 
                     v-for="spot in recommendedSpots" 
                     :key="spot.id"
-                    class="w-full flex-shrink-0 px-2"
+                    class="w-full flex-shrink-0 px-1"
                   >
                     <div 
                       @click="goToSpotDetail(spot.id)"
-                      class="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105"
+                      class="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 h-40"
                     >
-                      <!-- Horizontal Layout -->
-                      <div class="flex h-32">
-                        <!-- Spot Image -->
-                        <div class="w-48 bg-gradient-to-br from-blue-400 to-purple-500 relative flex-shrink-0">
-                          <PlacePhotoImage 
-                            :spot-name="spot.name"
-                            :place-id="spot.place_id"
-                            :alt="spot.name"
-                          >
-                            <div class="absolute top-2 right-2">
-                              <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded text-xs font-medium">
-                                {{ spot.prefecture }}
-                              </span>
-                            </div>
-                          </PlacePhotoImage>
+                      <!-- Full Background Image -->
+                      <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500">
+                        <PlacePhotoImage 
+                          :spot-name="spot.name"
+                          :place-id="spot.place_id"
+                          :alt="spot.name"
+                          image-class="w-full h-full object-cover"
+                        />
+                      </div>
+                      
+                      <!-- Gradient Overlay -->
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                      
+                      <!-- Spot Name Badge (top-left) -->
+                      <div class="absolute top-3 left-3">
+                        <div class="bg-black/10 backdrop-blur-sm rounded px-2 py-1">
+                          <h4 class="text-white text-base font-bold">
+                            {{ spot.name }}
+                          </h4>
                         </div>
-                        
-                        <!-- Spot Info -->
-                        <div class="flex-1 p-4 flex flex-col justify-between">
-                          <div>
-                            <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
-                              {{ spot.name }}
-                            </h4>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 transition-colors duration-300">
-                              {{ spot.description }}
-                            </p>
-                          </div>
-                          
-                          <!-- Bottom Row -->
-                          <div class="flex justify-between items-center mt-2">
-                            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded text-xs transition-colors duration-300">
-                              {{ spot.category }}
-                            </span>
-                          </div>
+                      </div>
+                      
+                      <!-- Short Description Badge (bottom-right) -->
+                      <div class="absolute bottom-2 right-2 max-w-[80%]">
+                        <div class="bg-black/10 backdrop-blur-sm rounded px-2 py-1 inline-block">
+                          <p class="text-white text-xs font-normal leading-tight text-left whitespace-nowrap">
+                            {{ getFirstSentence(spot.description) }}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -216,31 +203,13 @@
                 </div>
               </div>
               
-              <!-- Dots Indicator -->
-              <div class="flex justify-center mt-4 space-x-2">
-                <div 
-                  v-for="(spot, index) in recommendedSpots" 
-                  :key="index"
-                  :class="[
-                    'w-2 h-2 rounded-full transition-colors',
-                    currentIndex === index 
-                      ? 'bg-blue-600' 
-                      : 'bg-gray-300 dark:bg-gray-600'
-                  ]"
-                />
-              </div>
             </div>
           </div>
           
           <!-- Prefecture Selection -->
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            <div class="text-center mb-4">
-              <div class="flex items-center justify-center gap-3">
-                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <MapPin class="w-5 h-5 text-white" />
-                </div>
-                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">{{ t('都道府県から探す') }}</h3>
-              </div>
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-4 transition-all duration-300 relative z-10 shadow-lg">
+            <div class="text-center mb-2">
+              <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('都道府県から探す') }}</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               <button
@@ -280,14 +249,9 @@
           </div>
           
           <!-- Category Selection -->
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-colors duration-300 mt-8 mb-24">
-            <div class="text-center mb-4">
-              <div class="flex items-center justify-center gap-3">
-                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                  <Grid3X3 class="w-5 h-5 text-white" />
-                </div>
-                <h3 class="text-gray-800 dark:text-white text-xl font-light tracking-wide transition-colors duration-300">{{ t('カテゴリから探す') }}</h3>
-              </div>
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-24 transition-all duration-300 relative z-10 shadow-lg">
+            <div class="text-center mb-2">
+              <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('カテゴリから探す') }}</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               <button
@@ -835,6 +799,15 @@ const getPlaceholderStyle = (index) => {
       opacity: '0'
     }
   }
+}
+
+// 説明文の最初の一文（句読点まで）を取得
+const getFirstSentence = (description) => {
+  if (!description) return ''
+  
+  // 「。」で最初の一文を取得
+  const firstSentence = description.split('。')[0]
+  return firstSentence
 }
 
 </script>
