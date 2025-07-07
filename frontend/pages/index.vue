@@ -211,22 +211,22 @@
             <div class="text-center mb-2">
               <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('都道府県から探す') }}</h3>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-3 gap-3">
               <button
                 v-for="prefecture in mainPrefectures"
                 :key="prefecture.name"
                 @click="selectPrefecture(prefecture)"
                 :class="[
-                  'group p-4 rounded-xl border transition-all duration-300',
+                  'group px-2 py-1.5 rounded-lg border transition-all duration-300',
                   prefecture.available 
                     ? 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer'
                     : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
                 ]"
                 :disabled="!prefecture.available"
               >
-                <div class="text-3xl mb-2">{{ prefecture.emoji }}</div>
+                <div class="text-xl mb-0.5">{{ prefecture.emoji }}</div>
                 <h4 :class="[
-                  'font-light text-sm transition-colors tracking-wide',
+                  'font-light text-xs transition-colors tracking-wide leading-none',
                   prefecture.available 
                     ? 'text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
                     : 'text-gray-500 dark:text-gray-400'
@@ -240,32 +240,58 @@
             <div class="mt-6 text-center">
               <button
                 @click="showPrefectureModal = true"
-                class="inline-flex items-center gap-2 px-6 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
+                class="inline-flex items-center gap-1 px-4 py-1.5 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
               >
-                <span>すべて表示</span>
-                <span class="text-sm">→</span>
+                <span class="text-sm">すべて表示</span>
+                <span class="text-xs">→</span>
               </button>
             </div>
           </div>
           
           <!-- Category Selection -->
-          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-24 transition-all duration-300 relative z-10 shadow-lg">
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-8 transition-all duration-300 relative z-10 shadow-lg">
             <div class="text-center mb-2">
               <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('カテゴリから探す') }}</h3>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-3 gap-3">
               <button
                 v-for="category in categoryList"
                 :key="category.name"
                 @click="selectCategory(category)"
-                class="group p-4 rounded-xl border bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer transition-all duration-300"
+                class="group px-2 py-1.5 rounded-lg border bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer transition-all duration-300"
               >
-                <div class="text-3xl mb-2">{{ category.emoji }}</div>
-                <h4 class="font-light text-sm transition-colors tracking-wide text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <div class="text-xl mb-0.5">{{ category.emoji }}</div>
+                <h4 class="font-light text-xs transition-colors tracking-wide leading-none text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
                   {{ category.name }}
                 </h4>
               </button>
             </div>
+          </div>
+          
+          <!-- Footer Links -->
+          <div class="text-center mb-4 relative z-10">
+            <div class="flex justify-center items-center gap-4">
+              <button
+                @click="scrollToTop"
+                class="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              >
+                トップに戻る
+              </button>
+              <span class="text-xs text-gray-400">|</span>
+              <nuxt-link
+                to="/terms"
+                class="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              >
+                利用規約
+              </nuxt-link>
+            </div>
+          </div>
+          
+          <!-- Copyright -->
+          <div class="text-center mb-24 relative z-10">
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              © 2025 takuya ohigashi. All rights reserved.
+            </p>
           </div>
         </div>
       </div>
@@ -572,10 +598,18 @@ const previousSpot = () => {
 }
 
 const mainPrefectures = [
-  { name: '東京都', emoji: '🗼', available: true },
+  { name: '東京都', emoji: '🏙️', available: true },
   { name: '大阪府', emoji: '🏯', available: true },
   { name: '京都府', emoji: '⛩️', available: true },
-  { name: '北海道', emoji: '🐄', available: true }
+  { name: '北海道', emoji: '🐄', available: true },
+  { name: '福岡県', emoji: '🏮', available: true },
+  { name: '神奈川県', emoji: '🌊', available: false },
+  { name: '愛知県', emoji: '🏭', available: true },
+  { name: '埼玉県', emoji: '🌸', available: true },
+  { name: '千葉県', emoji: '🏰', available: false },
+  { name: '兵庫県', emoji: '🦌', available: false },
+  { name: '静岡県', emoji: '🗼', available: false },
+  { name: '広島県', emoji: '🕊️', available: true }
 ]
 
 // カテゴリリスト
@@ -608,7 +642,7 @@ const prefectureRegions = [
       { name: '東京都', emoji: '🗼', available: true },
       { name: '神奈川県', emoji: '🗻', available: false },
       { name: '埼玉県', emoji: '🌸', available: true },
-      { name: '千葉県', emoji: '🌊', available: false },
+      { name: '千葉県', emoji: '🏰', available: false },
       { name: '茨城県', emoji: '🥔', available: false },
       { name: '栃木県', emoji: '🍓', available: false },
       { name: '群馬県', emoji: '🏔️', available: false }
@@ -808,6 +842,14 @@ const getFirstSentence = (description) => {
   // 「。」で最初の一文を取得
   const firstSentence = description.split('。')[0]
   return firstSentence
+}
+
+// トップにスクロールする関数
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
 }
 
 </script>
