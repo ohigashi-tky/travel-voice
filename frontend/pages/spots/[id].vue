@@ -7,7 +7,7 @@
     <!-- <BackButton /> -->
 
     <!-- Title Section -->
-    <div v-if="currentSpot && !isLoading" class="pt-20 pb-6 px-4 sm:px-6 lg:px-8">
+    <div v-if="currentSpot && !isLoading" class="py-6 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
         <div class="flex items-center gap-2 mb-2">
           <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded-md text-xs">

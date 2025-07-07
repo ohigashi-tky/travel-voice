@@ -10,7 +10,7 @@
     <div class="pt-0 pb-6 px-4 sm:px-6 lg:px-8">
       <div class="max-w-6xl mx-auto">
         <div class="text-center">
-          <div class="flex items-center justify-center gap-3 mb-4">
+          <div class="flex items-center justify-center gap-3 my-4">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
               イベント情報
             </h1>
