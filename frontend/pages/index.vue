@@ -226,7 +226,7 @@
               >
                 <div class="text-xl mb-0.5">{{ prefecture.emoji }}</div>
                 <h4 :class="[
-                  'font-light text-xs transition-colors tracking-wide leading-none',
+                  'font-light text-sm transition-colors tracking-wide leading-none',
                   prefecture.available 
                     ? 'text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
                     : 'text-gray-500 dark:text-gray-400'
@@ -261,7 +261,7 @@
                 class="group px-2 py-1.5 rounded-lg border bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer transition-all duration-300"
               >
                 <div class="text-xl mb-0.5">{{ category.emoji }}</div>
-                <h4 class="font-light text-xs transition-colors tracking-wide leading-none text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <h4 class="font-light text-sm transition-colors tracking-wide leading-none text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
                   {{ category.name }}
                 </h4>
               </button>

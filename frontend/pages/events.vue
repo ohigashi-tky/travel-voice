@@ -488,7 +488,16 @@ const paginatedEvents = computed(() => {
 })
 
 // Fetch events from API
-const fetchEvents = async () => {
+const fetchEvents = async (forceRefresh = false) => {
+  // Check cache first unless force refresh is requested
+  if (!forceRefresh) {
+    const cachedEvents = getCachedEvents()
+    if (cachedEvents) {
+      events.value = cachedEvents
+      return // Use cached data, no API call needed
+    }
+  }
+
   isLoading.value = true
   error.value = null
 
@@ -501,7 +510,10 @@ const fetchEvents = async () => {
     })
 
     if (response.success) {
-      events.value = response.data || []
+      const eventData = response.data || []
+      events.value = eventData
+      // Save to cache for future use
+      setCachedEvents(eventData)
     } else {
       throw new Error(response.message || 'イベント情報の取得に失敗しました')
     }
@@ -570,8 +582,62 @@ const goToNextPage = () => {
   }
 }
 
+// Cache management
+const CACHE_KEY = 'events_cache'
+const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+
+// Check if cached data is still valid
+const isCacheValid = (timestamp) => {
+  return Date.now() - timestamp < CACHE_DURATION
+}
+
+// Get events from cache
+const getCachedEvents = () => {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached)
+      if (isCacheValid(timestamp)) {
+        return data
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to read from cache:', error)
+  }
+  return null
+}
+
+// Save events to cache
+const setCachedEvents = (data) => {
+  try {
+    const cacheData = {
+      data,
+      timestamp: Date.now()
+    }
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData))
+  } catch (error) {
+    console.warn('Failed to save to cache:', error)
+  }
+}
+
+// Clear expired cache
+const clearExpiredCache = () => {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (cached) {
+      const { timestamp } = JSON.parse(cached)
+      if (!isCacheValid(timestamp)) {
+        localStorage.removeItem(CACHE_KEY)
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to clear cache:', error)
+  }
+}
+
 // Initialize
 onMounted(() => {
+  clearExpiredCache()
   fetchEvents()
 })
 </script>
