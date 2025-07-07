@@ -4,16 +4,9 @@
     <AppHeader />
 
     <!-- Page Title -->
-    <div class="bg-white dark:bg-gray-900 py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-20">
+    <div class="bg-white dark:bg-gray-900 py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-center relative">
-          <button 
-            @click="goHome"
-            class="absolute left-0 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300 group"
-          >
-            <ArrowLeft class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
-            <span class="text-sm font-medium">戻る</span>
-          </button>
+        <div class="flex items-center justify-center">
           <div class="text-center">
             <div class="text-4xl mb-2">🔍</div>
             <h1 class="text-3xl font-bold text-gray-800 dark:text-white tracking-wide transition-colors duration-300">
@@ -23,12 +16,14 @@
             </h1>
             <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">
               <span v-if="searchQuery">"{{ searchQuery }}" の検索結果</span>
-              <span v-if="filteredSpots.length > 0">{{ filteredSpots.length }}件見つかりました</span>
             </p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Back Button -->
+    <BackButton fallback-route="/" />
 
     <!-- Search Bar -->
     <div class="bg-gray-50 dark:bg-gray-800 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -80,80 +75,16 @@
           </div>
 
           <!-- Results Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div 
-              v-for="spot in filteredSpots" 
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <TouristSpotCard
+              v-for="spot in filteredSpots"
               :key="spot.id"
-              @click="goToSpotDetail(spot.id)"
-              class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer group"
-            >
-              <!-- Spot Image -->
-              <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
-                <img 
-                  :src="spot.imageUrl" 
-                  :alt="spot.name"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                <div class="absolute top-3 right-3">
-                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.prefecture }}
-                  </span>
-                </div>
-                <div class="absolute top-3 left-3">
-                  <span class="bg-blue-500/90 text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.category }}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Spot Info -->
-              <div class="p-4">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {{ spot.name }}
-                </h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
-                  {{ spot.description }}
-                </p>
-                
-                <!-- Audio Guide Indicator -->
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400">
-                    <span>🎧</span>
-                    <span>音声ガイド対応</span>
-                  </div>
-                  <div class="text-gray-400 text-xs">
-                    詳細を見る →
-                  </div>
-                </div>
-              </div>
-            </div>
+              :spot="spot"
+              :show-prefecture="true"
+              :show-both-tags="true"
+            />
           </div>
 
-          <!-- Search Stats -->
-          <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-              検索結果の概要
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ filteredSpots.length }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">観光地数</div>
-              </div>
-              <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ uniquePrefectures.length }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">都道府県</div>
-              </div>
-              <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ uniqueCategories.length }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">カテゴリ</div>
-              </div>
-              <div class="bg-white dark:bg-gray-700 rounded-lg p-4">
-                <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ filteredSpots.length }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">音声ガイド</div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- No Results State -->
@@ -182,13 +113,6 @@
               </button>
             </div>
           </div>
-          
-          <button 
-            @click="goHome"
-            class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-          >
-            ホームに戻る
-          </button>
         </div>
       </div>
     </main>
@@ -200,9 +124,11 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
-import { ArrowLeft, Search } from 'lucide-vue-next'
+import { Search } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
+import TouristSpotCard from '~/components/TouristSpotCard.vue'
+import BackButton from '~/components/BackButton.vue'
 
 // Page meta
 definePageMeta({
@@ -351,10 +277,6 @@ useHead(() => ({
 }))
 
 // Navigation functions
-const goHome = () => {
-  navigateTo('/')
-}
-
 const goToSpotDetail = (spotId) => {
   navigateTo(`/spots/${spotId}`)
 }

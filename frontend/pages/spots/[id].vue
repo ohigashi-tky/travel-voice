@@ -1552,7 +1552,7 @@ const startGalleryAutoScroll = () => {
     
     const nextIndex = (currentImageIndex.value + 1) % totalImages
     scrollToImage(nextIndex)
-  }, 4000) // 4秒ごとに切り替え
+  }, 5000) // 5秒ごとに切り替え
 }
 
 const stopGalleryAutoScroll = () => {

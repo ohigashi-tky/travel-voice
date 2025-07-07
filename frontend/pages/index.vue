@@ -49,7 +49,7 @@
         <div 
           v-for="(image, index) in heroImages" 
           :key="index"
-          class="absolute inset-0 transition-opacity duration-[4000ms] ease-in-out"
+          class="absolute inset-0 transition-opacity duration-[5000ms] ease-in-out"
           :style="{ opacity: currentHeroIndex === index ? 1 : 0 }"
         >
           <img 
@@ -147,10 +147,6 @@
               <!-- Spots Carousel -->
               <div 
                 class="overflow-hidden"
-                @mousedown="handleMouseDown"
-                @mousemove="handleMouseMove"
-                @mouseup="handleMouseUp"
-                @mouseleave="handleMouseUp"
                 @touchstart="handleTouchStart"
                 @touchmove="handleTouchMove"
                 @touchend="handleTouchEnd"
@@ -427,11 +423,61 @@ const placeholderSpots = ['東京スカイツリー', '大阪城', '清水寺', 
 const currentPlaceholderIndex = ref(0)
 let placeholderInterval = null
 
-// Drag/swipe functionality
+// Touch swipe functionality (mobile only)
 const isDragging = ref(false)
 const startPos = ref(0)
 const currentPos = ref(0)
-const dragThreshold = 50
+const dragThreshold = 150 // Higher threshold to prevent accidental swipes
+const minimumMoveDistance = 20 // Minimum movement to consider it a drag
+
+// Touch handlers for mobile swipe (no mouse/tap handlers)
+const handleTouchStart = (e) => {
+  startPos.value = e.touches[0].clientX
+  currentPos.value = e.touches[0].clientX
+  isDragging.value = false // Don't set to true immediately
+}
+
+const handleTouchMove = (e) => {
+  if (!startPos.value) return
+  
+  currentPos.value = e.touches[0].clientX
+  const deltaX = Math.abs(currentPos.value - startPos.value)
+  
+  // Only start dragging if movement is significant
+  if (deltaX > minimumMoveDistance && !isDragging.value) {
+    isDragging.value = true
+    stopCarousel()
+  }
+}
+
+const handleTouchEnd = () => {
+  if (!isDragging.value) {
+    // If no significant movement, it's just a tap - restart carousel and return
+    startCarousel()
+    return
+  }
+  
+  const deltaX = currentPos.value - startPos.value
+  
+  // Only trigger swipe if movement is significant (over threshold)
+  if (Math.abs(deltaX) > dragThreshold) {
+    if (deltaX > 0) {
+      previousSpot()
+    } else {
+      nextSpot()
+    }
+  }
+  
+  isDragging.value = false
+  startCarousel()
+}
+
+// Navigation functions for swipe
+const previousSpot = () => {
+  currentIndex.value = currentIndex.value === 0 
+    ? recommendedSpots.value.length - 1 
+    : currentIndex.value - 1
+}
 
 // データは useTouristSpots コンポーザブルから取得
 
@@ -477,7 +523,7 @@ const selectPopularSpots = async () => {
 const startCarousel = () => {
   carouselInterval = setInterval(() => {
     nextSpot()
-  }, 4000) // 4秒ごとに切り替え
+  }, 5000) // 5秒ごとに切り替え
 }
 
 const stopCarousel = () => {
@@ -529,73 +575,6 @@ const goToSpotDetail = (spotId) => {
   }
 }
 
-// Mouse drag handlers
-const handleMouseDown = (e) => {
-  isDragging.value = true
-  startPos.value = e.clientX
-  stopCarousel() // Stop auto-scroll during drag
-}
-
-const handleMouseMove = (e) => {
-  if (!isDragging.value) return
-  e.preventDefault()
-  currentPos.value = e.clientX
-}
-
-const handleMouseUp = () => {
-  if (!isDragging.value) return
-  
-  const deltaX = currentPos.value - startPos.value
-  
-  if (Math.abs(deltaX) > dragThreshold) {
-    if (deltaX > 0) {
-      // Dragged right, go to previous
-      previousSpot()
-    } else {
-      // Dragged left, go to next
-      nextSpot()
-    }
-  }
-  
-  isDragging.value = false
-  startCarousel() // Resume auto-scroll
-}
-
-// Touch handlers for mobile
-const handleTouchStart = (e) => {
-  isDragging.value = true
-  startPos.value = e.touches[0].clientX
-  stopCarousel()
-}
-
-const handleTouchMove = (e) => {
-  if (!isDragging.value) return
-  currentPos.value = e.touches[0].clientX
-}
-
-const handleTouchEnd = () => {
-  if (!isDragging.value) return
-  
-  const deltaX = currentPos.value - startPos.value
-  
-  if (Math.abs(deltaX) > dragThreshold) {
-    if (deltaX > 0) {
-      previousSpot()
-    } else {
-      nextSpot()
-    }
-  }
-  
-  isDragging.value = false
-  startCarousel()
-}
-
-// Add previous function for drag navigation
-const previousSpot = () => {
-  currentIndex.value = currentIndex.value === 0 
-    ? recommendedSpots.value.length - 1 
-    : currentIndex.value - 1
-}
 
 const mainPrefectures = [
   { name: '東京都', emoji: '🏙️', available: true },
