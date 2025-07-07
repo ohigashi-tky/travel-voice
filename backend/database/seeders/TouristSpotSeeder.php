@@ -253,7 +253,13 @@ class TouristSpotSeeder extends Seeder
                 'latitude' => 33.519585,
                 'longitude' => 130.533234,
                 'category' => '神社',
-                'images' => [],
+                'images' => [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80'
+                ],
                 'access_info' => '西鉄太宰府線「太宰府駅」徒歩5分',
                 'public_transport' => [
                     ['type' => '電車', 'route' => '西鉄太宰府線', 'station' => '太宰府駅', 'time' => '徒歩5分'],
@@ -270,6 +276,191 @@ class TouristSpotSeeder extends Seeder
                 'phone' => '092-922-8225',
                 'opening_hours' => '6:00-19:00',
                 'admission_fee' => '無料',
+                'is_active' => true,
+            ],
+            [
+                'name' => '福岡城跡',
+                'description' => '黒田如水・長政父子が築城した福岡藩52万石の居城跡。桜の名所としても有名です。',
+                'overview' => '福岡城は慶長6年（1601年）から7年の歳月をかけて黒田長政によって築かれた平山城です。現在は舞鶴公園として整備され、春には約1,000本の桜が咲き誇る九州屈指の桜の名所となっています。',
+                'highlights' => ['天守台跡', '多聞櫓', '潮見櫓', '桜並木', '黒田家の歴史'],
+                'history' => '関ヶ原の戦いの功により筑前国に入封した黒田長政が、慶長6年（1601年）から築城を開始。総面積約25万平方メートルの巨大な城郭でしたが、明治時代に多くの建物が取り壊されました。',
+                'prefecture' => '福岡県',
+                'city' => '福岡市',
+                'address' => '福岡県福岡市中央区城内1',
+                'latitude' => 33.585085,
+                'longitude' => 130.381389,
+                'category' => '歴史建造物',
+                'images' => [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80'
+                ],
+                'access_info' => '地下鉄「赤坂駅」「大濠公園駅」徒歩8分',
+                'public_transport' => [
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線', 'station' => '赤坂駅', 'time' => '徒歩8分'],
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線', 'station' => '大濠公園駅', 'time' => '徒歩8分'],
+                    ['type' => 'バス', 'route' => '西鉄バス', 'station' => '福岡城跡バス停', 'time' => '徒歩3分']
+                ],
+                'car_access' => [
+                    ['from' => '九州自動車道', 'exit' => '福岡IC', 'time' => '約20分'],
+                    ['from' => '福岡都市高速道路', 'exit' => '西公園ランプ', 'time' => '約5分']
+                ],
+                'parking_info' => '舞鶴公園駐車場（131台）・料金：普通車150円/時間・営業時間：7:00-19:00',
+                'walking_info' => 'JR博多駅から徒歩約25分、天神から徒歩約15分',
+                'website' => 'https://www.ohorikouen.jp/',
+                'phone' => '092-781-2153',
+                'opening_hours' => '常時開放',
+                'admission_fee' => '無料',
+                'is_active' => true,
+            ],
+            [
+                'name' => '博多駅',
+                'description' => '九州の玄関口として親しまれる巨大ターミナル駅。グルメやショッピングも楽しめます。',
+                'overview' => '博多駅は九州最大のターミナル駅として、新幹線・在来線の拠点となっています。駅ビルには約230の専門店や飲食店が入り、博多ラーメンや明太子など福岡グルメを堪能できる一大商業施設です。',
+                'highlights' => ['博多ラーメン街道', '博多阪急', 'アミュプラザ博多', '屋上庭園', '福岡グルメ'],
+                'history' => '明治22年（1889年）に九州鉄道の駅として開業。昭和50年に山陽新幹線が延伸し、九州の玄関口としての地位を確立しました。平成23年に現在の駅ビルが完成し、九州最大級の商業施設となりました。',
+                'prefecture' => '福岡県',
+                'city' => '福岡市',
+                'address' => '福岡県福岡市博多区博多駅中央街1-1',
+                'latitude' => 33.590355,
+                'longitude' => 130.420679,
+                'category' => '観光エリア',
+                'images' => [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80'
+                ],
+                'access_info' => 'JR「博多駅」直結',
+                'public_transport' => [
+                    ['type' => 'JR', 'route' => '東海道・山陽新幹線', 'station' => '博多駅', 'time' => '直結'],
+                    ['type' => 'JR', 'route' => '鹿児島本線', 'station' => '博多駅', 'time' => '直結'],
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線', 'station' => '博多駅', 'time' => '直結']
+                ],
+                'car_access' => [
+                    ['from' => '九州自動車道', 'exit' => '福岡IC', 'time' => '約20分'],
+                    ['from' => '福岡都市高速道路', 'exit' => '博多駅東出入口', 'time' => '約3分']
+                ],
+                'parking_info' => 'JR博多シティ駐車場（1,480台）・料金：30分250円・営業時間：24時間',
+                'walking_info' => '福岡空港から地下鉄で約11分、天神から地下鉄で約5分',
+                'website' => 'https://www.jrhakatacity.com/',
+                'phone' => '092-431-8484',
+                'opening_hours' => '店舗により異なる',
+                'admission_fee' => '無料',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'キャナルシティ博多',
+                'description' => '運河が流れる開放的なショッピングモール。ファッション、グルメ、エンターテイメントが集結する複合商業施設です。',
+                'overview' => 'キャナルシティ博多は「都市の中の運河」をコンセプトに1996年にオープンした複合商業施設です。中央を流れる運河と噴水ショーが印象的で、ショッピング、グルメ、映画、劇場が一体となった九州最大級のエンターテイメント施設です。',
+                'highlights' => ['運河と噴水ショー', 'ファッション専門店', 'ラーメンスタジアム', '博多座', '映画館'],
+                'history' => '1996年4月に開業。アメリカの建築家ジョン・ジャーディが設計し、「都市の劇場」をコンセプトとした斬新なデザインで注目を集めました。開業以来、福岡の新たな観光スポットとして多くの人々に愛され続けています。',
+                'prefecture' => '福岡県',
+                'city' => '福岡市',
+                'address' => '福岡県福岡市博多区住吉1-2-25',
+                'latitude' => 33.593611,
+                'longitude' => 130.411389,
+                'category' => '観光エリア',
+                'images' => [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80'
+                ],
+                'access_info' => 'JR「博多駅」徒歩10分、地下鉄「中洲川端駅」徒歩5分',
+                'public_transport' => [
+                    ['type' => 'JR', 'route' => '各線', 'station' => '博多駅', 'time' => '徒歩10分'],
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線・箱崎線', 'station' => '中洲川端駅', 'time' => '徒歩5分'],
+                    ['type' => 'バス', 'route' => '西鉄バス', 'station' => 'キャナルシティ博多前バス停', 'time' => '徒歩1分']
+                ],
+                'car_access' => [
+                    ['from' => '九州自動車道', 'exit' => '福岡IC', 'time' => '約15分'],
+                    ['from' => '福岡都市高速道路', 'exit' => '呉服町出入口', 'time' => '約5分']
+                ],
+                'parking_info' => 'キャナルシティ博多駐車場（1,300台）・料金：30分200円・営業時間：24時間',
+                'walking_info' => '中洲・天神から徒歩約15分',
+                'website' => 'https://canalcity.co.jp/',
+                'phone' => '092-282-2525',
+                'opening_hours' => '10:00-21:00（店舗により異なる）',
+                'admission_fee' => '無料',
+                'is_active' => true,
+            ],
+            [
+                'name' => '櫛田神社',
+                'description' => '博多総鎮守として親しまれる古社。博多祇園山笠の出発点として知られ、博多っ子の心の拠り所です。',
+                'overview' => '櫛田神社は博多の総鎮守として757年に創建された古社です。毎年7月に開催される博多祇園山笠の出発点として全国的に有名で、境内には実物大の飾り山が常設展示されています。商売繁盛や不老長寿のご利益があるとされています。',
+                'highlights' => ['飾り山常設展示', '博多祇園山笠', '夫婦恵比須神社', '博多塀', '不老長寿の霊水'],
+                'history' => '天平宝字元年（757年）に創建されたと伝えられます。古くから博多の総鎮守として崇敬され、特に博多祇園山笠との結びつきが深く、毎年7月1日から15日の山笠期間中は多くの参拝者で賑わいます。',
+                'prefecture' => '福岡県',
+                'city' => '福岡市',
+                'address' => '福岡県福岡市博多区上川端町1-41',
+                'latitude' => 33.592778,
+                'longitude' => 130.408056,
+                'category' => '神社',
+                'images' => [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80'
+                ],
+                'access_info' => '地下鉄「祇園駅」徒歩5分、地下鉄「中洲川端駅」徒歩7分',
+                'public_transport' => [
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線', 'station' => '祇園駅', 'time' => '徒歩5分'],
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線・箱崎線', 'station' => '中洲川端駅', 'time' => '徒歩7分'],
+                    ['type' => 'バス', 'route' => '西鉄バス', 'station' => '櫛田神社前バス停', 'time' => '徒歩1分']
+                ],
+                'car_access' => [
+                    ['from' => '九州自動車道', 'exit' => '福岡IC', 'time' => '約20分'],
+                    ['from' => '福岡都市高速道路', 'exit' => '呉服町出入口', 'time' => '約5分']
+                ],
+                'parking_info' => '周辺コインパーキング利用・料金：30分200円〜',
+                'walking_info' => 'JR博多駅から徒歩約15分、天神から徒歩約10分',
+                'website' => 'https://hakatanomiryoku.com/spot/%E6%AB%9B%E7%94%B0%E7%A5%9E%E7%A4%BE',
+                'phone' => '092-291-2951',
+                'opening_hours' => '4:00-22:00',
+                'admission_fee' => '無料',
+                'is_active' => true,
+            ],
+            [
+                'name' => '福岡PayPayドーム',
+                'description' => '福岡ソフトバンクホークスの本拠地として親しまれる日本初の開閉式ドーム球場。野球以外にもコンサートなど多彩なイベントが開催されます。',
+                'overview' => '福岡PayPayドーム（旧ヤフオクドーム）は1993年に開業した日本初の開閉式屋根を持つドーム球場です。福岡ソフトバンクホークスの本拠地として親しまれ、野球シーズン以外にもコンサートや展示会など様々なイベントが開催される九州最大級のイベント施設です。',
+                'highlights' => ['開閉式屋根', '福岡ソフトバンクホークス', 'コンサート会場', '王貞治ベースボールミュージアム', 'ホークスタウンモール'],
+                'history' => '1993年4月に「福岡ドーム」として開業。2005年にソフトバンクが球団を買収後、「ヤフオクドーム」を経て2020年に「PayPayドーム」に改称されました。開業以来、九州のスポーツ・エンターテイメントの拠点として親しまれています。',
+                'prefecture' => '福岡県',
+                'city' => '福岡市',
+                'address' => '福岡県福岡市中央区地行浜2-2-2',
+                'latitude' => 33.595833,
+                'longitude' => 130.361111,
+                'category' => '観光エリア',
+                'images' => [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80'
+                ],
+                'access_info' => '地下鉄「唐人町駅」徒歩15分、西鉄バス「ヤフオクドーム前」下車',
+                'public_transport' => [
+                    ['type' => '地下鉄', 'route' => '福岡市地下鉄空港線', 'station' => '唐人町駅', 'time' => '徒歩15分'],
+                    ['type' => 'バス', 'route' => '西鉄バス', 'station' => 'ヤフオクドーム前バス停', 'time' => '徒歩3分'],
+                    ['type' => 'バス', 'route' => 'ドーム直行バス', 'station' => '天神・博多駅発', 'time' => '試合日運行']
+                ],
+                'car_access' => [
+                    ['from' => '九州自動車道', 'exit' => '福岡IC', 'time' => '約30分'],
+                    ['from' => '福岡都市高速道路', 'exit' => '百道出入口', 'time' => '約5分']
+                ],
+                'parking_info' => 'ヤフオクドーム駐車場（約4,500台）・料金：普通車1,000円・営業時間：イベント時のみ',
+                'walking_info' => '西新駅から徒歩約20分、藤崎駅から徒歩約25分',
+                'website' => 'https://www.paypaydome.jp/',
+                'phone' => '092-847-1006',
+                'opening_hours' => 'イベントにより異なる',
+                'admission_fee' => 'イベントにより異なる',
                 'is_active' => true,
             ],
             
