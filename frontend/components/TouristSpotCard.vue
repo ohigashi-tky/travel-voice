@@ -81,7 +81,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const goToSpotDetail = (spotId: number) => {
-  navigateTo(`/spots/${spotId}`)
+  // Special case for 銀座 (ID 4) - redirect to dedicated page
+  if (spotId === 4) {
+    navigateTo('/ginza')
+  } else {
+    navigateTo(`/spots/${spotId}`)
+  }
 }
 
 // 観光地のタグを計算プロパティで取得

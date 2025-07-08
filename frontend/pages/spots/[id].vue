@@ -1775,25 +1775,30 @@ onMounted(async () => {
     }
     
     const numericId = parseInt(id)
+    console.log('Loading spot detail for URL ID:', id, 'Numeric ID:', numericId)
     
-    // Use local data first, then fallback to API
+    // Use composable data first (most reliable), then fallback to others
     let spot = null
     
-    // Try API first for real data
-    spot = await fetchSpotFromAPI(numericId)
+    // Try useTouristSpots composable first (now includes ID 4 fix)
+    spot = getSpotById(numericId)
+    console.log('useTouristSpots search for ID', numericId, ':', spot)
     
-    // Fallback to local data if API fails
+    // Fallback to API if composable fails
     if (!spot) {
-      spot = allSpots.find(s => s.id === numericId)
+      spot = await fetchSpotFromAPI(numericId)
+      console.log('API response for spot ID', numericId, ':', spot)
     }
     
-    // Last fallback to stored API data
+    // Last fallback to local data
     if (!spot) {
-      spot = getSpotById(numericId)
+      spot = allSpots.find(s => s.id === numericId)
+      console.log('Local allSpots search for ID', numericId, ':', spot)
     }
     
     if (spot) {
       currentSpot.value = spot
+      console.log('Setting currentSpot for URL ID:', numericId, 'Spot data:', { id: spot.id, name: spot.name, description: spot.description })
       
       // Load gallery photos from Google Places API
       await loadGalleryPhotos()
@@ -1835,9 +1840,25 @@ onUnmounted(() => {
 watch(() => route.params.id, async (newId) => {
   if (newId) {
     const numericId = parseInt(newId as string)
-    const spot = allSpots.find(s => s.id === numericId)
+    console.log('Route changed to ID:', newId, 'Numeric ID:', numericId)
+    
+    // Use same priority order as onMounted: composable first, then fallbacks
+    let spot = getSpotById(numericId)
+    console.log('Watch: useTouristSpots search for ID', numericId, ':', spot)
+    
+    if (!spot) {
+      spot = await fetchSpotFromAPI(numericId)
+      console.log('Watch: API search for ID', numericId, ':', spot)
+    }
+    
+    if (!spot) {
+      spot = allSpots.find(s => s.id === numericId)
+      console.log('Watch: allSpots search for ID', numericId, ':', spot)
+    }
+    
     if (spot) {
       currentSpot.value = spot
+      console.log('Watch: Setting currentSpot:', { id: spot.id, name: spot.name })
       // Load gallery photos for the new spot
       await loadGalleryPhotos()
     }
