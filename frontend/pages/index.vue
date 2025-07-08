@@ -582,12 +582,12 @@ const mainPrefectures = [
   { name: '京都府', emoji: '⛩️', available: true },
   { name: '北海道', emoji: '🐄', available: true },
   { name: '福岡県', emoji: '🏮', available: true },
-  { name: '神奈川県', emoji: '🌊', available: false },
+  { name: '神奈川県', emoji: '🌊', available: true },
   { name: '愛知県', emoji: '🏭', available: true },
   { name: '埼玉県', emoji: '🌸', available: true },
-  { name: '千葉県', emoji: '🏰', available: false },
-  { name: '兵庫県', emoji: '🦌', available: false },
-  { name: '静岡県', emoji: '🗼', available: false },
+  { name: '千葉県', emoji: '🏰', available: true },
+  { name: '兵庫県', emoji: '🦌', available: true },
+  { name: '静岡県', emoji: '🗻', available: true },
   { name: '広島県', emoji: '🕊️', available: true }
 ]
 
@@ -619,9 +619,9 @@ const prefectureRegions = [
     name: '関東地方',
     prefectures: [
       { name: '東京都', emoji: '🗼', available: true },
-      { name: '神奈川県', emoji: '🗻', available: false },
+      { name: '神奈川県', emoji: '🗻', available: true },
       { name: '埼玉県', emoji: '🌸', available: true },
-      { name: '千葉県', emoji: '🏰', available: false },
+      { name: '千葉県', emoji: '🏰', available: true },
       { name: '茨城県', emoji: '🥔', available: false },
       { name: '栃木県', emoji: '🍓', available: false },
       { name: '群馬県', emoji: '🏔️', available: false }
@@ -631,7 +631,7 @@ const prefectureRegions = [
     name: '中部地方',
     prefectures: [
       { name: '愛知県', emoji: '🏭', available: true },
-      { name: '静岡県', emoji: '🗻', available: false },
+      { name: '静岡県', emoji: '🗻', available: true },
       { name: '新潟県', emoji: '🍚', available: true },
       { name: '長野県', emoji: '🏔️', available: false },
       { name: '岐阜県', emoji: '🏯', available: false },
@@ -645,7 +645,7 @@ const prefectureRegions = [
     name: '近畿地方',
     prefectures: [
       { name: '大阪府', emoji: '🏯', available: true },
-      { name: '兵庫県', emoji: '🦌', available: false },
+      { name: '兵庫県', emoji: '🦌', available: true },
       { name: '京都府', emoji: '⛩️', available: true },
       { name: '三重県', emoji: '🦐', available: false },
       { name: '滋賀県', emoji: '🏞️', available: false },
@@ -695,6 +695,10 @@ const prefectureRouteMap = {
   '北海道': '/hokkaido',
   '愛知県': '/aichi',
   '福岡県': '/fukuoka',
+  '神奈川県': '/kanagawa',
+  '千葉県': '/chiba',
+  '兵庫県': '/hyogo',
+  '静岡県': '/shizuoka',
   '広島県': '/hiroshima',
   '愛媛県': '/ehime',
   '福島県': '/fukushima',

@@ -63,6 +63,16 @@ const loadAudioGuide = async () => {
   error.value = null
 
   try {
+    // Debug: Log the spot ID being sent to API
+    console.log('SpotAudioGuide: Loading audio for spot ID:', props.spotId, 'spotName:', props.spotName)
+    
+    // Critical fix: Detect ID/name mismatch for 清水寺
+    let actualSpotId = props.spotId
+    if (props.spotName === '清水寺' && props.spotId !== 201) {
+      console.warn('Detected 清水寺 with wrong ID:', props.spotId, 'Correcting to 201')
+      actualSpotId = 201
+    }
+    
     const voiceId = process.client ? localStorage.getItem('audioGuideVoice') || 'Takumi' : 'Takumi'
     
     const config = useRuntimeConfig()
@@ -80,9 +90,10 @@ const loadAudioGuide = async () => {
     const response = await $fetch(`${apiBaseUrl}/api/audio-guide/tourist-spot`, {
       method: 'POST',
       body: {
-        spot_id: props.spotId,
+        spot_id: actualSpotId,
         voice_id: voiceId,
-        language: 'ja'
+        language: 'ja',
+        spot_name: props.spotName // Send spot name for verification
       }
     })
 
