@@ -4,21 +4,16 @@ export default defineEventHandler(async (event) => {
   setHeader(event, 'Content-Type', 'application/json')
   
   try {
-    console.log('Chat API called')
     
     const body = await readBody(event)
-    console.log('Request body:', JSON.stringify(body, null, 2))
     
     const { message, conversation } = body || {}
 
     if (!message) {
-      console.log('No message provided')
       return {
         error: 'Message is required'
       }
     }
-
-    console.log('Processing message:', message)
 
     // OpenRouter API設定
     const config = useRuntimeConfig()
@@ -49,7 +44,6 @@ export default defineEventHandler(async (event) => {
           
           if (locationNames.length > 0) {
             contextInfo = `\n【前回の回答で言及した場所】: ${locationNames.join('、')}`
-            console.log('Extracted locations from previous response:', locationNames)
           }
         }
       }
@@ -127,8 +121,6 @@ Travel Voiceアプリのユーザーとして、音声ガイド機能も活用�
       content: message
     })
 
-    console.log('Calling OpenRouter API with messages:', messages.length, 'messages')
-
     // OpenRouter APIを呼び出し
     const apiResponse = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
@@ -149,8 +141,6 @@ Travel Voiceアプリのユーザーとして、音声ガイド機能も活用�
       })
     })
 
-    console.log('OpenRouter API response status:', apiResponse.status)
-
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text()
       console.error('OpenRouter API Error:', apiResponse.status, errorText)
@@ -162,7 +152,6 @@ Travel Voiceアプリのユーザーとして、音声ガイド機能も活用�
     }
 
     const data = await apiResponse.json()
-    console.log('OpenRouter API response data:', JSON.stringify(data, null, 2))
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
       console.error('Invalid response format from OpenRouter:', data)
@@ -173,7 +162,6 @@ Travel Voiceアプリのユーザーとして、音声ガイド機能も活用�
     }
 
     const aiContent = data.choices[0].message.content
-    // console.log('AI response content:', aiContent)
 
     return {
       content: aiContent,

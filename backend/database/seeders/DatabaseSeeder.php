@@ -24,8 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PrefectureSeeder::class,
             TravelSpotSeeder::class,
-            GuideSeeder::class,
+            AllGuidesSeeder::class, // 全観光地のガイドを自動生成
             EventSeeder::class,
+            PronunciationCorrectionSeeder::class,
         ]);
     }
 }

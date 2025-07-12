@@ -3,8 +3,6 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const { spotName, placeId } = body
 
-    // console.log('🔍 Place Photos API called:', { spotName, placeId })
-
     if (!spotName && !placeId) {
       throw createError({
         statusCode: 400,
@@ -22,8 +20,6 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Google Maps API key not configured'
       })
     }
-
-    // console.log('✅ API key found:', apiKey.substring(0, 10) + '...')
 
     let finalPlaceId = placeId
 

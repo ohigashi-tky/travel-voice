@@ -437,24 +437,20 @@ onMounted(async () => {
     }
     
     const numericId = parseInt(id)
-    console.log('Loading spot detail for URL ID:', id, 'Numeric ID:', numericId)
     
     // travel_spots APIから直接取得
     let spot = null
     
     // travel_spots API優先
     spot = await fetchSpotFromAPI(numericId)
-    console.log('API response for spot ID', numericId, ':', spot)
     
     // フォールバック: composableからも確認（削除予定）
     if (!spot) {
       spot = getSpotById(numericId)
-      console.log('useTouristSpots fallback search for ID', numericId, ':', spot)
     }
     
     if (spot) {
       currentSpot.value = spot
-      console.log('Setting currentSpot for URL ID:', numericId, 'Spot data:', { id: spot.id, name: spot.name, description: spot.description })
       
       // Load gallery photos from Google Places API
       await loadGalleryPhotos()
@@ -481,20 +477,16 @@ onMounted(async () => {
 watch(() => route.params.id, async (newId) => {
   if (newId) {
     const numericId = parseInt(newId as string)
-    console.log('Route changed to ID:', newId, 'Numeric ID:', numericId)
     
     // travel_spots API優先
     let spot = await fetchSpotFromAPI(numericId)
-    console.log('Watch: API search for ID', numericId, ':', spot)
     
     if (!spot) {
       spot = getSpotById(numericId)
-      console.log('Watch: useTouristSpots fallback for ID', numericId, ':', spot)
     }
     
     if (spot) {
       currentSpot.value = spot
-      console.log('Watch: Setting currentSpot:', { id: spot.id, name: spot.name })
       // Load gallery photos for the new spot
       await loadGalleryPhotos()
       // Re-initialize tabs

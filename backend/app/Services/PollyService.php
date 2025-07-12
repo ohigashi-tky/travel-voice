@@ -7,6 +7,7 @@ use Aws\Exception\AwsException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use App\Models\PronunciationCorrection;
 
 class PollyService
 {
@@ -45,8 +46,11 @@ class PollyService
     public function synthesizeSpeech(string $text, ?string $voiceId = null, string $format = 'mp3'): array
     {
         try {
+            // テキストを前処理（読み方修正）
+            $processedText = $this->correctPronunciation($text);
+            
             // キャッシュキーを生成
-            $cacheKey = $this->generateCacheKey($text, $voiceId ?? $this->voiceId);
+            $cacheKey = $this->generateCacheKey($processedText, $voiceId ?? $this->voiceId);
             
             // キャッシュから音声URLを取得
             $cachedUrl = Cache::get($cacheKey);
@@ -58,10 +62,10 @@ class PollyService
                 ];
             }
 
-            // MP3形式で正しい設定
+            // SSML形式でテキストを送信
             $synthesizeParams = [
-                'Text' => $text,
-                'TextType' => 'text',
+                'Text' => $processedText,
+                'TextType' => 'ssml',
                 'VoiceId' => $voiceId ?? $this->voiceId,
                 'Engine' => $this->engine,
                 'OutputFormat' => 'mp3'
@@ -131,22 +135,48 @@ class PollyService
     }
 
     /**
-     * テキストを前処理（SSML形式に変換）
+     * 観光地名などの読み方を修正
      *
      * @param string $text
      * @return string
      */
-    private function preprocessText(string $text): string
+    private function correctPronunciation(string $text): string
     {
         // HTMLタグを削除
         $text = strip_tags($text);
         
-        // 特殊文字をエスケープ
+        // 先に特殊文字をエスケープ
         $text = htmlspecialchars($text, ENT_XML1, 'UTF-8');
+        
+        // データベースから読み方修正データを取得（キャッシュ付き）
+        $corrections = Cache::remember('pronunciation_corrections', 3600, function () {
+            return PronunciationCorrection::active()
+                ->ordered()
+                ->get();
+        });
+
+        // データベースの設定に基づいて置換（エスケープ済みテキストに対して）
+        foreach ($corrections as $correction) {
+            $escapedOriginal = htmlspecialchars($correction->original_text, ENT_XML1, 'UTF-8');
+            $ssml = $correction->getSSMLSubstitution();
+            
+            // SSML要素内では置換しない（既に置換済みの部分を避ける）
+            $text = preg_replace_callback('/(<sub[^>]*>.*?<\/sub>)|(' . preg_quote($escapedOriginal, '/') . ')/', 
+                function($matches) use ($ssml) {
+                    // SSML要素の場合はそのまま返す
+                    if (!empty($matches[1])) {
+                        return $matches[1];
+                    }
+                    // 通常のテキストの場合は置換
+                    return $ssml;
+                }, $text);
+        }
         
         // SSMLで包む
         return sprintf('<speak>%s</speak>', $text);
     }
+
+
 
     /**
      * キャッシュキーを生成

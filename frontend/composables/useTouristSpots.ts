@@ -91,8 +91,6 @@ export const useTouristSpots = () => {
   // IDで検索
   const getSpotById = (id: number) => {
     const foundSpot = spots.value.find(spot => spot.id === id)
-    console.log(`getSpotById(${id}): Found spot:`, foundSpot ? { id: foundSpot.id, name: foundSpot.name } : 'NOT FOUND')
-    console.log(`Available spots IDs: [${spots.value.map(s => s.id).join(', ')}]`)
     return foundSpot
   }
 

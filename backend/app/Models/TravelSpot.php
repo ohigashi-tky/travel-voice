@@ -42,4 +42,12 @@ class TravelSpot extends Model
     {
         return $this->belongsTo(Prefecture::class);
     }
+
+    /**
+     * 音声ガイドとの関係
+     */
+    public function guides()
+    {
+        return $this->hasMany(Guide::class, 'tourist_spot_id');
+    }
 }

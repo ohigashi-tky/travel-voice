@@ -61,9 +61,6 @@ const loadAudioGuide = async () => {
   error.value = null
 
   try {
-    // Debug: Log the spot ID and name being sent to API
-    console.log('AudioGuideSimple: Loading audio for spot ID:', props.spotId, 'spotName:', props.spotName)
-    
     // Critical fix: Detect ID/name mismatch for 清水寺
     let actualSpotId = props.spotId
     if (props.spotName === '清水寺' && props.spotId !== 201) {
