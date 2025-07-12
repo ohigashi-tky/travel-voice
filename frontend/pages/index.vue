@@ -267,10 +267,20 @@
                 v-for="category in categoryList"
                 :key="category.name"
                 @click="selectCategory(category)"
-                class="group px-2 py-1.5 rounded-lg border bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer transition-all duration-300"
+                class="group relative px-2 h-20 rounded-lg border border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer transition-all duration-300 overflow-hidden flex items-center justify-center"
               >
-                <div class="text-xl mb-0.5">{{ category.emoji }}</div>
-                <h4 class="font-light text-sm transition-colors tracking-wide leading-none text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <!-- Background Image -->
+                <div class="absolute inset-0">
+                  <img 
+                    :src="category.image" 
+                    :alt="category.name"
+                    class="w-full h-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-black/40"></div>
+                </div>
+                
+                <!-- Category Name -->
+                <h4 class="relative z-10 font-medium text-sm text-white tracking-wide leading-none text-center">
                   {{ category.name }}
                 </h4>
               </button>
@@ -622,12 +632,12 @@ const prefectureRegions = ref([])
 
 // カテゴリリスト
 const categoryList = [
-  { name: '寺院', emoji: '⛩️' },
-  { name: '歴史建造物', emoji: '🏯' },
-  { name: '神社', emoji: '🕊️' },
-  { name: '展望台', emoji: '🗼' },
-  { name: '博物館', emoji: '🏛️' },
-  { name: '観光エリア', emoji: '🌆' }
+  { name: '寺院', emoji: '⛩️', image: '/category/tera.jpg' },
+  { name: '歴史建造物', emoji: '🏯', image: '/category/rekishi.jpg' },
+  { name: '神社', emoji: '🕊️', image: '/category/jinjya.jpg' },
+  { name: '展望台', emoji: '🗼', image: '/category/tenbodai.jpg' },
+  { name: '博物館', emoji: '🏛️', image: '/category/hakubutsukan.jpeg' },
+  { name: '観光エリア', emoji: '🌆', image: '/category/kanko.jpg' }
 ]
 
 // 都道府県データ初期化
