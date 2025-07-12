@@ -91,6 +91,17 @@ export default defineNuxtConfig({
               maxAgeSeconds: 60 * 60 // 1 hour
             }
           }
+        },
+        {
+          urlPattern: /^https:\/\/travel-voice-production\.up\.railway\.app\/api\/.*/i,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'production-api-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 // 1 hour
+            }
+          }
         }
       ]
     },

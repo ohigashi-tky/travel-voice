@@ -19,7 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:3000',
+        'https://guide-app-frontend.up.railway.app',
+        'https://travel-voice-production.up.railway.app',
+        'https://travel-voice-production-frontend.up.railway.app',
+        '*' // 一時的に全て許可
+    ],
 
     'allowed_origins_patterns' => [],
 
