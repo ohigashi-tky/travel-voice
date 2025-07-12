@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password123'),
         ]);
 
-        // Seed travel spots and guides
+        // Seed prefectures, travel spots and guides
         $this->call([
+            PrefectureSeeder::class,
             TravelSpotSeeder::class,
             GuideSeeder::class,
         ]);
