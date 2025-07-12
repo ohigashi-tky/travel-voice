@@ -47,6 +47,47 @@ Route::delete('/events/cache', [EventController::class, 'clearCache']);
 
 // Test Routes
 Route::get('/test-polly', [TestPollyController::class, 'test']);
+
+// Health check and debug routes
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now(),
+        'database' => 'connected'
+    ]);
+});
+
+Route::get('/debug/prefectures', function () {
+    try {
+        $count = \App\Models\Prefecture::count();
+        return response()->json([
+            'status' => 'ok',
+            'prefecture_count' => $count,
+            'sample' => \App\Models\Prefecture::take(3)->get()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
+Route::get('/debug/events', function () {
+    try {
+        $count = \App\Models\Event::count();
+        return response()->json([
+            'status' => 'ok',
+            'event_count' => $count,
+            'sample' => \App\Models\Event::take(3)->get()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
 Route::get('/test-events', function () {
     $service = new \App\Services\EventGeneratorService();
     $events = $service->getEvents();

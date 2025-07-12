@@ -1,0 +1,14 @@
+[build]
+cmdOverride = "composer install --no-dev --optimize-autoloader"
+
+[phases.setup]
+aptPkgs = ["sqlite3"]
+
+[phases.install]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "chmod +x deploy.sh"
+]
+
+[start]
+cmd = "bash deploy.sh"

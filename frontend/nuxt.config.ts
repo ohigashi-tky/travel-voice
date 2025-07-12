@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     apiBaseServer: process.env.NUXT_API_BASE_URL || 'http://localhost:8000',
     public: {
       // Client-side API base URL - use localhost for local dev, Railway for production
-      apiBase: process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://travel-voice-production.up.railway.app',
+      apiBase: process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NUXT_PUBLIC_API_BASE || 'https://travel-voice-production.up.railway.app',
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID
     }
   },
