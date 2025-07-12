@@ -112,7 +112,7 @@
 │                       MySQL Database                       │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │    users    │  │tourist_spots│  │   guides    │          │
+│  │    users    │  │travel_spots│  │   guides    │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 │                              │                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
@@ -141,10 +141,10 @@
          │ 1:N (future)
          ▼
 ┌─────────────────┐    1:N    ┌─────────────────┐
-│  tourist_spots  │◄─────────►│     guides      │
+│  travel_spots  │◄─────────►│     guides      │
 ├─────────────────┤           ├─────────────────┤
 │ id (PK)         │           │ id (PK)         │
-│ name            │           │ tourist_spot_id │
+│ name            │           │ travel_spot_id │
 │ description     │           │ title           │
 │ prefecture      │           │ content         │
 │ city            │           │ type            │
@@ -178,7 +178,7 @@
 
 ### リレーション設計
 
-1. **TouristSpot ↔ Guide**: 1対多
+1. **TravelSpot ↔ Guide**: 1対多
    - 1つの観光スポットに複数のガイドが存在
    - CASCADE DELETE設定
 
@@ -209,7 +209,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // 公開API
-Route::get('/tourist-spots', [TouristSpotController::class, 'index']);
+Route::get('/tourist-spots', [TravelSpotController::class, 'index']);
 ```
 
 ### データ保護
@@ -250,12 +250,12 @@ const AudioPlayer = defineAsyncComponent(() =>
 **実装例:**
 ```php
 // Eager Loading
-$spots = TouristSpot::with(['activeGuides.activeAudioGuides'])
+$spots = TravelSpot::with(['activeGuides.activeAudioGuides'])
     ->where('prefecture', $prefecture)
     ->get();
 
 // Database Index
-Schema::table('tourist_spots', function (Blueprint $table) {
+Schema::table('travel_spots', function (Blueprint $table) {
     $table->index('prefecture');
     $table->index('category');
     $table->index(['prefecture', 'is_active']);

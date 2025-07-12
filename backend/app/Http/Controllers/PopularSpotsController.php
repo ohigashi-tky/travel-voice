@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TouristSpot;
+use App\Models\TravelSpot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -22,13 +22,13 @@ class PopularSpotsController extends Controller
             $popularSpots = Cache::get($cacheKey);
 
             if (!$popularSpots) {
-                // Get all tourist spots
-                $allSpots = TouristSpot::where('is_active', true)->get();
+                // Get all travel spots with images
+                $allSpots = TravelSpot::with('spotImages')->get();
 
                 if ($allSpots->isEmpty()) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'No tourist spots found'
+                        'message' => 'No travel spots found'
                     ], 404);
                 }
 
@@ -72,9 +72,7 @@ class PopularSpotsController extends Controller
                     'name' => $spot->name,
                     'description' => $spot->description,
                     'prefecture' => $spot->prefecture,
-                    'city' => $spot->city,
                     'category' => $spot->category,
-                    'tags' => $spot->tags,
                     'overview' => $spot->overview,
                     'highlights' => $spot->highlights,
                 ];
@@ -219,19 +217,19 @@ class PopularSpotsController extends Controller
     }
 
     /**
-     * Get unique random tourist spots
+     * Get unique random travel spots
      */
     private function getUniqueRandomSpots(int $count, array $excludeIds = []): \Illuminate\Support\Collection
     {
-        $query = TouristSpot::where('is_active', true);
+        $query = TravelSpot::query();
         
         // Exclude already selected IDs
         if (!empty($excludeIds)) {
             $query->whereNotIn('id', $excludeIds);
         }
         
-        // Get all available spots and shuffle them
-        $availableSpots = $query->get();
+        // Get all available spots with images and shuffle them
+        $availableSpots = $query->with('spotImages')->get();
         
         if ($availableSpots->isEmpty()) {
             return collect();

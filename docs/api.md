@@ -126,7 +126,7 @@ Authorization: Bearer {token}
 ### 観光スポット一覧取得
 
 ```http
-GET /api/tourist-spots
+GET /api/travel-spots
 ```
 
 **Query Parameters:**
@@ -135,7 +135,7 @@ GET /api/tourist-spots
 
 **Example:**
 ```http
-GET /api/tourist-spots?prefecture=東京都&category=寺院
+GET /api/travel-spots?prefecture=東京都&category=寺院
 ```
 
 **Response (200):**
@@ -179,7 +179,7 @@ GET /api/tourist-spots?prefecture=東京都&category=寺院
 ### 観光スポット詳細取得
 
 ```http
-GET /api/tourist-spots/{id}
+GET /api/travel-spots/{id}
 ```
 
 **Response (200):**
@@ -209,7 +209,7 @@ GET /api/tourist-spots/{id}
   "active_guides": [
     {
       "id": 1,
-      "tourist_spot_id": 1,
+      "travel_spot_id": 1,
       "title": "東京スカイツリー完全ガイド",
       "content": "2012年に開業した東京スカイツリーは、高さ634mの世界一高い自立式電波塔です。...",
       "type": "audio",
@@ -248,19 +248,19 @@ GET /api/tourist-spots/{id}
 **Error Response (404):**
 ```json
 {
-  "message": "No query results for model [App\\Models\\TouristSpot] 999"
+  "message": "No query results for model [App\\Models\\TravelSpot] 999"
 }
 ```
 
 ### 都道府県別観光スポット取得
 
 ```http
-GET /api/tourist-spots/prefecture/{prefecture}
+GET /api/travel-spots/prefecture/{prefecture}
 ```
 
 **Example:**
 ```http
-GET /api/tourist-spots/prefecture/東京都
+GET /api/travel-spots/prefecture/東京都
 ```
 
 **Response (200):**
@@ -299,7 +299,7 @@ GET /api/guides/{id}
 ```json
 {
   "id": 1,
-  "tourist_spot_id": 1,
+  "travel_spot_id": 1,
   "title": "東京スカイツリー完全ガイド",
   "content": "2012年に開業した東京スカイツリーは、高さ634mの世界一高い自立式電波塔です。その名前の由来は「空」を表すSkyと「木」を表すTreeを組み合わせたもので、日本の伝統的な建築技術と最新技術が融合した驚くべき建造物です。...",
   "type": "audio",
@@ -335,7 +335,7 @@ GET /api/guides/{id}
 
 ## 📊 データモデル
 
-### TouristSpot (観光スポット)
+### TravelSpot (観光スポット)
 
 | フィールド | 型 | 説明 |
 |---|---|---|
@@ -361,7 +361,7 @@ GET /api/guides/{id}
 | フィールド | 型 | 説明 |
 |---|---|---|
 | id | integer | ID |
-| tourist_spot_id | integer | 観光スポットID |
+| travel_spot_id | integer | 観光スポットID |
 | title | string | タイトル |
 | content | text | 内容 |
 | type | string | タイプ (text/audio/video) |
@@ -406,7 +406,7 @@ GET /api/guides/{id}
 #### リソースが見つからない (404)
 ```json
 {
-  "message": "No query results for model [App\\Models\\TouristSpot] 999"
+  "message": "No query results for model [App\\Models\\TravelSpot] 999"
 }
 ```
 
@@ -455,7 +455,7 @@ const loginResponse = await fetch('http://localhost:8000/api/login', {
 const { user, token } = await loginResponse.json();
 
 // 観光スポット取得
-const spotsResponse = await fetch('http://localhost:8000/api/tourist-spots?prefecture=東京都', {
+const spotsResponse = await fetch('http://localhost:8000/api/travel-spots?prefecture=東京都', {
   headers: {
     'Authorization': `Bearer ${token}`,
     'Accept': 'application/json'
@@ -474,7 +474,7 @@ curl -X POST http://localhost:8000/api/login \
   -d '{"email":"demo@example.com","password":"password123"}'
 
 # 観光スポット取得
-curl -X GET "http://localhost:8000/api/tourist-spots?prefecture=東京都" \
+curl -X GET "http://localhost:8000/api/travel-spots?prefecture=東京都" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Accept: application/json"
 ```

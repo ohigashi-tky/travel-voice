@@ -8,6 +8,7 @@
       <PlacePhotoImage 
         :spot-name="spot.name"
         :place-id="spot.place_id"
+        :spot-images="spot.spot_images"
         :alt="spot.name"
         image-class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       >

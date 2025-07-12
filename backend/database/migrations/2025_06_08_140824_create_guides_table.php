@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tourist_spot_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tourist_spot_id')->constrained('travel_spots')->onDelete('cascade');
             $table->string('title');
             $table->text('content');
             $table->string('type')->default('text'); // text, audio, video

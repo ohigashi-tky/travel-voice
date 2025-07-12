@@ -115,6 +115,7 @@
                 <PlacePhotoImage 
                   :spot-name="suggestion.name"
                   :place-id="suggestion.place_id"
+                  :spot-images="suggestion.spot_images"
                   :alt="suggestion.name"
                   image-class="rounded-lg"
                   :width="32"
@@ -169,6 +170,7 @@
                         <PlacePhotoImage 
                           :spot-name="spot.name"
                           :place-id="spot.place_id"
+                          :spot-images="spot.spot_images"
                           :alt="spot.name"
                           image-class="w-full h-full object-cover"
                         />

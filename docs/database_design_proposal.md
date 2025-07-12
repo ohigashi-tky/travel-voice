@@ -22,17 +22,17 @@ CREATE TABLE tags (
 );
 ```
 
-#### `tourist_spot_tags` テーブル（中間テーブル）
+#### `travel_spot_tags` テーブル（中間テーブル）
 ```sql
-CREATE TABLE tourist_spot_tags (
+CREATE TABLE travel_spot_tags (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    tourist_spot_id BIGINT NOT NULL,
+    travel_spot_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
     priority INT DEFAULT 1, -- タグの表示優先度
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (tourist_spot_id) REFERENCES tourist_spots(id) ON DELETE CASCADE,
+    FOREIGN KEY (travel_spot_id) REFERENCES travel_spots(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_spot_tag (tourist_spot_id, tag_id)
+    UNIQUE KEY unique_spot_tag (travel_spot_id, tag_id)
 );
 ```
 
@@ -59,9 +59,9 @@ class Tag extends Model
 {
     protected $fillable = ['name', 'color_class', 'description', 'is_active'];
     
-    public function touristSpots()
+    public function travelSpots()
     {
-        return $this->belongsToMany(TouristSpot::class, 'tourist_spot_tags')
+        return $this->belongsToMany(TravelSpot::class, 'travel_spot_tags')
                     ->withPivot('priority')
                     ->orderByPivot('priority');
     }
@@ -73,13 +73,13 @@ class Tag extends Model
 }
 ```
 
-#### TouristSpot Model 拡張
+#### TravelSpot Model 拡張
 ```php
-class TouristSpot extends Model
+class TravelSpot extends Model
 {
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'tourist_spot_tags')
+        return $this->belongsToMany(Tag::class, 'travel_spot_tags')
                     ->withPivot('priority')
                     ->orderByPivot('priority');
     }
@@ -114,8 +114,8 @@ class TouristSpot extends Model
 
 #### API エンドポイント
 ```php
-// api/tourist-spots/{id}/tags
-public function getTags(TouristSpot $touristSpot)
+// api/travel-spots/{id}/tags
+public function getTags(TravelSpot $touristSpot)
 {
     return response()->json([
         'success' => true,
@@ -134,8 +134,8 @@ public function getTags(TouristSpot $touristSpot)
 
 #### APIからタグ取得
 ```typescript
-// composables/useTouristSpotTags.ts
-export const useTouristSpotTags = () => {
+// composables/useTravelSpotTags.ts
+export const useTravelSpotTags = () => {
   const getTags = async (spotId: number): Promise<SpotTag[]> => {
     try {
       const config = useRuntimeConfig()
@@ -144,7 +144,7 @@ export const useTouristSpotTags = () => {
       const response = await $fetch<{
         success: boolean
         data: SpotTag[]
-      }>(`${apiBaseUrl}/api/tourist-spots/${spotId}/tags`)
+      }>(`${apiBaseUrl}/api/travel-spots/${spotId}/tags`)
       
       return response.data || []
     } catch (error) {

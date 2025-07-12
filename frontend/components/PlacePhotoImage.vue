@@ -49,6 +49,13 @@ interface Props {
   fallbackUrl?: string
   width?: number
   height?: number
+  spotImages?: Array<{
+    id: number
+    image_url: string
+    thumbnail_url?: string
+    width?: number
+    height?: number
+  }>
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -79,7 +86,15 @@ const loadImage = async () => {
     loading.value = true
     error.value = false
     
-    // Check if we have either spotName or placeId
+    // 1. 最優先: travel_spot_imagesからの画像を使用
+    if (props.spotImages && props.spotImages.length > 0) {
+      imageUrl.value = props.spotImages[0].image_url
+      error.value = false
+      loading.value = false
+      return
+    }
+    
+    // 2. フォールバック: Google Places APIを使用
     if (!props.spotName && !props.placeId) {
       error.value = true
       loading.value = false
@@ -108,8 +123,8 @@ onMounted(() => {
 })
 
 // Watch for prop changes
-watch([() => props.spotName, () => props.placeId], () => {
-  if (props.spotName) {
+watch([() => props.spotName, () => props.placeId, () => props.spotImages], () => {
+  if (props.spotName || props.spotImages) {
     loadImage()
   }
 }, { immediate: false })

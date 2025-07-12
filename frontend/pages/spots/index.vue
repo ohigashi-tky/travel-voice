@@ -182,16 +182,23 @@ const getCategoryStyle = (category?: string) => {
 const fetchSpots = async () => {
   loading.value = true
   try {
-    const params = new URLSearchParams()
-    if (filters.prefecture) params.append('prefecture', filters.prefecture)
-    if (filters.category) params.append('category', filters.category)
+    const response = await $api<{success: boolean, data: TouristSpot[]}>('/travel-spots')
     
-    const url = `/tourist-spots${params.toString() ? '?' + params.toString() : ''}`
-    const response = await $api<TouristSpot[]>(url)
+    let filteredSpots = response.data || []
     
-    let filteredSpots = response
+    // 県別フィルタリング
+    if (filters.prefecture) {
+      filteredSpots = filteredSpots.filter(spot => spot.prefecture === filters.prefecture)
+    }
+    
+    // カテゴリフィルタリング
+    if (filters.category) {
+      filteredSpots = filteredSpots.filter(spot => spot.category === filters.category)
+    }
+    
+    // 検索フィルタリング
     if (filters.search) {
-      filteredSpots = response.filter(spot => 
+      filteredSpots = filteredSpots.filter(spot => 
         spot.name.toLowerCase().includes(filters.search.toLowerCase()) ||
         spot.description.toLowerCase().includes(filters.search.toLowerCase())
       )

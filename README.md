@@ -100,7 +100,7 @@ travel-voice/
 │   ├── 🔧 composables/      # Vue Composition関数
 │   │   ├── useAuth.ts       # 認証管理
 │   │   ├── useAudioGuide.ts # 音声ガイド機能
-│   │   └── useTouristSpots.ts # 観光地データ管理
+│   │   └── useTouristSpots.ts # 観光地データ管理（travel_spotsテーブル使用）
 │   ├── 🗄️ stores/          # Pinia ストア
 │   │   └── auth.ts          # 認証状態管理
 │   └── 📝 types/            # TypeScript型定義
@@ -133,6 +133,12 @@ docker compose exec backend php artisan migrate --seed     # DB初期化
 docker compose exec backend php artisan audio-guide:quality-check  # 音声品質チェック
 docker compose exec backend ./vendor/bin/phpunit tests/    # テスト実行
 
+# 🗺️ 観光地データ管理
+docker compose exec backend php artisan travel-spots:update-place-ids    # Google Places APIでplace_idを一括更新
+docker compose exec backend php artisan travel-spots:update-place-ids --force  # 全てのplace_idを強制更新
+docker compose exec backend php artisan travel-spots:fetch-images       # 観光地の写真を一括取得してtravel_spot_imagesテーブルに保存（新規のみ）
+docker compose exec backend php artisan travel-spots:fetch-images --force     # 既存の写真も再取得（全て強制更新）
+
 # 🌐 Nuxt操作
 docker compose exec frontend npm run dev           # 開発サーバー
 docker compose exec frontend npm run build         # 本番ビルド
@@ -146,11 +152,39 @@ docker compose exec frontend npm run type-check    # 型チェック
 | `POST` | `/api/login` | ログイン | ❌ |
 | `POST` | `/api/register` | 新規登録 | ❌ |
 | `POST` | `/api/logout` | ログアウト | ✅ |
-| `GET` | `/api/tourist-spots` | 観光スポット一覧 | ❌ |
-| `GET` | `/api/tourist-spots/{id}` | スポット詳細 | ❌ |
+| `GET` | `/api/travel-spots` | 観光スポット一覧 | ❌ |
+| `GET` | `/api/travel-spots/{id}` | スポット詳細 | ❌ |
 | `GET` | `/api/popular-spots` | 人気スポット | ❌ |
 | `POST` | `/api/audio-guide/tourist-spot` | 音声ガイド生成 | ❌ |
 | `DELETE` | `/api/popular-spots/cache` | キャッシュクリア | ❌ |
+
+## 📸 画像管理システム
+
+### 仕組み
+- **travel_spot_imagesテーブル**: 各観光地の画像URL（最大5枚）をデータベースで管理
+- **フロントエンド表示**: データベース保存済み画像を優先使用、Google Places APIをフォールバック
+- **コスト削減**: 画像をDBに保存することで、100%のAPI呼び出しを削減
+
+### 現在の状況（最終更新: 2025-07-12）
+- **総観光地数**: 90件
+- **画像保存済み**: 90件（100%）
+- **画像未保存**: 0件
+- **総画像数**: 446枚
+- **Google Places API呼び出し削減率**: 100%
+
+### 画像取得の流れ
+1. **新規観光地追加**: `TravelSpotSeeder`にデータ追加 → `db:seed`実行
+2. **画像取得**: `travel-spots:fetch-images`でGoogle Places APIから画像を取得・保存
+3. **表示**: フロントエンドで自動的にDB保存済み画像を表示
+
+### 画像管理コマンド
+```bash
+# 新しい観光地の画像のみ取得（推奨）
+docker compose exec backend php artisan travel-spots:fetch-images
+
+# 全ての画像を強制再取得（既存も含む）
+docker compose exec backend php artisan travel-spots:fetch-images --force
+```
 
 ## 🎯 音声ガイド品質管理
 

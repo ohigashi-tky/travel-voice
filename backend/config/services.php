@@ -52,4 +52,8 @@ return [
         'model' => env('OPENROUTER_MODEL', 'google/gemini-2.5-flash-lite-preview-06-17'),
     ],
 
+    'google' => [
+        'places_api_key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
 ];
