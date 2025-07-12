@@ -644,9 +644,6 @@ const initializePrefectureData = async () => {
       available: p.is_available
     }))
     
-    // デバッグ: 主要都道府県の順番を確認
-    console.log('Featured prefectures order:', mainPrefectures.value.map(p => p.name))
-    
     // 地域別都道府県データを取得（人口順ソート済み）
     prefectureRegions.value = Object.entries(prefecturesByRegion.value).map(([regionName, prefectures]) => ({
       name: regionName,
@@ -658,11 +655,6 @@ const initializePrefectureData = async () => {
       }))
     }))
     
-    // デバッグ: 地域の順番と各地域内の都道府県順を確認
-    console.log('Prefecture regions order:', prefectureRegions.value.map(r => r.name))
-    prefectureRegions.value.forEach(region => {
-      console.log(`${region.name}:`, region.prefectures.map(p => p.name))
-    })
   } catch (error) {
     console.error('Failed to initialize prefecture data:', error)
     // フォールバック: 空配列で初期化

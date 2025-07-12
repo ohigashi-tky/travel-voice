@@ -551,10 +551,6 @@ const fetchEvents = async () => {
 
     if (response.success) {
       events.value = response.data || []
-      console.log('Fetched events:', events.value.length)
-      if (events.value.length > 0) {
-        console.log('Sample event:', events.value[0])
-      }
     } else {
       throw new Error(response.message || 'イベント情報の取得に失敗しました')
     }
