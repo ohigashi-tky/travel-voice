@@ -14,12 +14,17 @@ class Event extends Model
     protected $fillable = [
         'title',
         'description',
+        'overview',
         'prefecture',
         'location',
         'start_date',
         'end_date',
-        'image_url',
+        'category',
         'tags',
+        'access',
+        'url',
+        'organizer',
+        'display_order',
         'is_active',
     ];
 
@@ -77,8 +82,26 @@ class Event extends Model
         return $query->where(function ($q) use ($keyword) {
             $q->where('title', 'like', '%' . $keyword . '%')
               ->orWhere('description', 'like', '%' . $keyword . '%')
+              ->orWhere('overview', 'like', '%' . $keyword . '%')
               ->orWhere('location', 'like', '%' . $keyword . '%');
         });
+    }
+
+    /**
+     * Scope to filter by category
+     */
+    public function scopeByCategory(Builder $query, string $category): Builder
+    {
+        return $query->where('category', $category);
+    }
+
+    /**
+     * Scope to order by display order
+     */
+    public function scopeOrderByDisplay(Builder $query): Builder
+    {
+        return $query->orderBy('display_order', 'asc')
+                     ->orderBy('start_date', 'asc');
     }
 
     /**

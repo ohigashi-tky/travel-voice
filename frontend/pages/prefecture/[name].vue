@@ -10,15 +10,27 @@
     <!-- Fixed Back Button (always visible) -->
     <BackButton />
 
-    <!-- Header -->
+    <!-- Header with Background Image -->
     <header class="relative z-10 p-6 pt-6">
-      <nav class="flex items-center justify-center max-w-7xl mx-auto">
-        <h1 class="text-2xl font-black text-white">
-          <span class="bg-gradient-to-r from-cyan-400 to-white bg-clip-text text-transparent">
-            {{ prefectureName }}
-          </span>
+      <div class="flex items-center justify-center max-w-7xl mx-auto relative">
+        <!-- Background Image -->
+        <div 
+          v-if="prefectureImage"
+          class="absolute inset-0 rounded-lg overflow-hidden"
+          style="margin: -24px;"
+        >
+          <img 
+            :src="prefectureImage" 
+            :alt="prefectureName"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-black/40"></div>
+        </div>
+        
+        <h1 class="text-2xl font-black text-white relative z-10">
+          {{ prefectureName }}
         </h1>
-      </nav>
+      </div>
     </header>
 
     <!-- Main Content -->
@@ -180,12 +192,70 @@ useHead({
 
 const touristSpots = ref<TouristSpot[]>([])
 
+// 都道府県IDと画像パスのマッピング
+const prefectureImageMap: Record<string, string> = {
+  '北海道': '/prefectures_image/1.jpeg',
+  '青森県': '/prefectures_image/2.jpeg',
+  '岩手県': '/prefectures_image/3.jpeg',
+  '宮城県': '/prefectures_image/4.jpeg',
+  '秋田県': '/prefectures_image/5.jpeg',
+  '山形県': '/prefectures_image/6.jpeg',
+  '福島県': '/prefectures_image/7.jpeg',
+  '茨城県': '/prefectures_image/8.jpeg',
+  '栃木県': '/prefectures_image/9.jpeg',
+  '群馬県': '/prefectures_image/10.jpeg',
+  '埼玉県': '/prefectures_image/11.jpeg',
+  '千葉県': '/prefectures_image/12.jpeg',
+  '東京都': '/prefectures_image/13.jpeg',
+  '神奈川県': '/prefectures_image/14.jpeg',
+  '新潟県': '/prefectures_image/15.jpeg',
+  '富山県': '/prefectures_image/16.jpeg',
+  '石川県': '/prefectures_image/17.jpeg',
+  '福井県': '/prefectures_image/18.jpeg',
+  '山梨県': '/prefectures_image/19.jpeg',
+  '長野県': '/prefectures_image/20.jpeg',
+  '岐阜県': '/prefectures_image/21.jpeg',
+  '静岡県': '/prefectures_image/22.jpeg',
+  '愛知県': '/prefectures_image/23.jpeg',
+  '三重県': '/prefectures_image/24.jpeg',
+  '滋賀県': '/prefectures_image/25.jpg',
+  '京都府': '/prefectures_image/26.jpeg',
+  '大阪府': '/prefectures_image/27.jpeg',
+  '兵庫県': '/prefectures_image/28.jpeg',
+  '奈良県': '/prefectures_image/29.jpeg',
+  '和歌山県': '/prefectures_image/30.jpeg',
+  '鳥取県': '/prefectures_image/31.jpeg',
+  '島根県': '/prefectures_image/32.jpeg',
+  '岡山県': '/prefectures_image/33.jpg',
+  '広島県': '/prefectures_image/34.jpeg',
+  '山口県': '/prefectures_image/35.jpeg',
+  '徳島県': '/prefectures_image/36.jpeg',
+  '香川県': '/prefectures_image/37.jpeg',
+  '愛媛県': '/prefectures_image/38.jpg',
+  '高知県': '/prefectures_image/39.jpeg',
+  '福岡県': '/prefectures_image/40.jpeg',
+  '佐賀県': '/prefectures_image/41.jpeg',
+  '長崎県': '/prefectures_image/42.jpeg',
+  '熊本県': '/prefectures_image/43.jpeg',
+  '大分県': '/prefectures_image/44.jpg',
+  '宮崎県': '/prefectures_image/45.jpeg',
+  '鹿児島県': '/prefectures_image/46.jpeg',
+  '沖縄県': '/prefectures_image/47.jpg'
+}
+
 // APIデータから都道府県情報を取得
 const prefectureImage = computed(() => {
+  // まず、ローカルの画像マップから取得を試行
+  if (prefectureImageMap[prefectureName]) {
+    return prefectureImageMap[prefectureName]
+  }
+  
+  // APIからの画像データがある場合はそれを使用
   if (prefectureData.value?.prefecture?.images?.length > 0) {
     const bannerImage = prefectureData.value.prefecture.images.find(img => img.image_type === 'banner')
     return bannerImage?.image_url || prefectureData.value.prefecture.images[0]?.image_url || ''
   }
+  
   return ''
 })
 

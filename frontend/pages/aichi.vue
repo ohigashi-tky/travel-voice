@@ -7,13 +7,21 @@
     <BackButton />
 
     <!-- Page Title -->
-    <div class="bg-white dark:bg-gray-900 py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6 overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0">
+        <img 
+          src="/prefectures_image/23.jpeg" 
+          alt="愛知県"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/40"></div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex items-center justify-center">
-          <h1 class="text-3xl font-bold text-gray-800 dark:text-white tracking-wide transition-colors duration-300">
-            <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-              愛知県
-            </span>
+          <h1 class="text-3xl font-bold text-white tracking-wide">
+            愛知県
           </h1>
         </div>
       </div>
@@ -24,38 +32,12 @@
       <div class="max-w-7xl mx-auto py-6">
         <!-- Tourist Spots Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
-            v-for="spot in touristSpots" 
+          <TouristSpotCard
+            v-for="spot in touristSpots"
             :key="spot.id"
-            @click="goToSpotDetail(spot.id)"
-            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer"
-          >
-            <!-- Spot Image -->
-            <div class="h-48 bg-gradient-to-br from-red-400 to-orange-500 relative">
-              <PlacePhotoImage 
-                :spot-name="spot.name" :place-id="spot.place_id"
-                :alt="spot.name"
-              >
-                <div class="absolute top-3 right-3">
-                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.category }}
-                  </span>
-                </div>
-              </PlacePhotoImage>
-            </div>
-
-            <!-- Spot Info -->
-            <div class="p-4">
-              <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">{{ spot.name }}</h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">{{ spot.description }}</p>
-              
-              <!-- Audio Guide Indicator -->
-              <div class="flex items-center gap-2 text-xs text-orange-600 dark:text-orange-400">
-                <span>🎧</span>
-                <span>音声ガイド対応</span>
-              </div>
-            </div>
-          </div>
+            :spot="spot"
+            :show-tags="true"
+          />
         </div>
       </div>
     </main>
@@ -66,10 +48,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
+import TouristSpotCard from '~/components/TouristSpotCard.vue'
+import { useTouristSpots } from '~/composables/useTouristSpots'
 
 // Page meta
 definePageMeta({
@@ -86,32 +69,20 @@ useHead({
 // Reactive variables
 const activeTab = ref('guide')
 
-// Tourist spots data for Aichi
-const touristSpots = [
-  {
-    id: 401,
-    name: '名古屋城',
-    description: '徳川家康が築城した名古屋のシンボル。金の鯱鉾で有名な日本三大名城の一つです。',
-    category: '歴史建造物'
-  },
-  {
-    id: 402,
-    name: '熱田神宮',
-    description: '三種の神器の一つ草薙剣を祀る由緒ある神社。1900年の歴史を誇る格式高い神宮です。',
-    category: '神社'
-  },
-  {
-    id: 403,
-    name: 'トヨタ産業技術記念館',
-    description: 'トヨタグループ発祥の地に建つ産業技術博物館。自動車産業の歴史と技術を学べます。',
-    category: '博物館'
-  }
-]
+// 観光地データをAPIから取得
+const { spots, fetchSpots, getSpotsByPrefecture } = useTouristSpots()
+
+// 愛知県の観光スポット
+const touristSpots = computed(() => {
+  return getSpotsByPrefecture('愛知県')
+})
+
+// データを初期化
+onMounted(async () => {
+  await fetchSpots()
+})
 
 // Navigation functions
 
-const goToSpotDetail = (spotId) => {
-  navigateTo(`/spots/${spotId}`)
-}
 
 </script>

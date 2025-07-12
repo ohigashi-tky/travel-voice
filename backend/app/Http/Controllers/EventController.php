@@ -3,98 +3,72 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Services\EventGeneratorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class EventController extends Controller
 {
-    protected $eventGeneratorService;
-
-    public function __construct(EventGeneratorService $eventGeneratorService)
-    {
-        $this->eventGeneratorService = $eventGeneratorService;
-    }
-
     /**
-     * Display a listing of events
+     * イベント一覧を取得
      */
     public function index(Request $request): JsonResponse
     {
         try {
-            // Get events from AI generator service with caching
-            $events = collect($this->eventGeneratorService->getEvents());
+            $query = Event::active();
 
-            // Apply filters
-            if ($request->has('prefecture') && $request->prefecture) {
-                $events = $events->filter(function ($event) use ($request) {
-                    return $event['prefecture'] === $request->prefecture;
-                });
+            // 都道府県フィルター
+            if ($request->filled('prefecture')) {
+                $query->byPrefecture($request->prefecture);
             }
 
-            // Date range filter
-            if ($request->has('date_range') && $request->date_range) {
-                $dateRange = $request->date_range;
-                $now = Carbon::now();
-                
-                switch ($dateRange) {
-                    case 'thisMonth':
-                        $startDate = $now->copy()->startOfMonth();
-                        $endDate = $now->copy()->endOfMonth();
-                        break;
-                    case 'nextMonth':
-                        $startDate = $now->copy()->addMonth()->startOfMonth();
-                        $endDate = $now->copy()->addMonth()->endOfMonth();
-                        break;
-                    case 'next3Months':
-                        $startDate = $now->copy()->startOfMonth();
-                        $endDate = $now->copy()->addMonths(3)->endOfMonth();
-                        break;
-                    default:
-                        $startDate = null;
-                        $endDate = null;
-                }
-                
-                if ($startDate && $endDate) {
-                    $events = $events->filter(function ($event) use ($startDate, $endDate) {
-                        $eventStart = Carbon::parse($event['start_date']);
-                        $eventEnd = Carbon::parse($event['end_date']);
-                        
-                        return ($eventStart >= $startDate && $eventStart <= $endDate) ||
-                               ($eventEnd >= $startDate && $eventEnd <= $endDate) ||
-                               ($eventStart <= $startDate && $eventEnd >= $endDate);
-                    });
-                }
+            // カテゴリフィルター
+            if ($request->filled('category')) {
+                $query->byCategory($request->category);
             }
 
-            // Search filter
-            if ($request->has('search') && $request->search) {
-                $searchTerm = strtolower($request->search);
-                $events = $events->filter(function ($event) use ($searchTerm) {
-                    return str_contains(strtolower($event['title']), $searchTerm) ||
-                           str_contains(strtolower($event['description']), $searchTerm) ||
-                           str_contains(strtolower($event['location']), $searchTerm);
-                });
+            // 日付フィルター
+            if ($request->filled('date')) {
+                $date = Carbon::parse($request->date);
+                $query->inDateRange($date, $date);
             }
 
-            // Tags filter
-            if ($request->has('tags') && $request->tags) {
-                $tags = is_array($request->tags) ? $request->tags : explode(',', $request->tags);
-                $events = $events->filter(function ($event) use ($tags) {
-                    $eventTags = $event['tags'] ?? [];
-                    return !empty(array_intersect($tags, $eventTags));
-                });
+            // 日付範囲フィルター
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $startDate = Carbon::parse($request->start_date);
+                $endDate = Carbon::parse($request->end_date);
+                $query->inDateRange($startDate, $endDate);
             }
 
-            // Sort by start date
-            $events = $events->sortBy('start_date')->values();
+            // キーワード検索
+            if ($request->filled('keyword') || $request->filled('search')) {
+                $keyword = $request->keyword ?? $request->search;
+                $query->search($keyword);
+            }
+
+            // 今後のイベントのみ（デフォルト）
+            if (!$request->filled('include_past')) {
+                $query->upcoming();
+            }
+
+            // ソート
+            $sortBy = $request->get('sort', 'display_order');
+            $sortOrder = $request->get('order', 'asc');
+            
+            if ($sortBy === 'display_order') {
+                $query->orderByDisplay();
+            } else {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+
+            // ページネーション
+            $perPage = min($request->get('per_page', 100), 5000); // 最大5000件（全件取得対応）
+            $events = $query->paginate($perPage);
 
             return response()->json([
                 'success' => true,
-                'data' => $events->all(),
-                'message' => 'イベント情報を取得しました。',
-                'cached' => false // Cache disabled
+                'data' => $events->items(),
+                'message' => 'イベント情報を取得しました。'
             ]);
 
         } catch (\Exception $e) {
@@ -107,18 +81,15 @@ class EventController extends Controller
     }
 
     /**
-     * Display the specified event
+     * イベント詳細を取得
      */
-    public function show(int $id): JsonResponse
+    public function show(Event $event): JsonResponse
     {
         try {
-            $events = collect($this->eventGeneratorService->getEvents());
-            $event = $events->firstWhere('id', $id);
-
-            if (!$event) {
+            if (!$event->is_active) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'イベントが見つかりません。'
+                    'message' => 'このイベントは現在利用できません。'
                 ], 404);
             }
 
@@ -138,48 +109,22 @@ class EventController extends Controller
     }
 
     /**
-     * Get events by prefecture
+     * 都道府県別イベント数を取得
      */
-    public function byPrefecture(string $prefecture): JsonResponse
+    public function countByPrefecture(): JsonResponse
     {
         try {
-            $events = collect($this->eventGeneratorService->getEvents())
-                        ->filter(function ($event) use ($prefecture) {
-                            return $event['prefecture'] === $prefecture;
-                        })
-                        ->sortBy('start_date')
-                        ->values();
+            $counts = Event::active()
+                ->upcoming()
+                ->selectRaw('prefecture, COUNT(*) as count')
+                ->groupBy('prefecture')
+                ->orderBy('prefecture')
+                ->pluck('count', 'prefecture');
 
             return response()->json([
                 'success' => true,
-                'data' => $events->all(),
-                'message' => $prefecture . 'のイベント情報を取得しました。'
+                'data' => $counts
             ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'イベント情報の取得に失敗しました。',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Get available prefectures with events
-     */
-    public function prefectures(): JsonResponse
-    {
-        try {
-            $events = collect($this->eventGeneratorService->getEvents());
-            $prefectures = $events->pluck('prefecture')->unique()->sort()->values();
-
-            return response()->json([
-                'success' => true,
-                'data' => $prefectures->all(),
-                'message' => 'イベント開催都道府県を取得しました。'
-            ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -190,28 +135,37 @@ class EventController extends Controller
     }
 
     /**
-     * Get available tags
+     * 人気のタグを取得
      */
-    public function tags(): JsonResponse
+    public function popularTags(Request $request): JsonResponse
     {
         try {
-            $events = collect($this->eventGeneratorService->getEvents());
-            $allTags = collect();
+            $limit = min($request->get('limit', 20), 50);
             
+            $events = Event::active()
+                ->upcoming()
+                ->whereNotNull('tags')
+                ->get();
+                
+            $tagCounts = [];
             foreach ($events as $event) {
-                if (isset($event['tags']) && is_array($event['tags'])) {
-                    $allTags = $allTags->merge($event['tags']);
+                if (is_array($event->tags)) {
+                    foreach ($event->tags as $tag) {
+                        $tag = trim($tag);
+                        if (!empty($tag)) {
+                            $tagCounts[$tag] = ($tagCounts[$tag] ?? 0) + 1;
+                        }
+                    }
                 }
             }
             
-            $uniqueTags = $allTags->unique()->sort()->values();
+            arsort($tagCounts);
+            $popularTags = array_slice($tagCounts, 0, $limit, true);
 
             return response()->json([
                 'success' => true,
-                'data' => $uniqueTags->all(),
-                'message' => 'イベントタグを取得しました。'
+                'data' => $popularTags
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -222,45 +176,56 @@ class EventController extends Controller
     }
 
     /**
-     * Refresh events cache
+     * おすすめイベントを取得
      */
-    public function refreshCache(): JsonResponse
+    public function featured(Request $request): JsonResponse
     {
         try {
-            $events = $this->eventGeneratorService->refreshEvents();
+            $limit = min($request->get('limit', 10), 50);
+            
+            $events = Event::active()
+                ->upcoming()
+                ->orderByDisplay()
+                ->limit($limit)
+                ->get();
 
             return response()->json([
                 'success' => true,
-                'data' => $events,
-                'message' => 'イベント情報のキャッシュを更新しました。'
+                'data' => $events
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'キャッシュの更新に失敗しました。',
+                'message' => 'データの取得に失敗しました。',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * Clear events cache
+     * 現在開催中のイベントを取得
      */
-    public function clearCache(): JsonResponse
+    public function current(Request $request): JsonResponse
     {
         try {
-            $cleared = $this->eventGeneratorService->clearCache();
+            $limit = min($request->get('limit', 10), 50);
+            $today = Carbon::today();
+            
+            $events = Event::active()
+                ->where('start_date', '<=', $today)
+                ->where('end_date', '>=', $today)
+                ->orderByDisplay()
+                ->limit($limit)
+                ->get();
 
             return response()->json([
-                'success' => $cleared,
-                'message' => $cleared ? 'キャッシュを削除しました。' : 'キャッシュが見つかりませんでした。'
+                'success' => true,
+                'data' => $events
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'キャッシュの削除に失敗しました。',
+                'message' => 'データの取得に失敗しました。',
                 'error' => $e->getMessage()
             ], 500);
         }

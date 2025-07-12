@@ -4,20 +4,28 @@
     <AppHeader />
 
     <!-- Page Title -->
-    <div class="bg-white dark:bg-gray-900 py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6 overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0">
+        <img 
+          src="/prefectures_image/46.jpeg" 
+          alt="鹿児島県"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/40"></div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex items-center justify-center relative">
           <button 
             @click="goHome"
-            class="absolute left-0 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300 group"
+            class="absolute left-0 flex items-center gap-2 text-gray-200 hover:text-white transition-colors duration-300 group"
           >
             <ArrowLeft class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
             <span class="text-sm font-medium">戻る</span>
           </button>
-          <h1 class="text-3xl font-bold text-gray-800 dark:text-white tracking-wide transition-colors duration-300">
-            <span class="bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">
-              鹿児島県
-            </span>
+          <h1 class="text-3xl font-bold text-white tracking-wide">
+            鹿児島県
           </h1>
         </div>
       </div>
@@ -28,53 +36,12 @@
       <div class="max-w-7xl mx-auto py-6">
         <!-- Tourist Spots Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
-            v-for="spot in touristSpots" 
+          <TouristSpotCard
+            v-for="spot in touristSpots"
             :key="spot.id"
-            @click="goToSpotDetail(spot.id)"
-            class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer"
-          >
-            <!-- Spot Image -->
-            <div class="h-48 bg-gradient-to-br from-red-400 to-orange-500 relative">
-              <PlacePhotoImage 
-                :spot-name="spot.name" :place-id="spot.place_id"
-                :alt="spot.name"
-              >
-                <div class="absolute top-3 right-3">
-                  <span class="bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white px-2 py-1 rounded-lg text-xs font-medium">
-                    {{ spot.category }}
-                  </span>
-                </div>
-              </PlacePhotoImage>
-            </div>
-            
-            <!-- Spot Info -->
-            <div class="p-6">
-              <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
-                {{ spot.name }}
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2 transition-colors duration-300">
-                {{ spot.description }}
-              </p>
-              
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-2 mb-4">
-                <span 
-                  v-for="highlight in spot.highlights?.slice(0, 3)" 
-                  :key="highlight"
-                  class="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-2 py-1 rounded text-xs transition-colors duration-300"
-                >
-                  {{ highlight }}
-                </span>
-              </div>
-              
-              <!-- Action Button -->
-              <div class="flex justify-between items-center">
-                <span class="text-red-600 dark:text-red-400 text-sm font-medium">詳細を見る</span>
-                <ArrowRight class="w-4 h-4 text-red-600 dark:text-red-400" />
-              </div>
-            </div>
-          </div>
+            :spot="spot"
+            :show-tags="true"
+          />
         </div>
       </div>
     </main>
@@ -89,7 +56,7 @@ import { ref, computed } from 'vue'
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
-import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
+import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta
 definePageMeta({
@@ -168,7 +135,4 @@ const goHome = () => {
   navigateTo('/')
 }
 
-const goToSpotDetail = (spotId) => {
-  navigateTo(`/spots/${spotId}`)
-}
 </script>

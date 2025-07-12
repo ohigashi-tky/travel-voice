@@ -27,7 +27,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Filters Section -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-4 border border-gray-200 dark:border-gray-700 relative">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-2 border border-gray-200 dark:border-gray-700 relative">
           <!-- Always visible: Prefecture filter and toggle button -->
           <div class="flex items-center gap-4">
             <!-- Prefecture Filter -->
@@ -77,24 +77,13 @@
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     日付
                   </label>
-                  <div class="relative">
-                    <input
-                      v-model="selectedDate"
-                      @input="filterEvents"
-                      type="date"
-                      class="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-gray-300 dark:focus:border-gray-600 appearance-none date-input"
-                      style="min-height: 38px;"
-                    />
-                    <!-- Calendar icon for visual consistency -->
-                    <svg 
-                      class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
+                  <input
+                    v-model="selectedDate"
+                    @input="filterEvents"
+                    type="date"
+                    class="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+                    style="min-height: 38px;"
+                  />
                 </div>
 
                 <!-- Category Filter -->
@@ -154,66 +143,65 @@
         </div>
 
         <!-- Pagination Controls -->
-        <div v-if="filteredEvents.length > 0 && totalPages > 1" class="mb-4 flex items-center justify-between">
+        <div v-if="filteredEvents.length > 0 && totalPages > 1" class="mb-2">
           <!-- Results Summary -->
-          <div class="text-sm text-gray-600 dark:text-gray-300">
-            {{ filteredEvents.length }}件中 {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredEvents.length) }}件を表示
+          <div class="text-sm text-gray-600 dark:text-gray-300 mb-1 text-center">
+            全{{ filteredEvents.length }}件 {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredEvents.length) }}件を表示
           </div>
           
-          <!-- Pagination Buttons -->
-          <div class="flex items-center space-x-2">
+          <!-- Pagination Buttons (5 buttons always visible) -->
+          <div class="flex items-center justify-center space-x-2">
+            <!-- First Page Button -->
+            <button
+              @click="goToPage(1)"
+              :disabled="currentPage === 1"
+              class="px-2 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="最初のページ"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+              </svg>
+            </button>
+
             <!-- Previous Button -->
             <button
               @click="goToPreviousPage"
               :disabled="currentPage === 1"
-              class="px-2 py-1 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="px-2 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="前のページ"
             >
-              前へ
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
             </button>
 
-            <!-- Page Numbers -->
-            <div class="flex space-x-1">
-              <button
-                v-for="page in Math.min(totalPages, 7)"
-                :key="page"
-                @click="goToPage(page)"
-                :class="[
-                  'px-2 py-1 text-sm font-medium rounded-lg border transition-colors',
-                  page === currentPage
-                    ? 'bg-blue-600 border-blue-600 text-white'
-                    : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                ]"
-              >
-                {{ page }}
-              </button>
-              
-              <!-- Show dots if there are more pages -->
-              <span v-if="totalPages > 7" class="px-2 py-1 text-sm text-gray-500 dark:text-gray-400">
-                ...
-              </span>
-              
-              <!-- Last page if not already shown -->
-              <button
-                v-if="totalPages > 7"
-                @click="goToPage(totalPages)"
-                :class="[
-                  'px-2 py-1 text-sm font-medium rounded-lg border transition-colors',
-                  totalPages === currentPage
-                    ? 'bg-blue-600 border-blue-600 text-white'
-                    : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                ]"
-              >
-                {{ totalPages }}
-              </button>
+            <!-- Current Page Display -->
+            <div class="px-3 py-0.5 text-sm font-medium bg-blue-600 border border-blue-600 text-white rounded-md">
+              {{ currentPage }}
             </div>
 
             <!-- Next Button -->
             <button
               @click="goToNextPage"
               :disabled="currentPage === totalPages"
-              class="px-2 py-1 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="px-2 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="次のページ"
             >
-              次へ
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+
+            <!-- Last Page Button -->
+            <button
+              @click="goToPage(totalPages)"
+              :disabled="currentPage === totalPages"
+              class="px-2 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="最後のページ"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+              </svg>
             </button>
           </div>
         </div>
@@ -376,6 +364,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useLanguage } from '~/composables/useLanguage'
+import { usePrefectures } from '~/composables/usePrefectures'
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import BackButton from '~/components/BackButton.vue'
@@ -395,6 +384,7 @@ useHead({
 
 const { t } = useLanguage()
 const config = useRuntimeConfig()
+const { prefectures: masterPrefectures, fetchPrefectures } = usePrefectures()
 
 // Reactive variables
 const isLoading = ref(false)
@@ -405,29 +395,30 @@ const selectedDate = ref('')
 const selectedCategory = ref('')
 const searchKeyword = ref('')
 const currentPage = ref(1)
-const itemsPerPage = 10
+const itemsPerPage = 20
 const isFiltersExpanded = ref(false)
 
-// Available prefectures (matches the main app)
-const availablePrefectures = [
-  '北海道', '東京都', '大阪府', '京都府', '愛知県', '福岡県', 
-  '広島県', '愛媛県', '福島県', '埼玉県', '新潟県', '山口県', 
-  '徳島県', '鹿児島県'
-]
-
 // Options for CustomSelect components
-const prefectureOptions = computed(() => [
-  { value: '', label: 'すべて' },
-  ...availablePrefectures.map(prefecture => ({
-    value: prefecture,
-    label: prefecture
-  }))
-])
+const prefectureOptions = computed(() => {
+  const options = [{ value: '', label: 'すべて' }]
+  
+  // マスターテーブルから都道府県を取得（display_order順）
+  if (masterPrefectures.value && masterPrefectures.value.length > 0) {
+    const sortedPrefectures = [...masterPrefectures.value].sort((a, b) => a.display_order - b.display_order)
+    options.push(...sortedPrefectures.map(prefecture => ({
+      value: prefecture.name,
+      label: prefecture.name
+    })))
+  }
+  
+  return options
+})
 
-// Available categories based on common event tags
+// Available categories based on actual event tags in database
 const availableCategories = [
-  '祭り', '花見', '紅葉', '花火', '文化', '伝統', 'グルメ', '音楽', 
-  'スポーツ', '季節', '春', '夏', '秋', '冬', 'ライトアップ', '体験'
+  '祭り', '花火大会', '桜', '紅葉', 'グルメ', '音楽', 'スポーツ', 
+  '文化', '伝統', 'アート', 'フェスティバル', 'ライトアップ', 
+  'イルミネーション', '体験', '季節イベント', '展示・展覧会'
 ]
 
 const categoryOptions = computed(() => [
@@ -462,7 +453,57 @@ const filteredEvents = computed(() => {
   if (selectedCategory.value) {
     filtered = filtered.filter(event => {
       const eventTags = event.tags || []
-      return eventTags.some(tag => tag.includes(selectedCategory.value))
+      const category = selectedCategory.value
+      
+      // タグが配列であることを確認
+      if (!Array.isArray(eventTags)) {
+        console.warn('Event tags is not an array:', event.title, eventTags)
+        return false
+      }
+      
+      // Check if any tag matches the selected category
+      return eventTags.some(tag => {
+        // タグが文字列であることを確認
+        if (typeof tag !== 'string') {
+          return false
+        }
+        
+        // Handle specific category mappings
+        switch (category) {
+          case '花火大会':
+            return tag.includes('花火')
+          case '桜':
+            return tag.includes('桜') || tag.includes('花見')
+          case '紅葉':
+            return tag.includes('紅葉')
+          case 'グルメ':
+            return tag.includes('グルメ') || tag.includes('食') || tag.includes('酒') || tag.includes('フルーツ') || tag.includes('うどん') || tag.includes('そば') || tag.includes('ラーメン')
+          case '音楽':
+            return tag.includes('音楽') || tag.includes('ライブ') || tag.includes('コンサート') || tag.includes('ジャズ')
+          case 'スポーツ':
+            return tag.includes('スポーツ') || tag.includes('マラソン') || tag.includes('野球') || tag.includes('サッカー') || tag.includes('競馬')
+          case '文化':
+            return tag.includes('文化') || tag.includes('芸術') || tag.includes('美術') || tag.includes('歴史')
+          case '伝統':
+            return tag.includes('伝統') || tag.includes('神事') || tag.includes('神輿') || tag.includes('盆踊り')
+          case 'アート':
+            return tag.includes('アート') || tag.includes('美術') || tag.includes('現代アート')
+          case 'フェスティバル':
+            return tag.includes('フェスティバル') || tag.includes('フェス')
+          case 'ライトアップ':
+            return tag.includes('ライトアップ') || tag.includes('夜景')
+          case 'イルミネーション':
+            return tag.includes('イルミネーション') || tag.includes('クリスマス') || tag.includes('光')
+          case '体験':
+            return tag.includes('体験') || tag.includes('アクティビティ') || tag.includes('ワークショップ')
+          case '季節イベント':
+            return tag.includes('季節') || tag.includes('春') || tag.includes('夏') || tag.includes('秋') || tag.includes('冬')
+          case '展示・展覧会':
+            return tag.includes('展示') || tag.includes('展覧会') || tag.includes('博物館')
+          default:
+            return tag.includes(category)
+        }
+      })
     })
   }
 
@@ -487,22 +528,21 @@ const paginatedEvents = computed(() => {
   return filteredEvents.value.slice(start, end)
 })
 
-// Fetch events from API
-const fetchEvents = async (forceRefresh = false) => {
-  // Check cache first unless force refresh is requested
-  if (!forceRefresh) {
-    const cachedEvents = getCachedEvents()
-    if (cachedEvents) {
-      events.value = cachedEvents
-      return // Use cached data, no API call needed
-    }
-  }
 
+// Fetch events from API (データベース駆動)
+const fetchEvents = async () => {
   isLoading.value = true
   error.value = null
 
   try {
-    const response = await $fetch(`${config.public.apiBase}/api/events`, {
+    // 全てのイベントを取得（フィルタリングはクライアント側で実行）
+    const params = new URLSearchParams()
+    params.append('per_page', '2000') // 全イベントを取得
+
+    const queryString = params.toString()
+    const url = `${config.public.apiBase}/api/events${queryString ? '?' + queryString : ''}`
+
+    const response = await $fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -510,10 +550,11 @@ const fetchEvents = async (forceRefresh = false) => {
     })
 
     if (response.success) {
-      const eventData = response.data || []
-      events.value = eventData
-      // Save to cache for future use
-      setCachedEvents(eventData)
+      events.value = response.data || []
+      console.log('Fetched events:', events.value.length)
+      if (events.value.length > 0) {
+        console.log('Sample event:', events.value[0])
+      }
     } else {
       throw new Error(response.message || 'イベント情報の取得に失敗しました')
     }
@@ -526,16 +567,6 @@ const fetchEvents = async (forceRefresh = false) => {
   }
 }
 
-
-// Format date for display
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
 
 // Format date range for compact display
 const formatDateRange = (startDate, endDate) => {
@@ -563,6 +594,7 @@ const formatDateRange = (startDate, endDate) => {
 const filterEvents = () => {
   // Reset to first page when filters change
   currentPage.value = 1
+  // フィルタリングはcomputed propertyで自動的に行われる
 }
 
 // Pagination functions
@@ -582,63 +614,13 @@ const goToNextPage = () => {
   }
 }
 
-// Cache management
-const CACHE_KEY = 'events_cache'
-const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
-
-// Check if cached data is still valid
-const isCacheValid = (timestamp) => {
-  return Date.now() - timestamp < CACHE_DURATION
-}
-
-// Get events from cache
-const getCachedEvents = () => {
-  try {
-    const cached = localStorage.getItem(CACHE_KEY)
-    if (cached) {
-      const { data, timestamp } = JSON.parse(cached)
-      if (isCacheValid(timestamp)) {
-        return data
-      }
-    }
-  } catch (error) {
-    console.warn('Failed to read from cache:', error)
-  }
-  return null
-}
-
-// Save events to cache
-const setCachedEvents = (data) => {
-  try {
-    const cacheData = {
-      data,
-      timestamp: Date.now()
-    }
-    localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData))
-  } catch (error) {
-    console.warn('Failed to save to cache:', error)
-  }
-}
-
-// Clear expired cache
-const clearExpiredCache = () => {
-  try {
-    const cached = localStorage.getItem(CACHE_KEY)
-    if (cached) {
-      const { timestamp } = JSON.parse(cached)
-      if (!isCacheValid(timestamp)) {
-        localStorage.removeItem(CACHE_KEY)
-      }
-    }
-  } catch (error) {
-    console.warn('Failed to clear cache:', error)
-  }
-}
 
 // Initialize
-onMounted(() => {
-  clearExpiredCache()
-  fetchEvents()
+onMounted(async () => {
+  // 都道府県マスターデータを取得
+  await fetchPrefectures()
+  // イベントデータを取得
+  await fetchEvents()
 })
 </script>
 

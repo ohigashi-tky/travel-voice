@@ -74,9 +74,9 @@ docker compose exec backend php artisan migrate --seed
 - **SQLite** - 軽量データベース
 
 ### AI・音声技術
-- **Amazon Polly Neural Engine**
-- **Google Gemini 2.5 Flash**
-- **OpenRouter API**
+- **Amazon Polly Neural Engine** - 自然な日本語音声合成
+- **OpenRouter API** - AI応答生成（Google Gemini 2.5 Flash使用）
+  - **重要**: 本プロジェクトではOpenRouter APIのみ使用。OpenAI APIは使用しません。
 
 ### Infrastructure
 - **Docker**
@@ -190,6 +190,11 @@ docker compose exec backend php artisan travel-spots:fetch-images
 
 # 全ての画像を強制再取得（既存も含む）
 docker compose exec backend php artisan travel-spots:fetch-images --force
+
+# イベント情報管理（OpenRouter API使用）
+docker compose exec backend php artisan events:fetch              # 全都道府県のイベント情報取得
+docker compose exec backend php artisan events:fetch --prefecture=東京都  # 特定都道府県のみ
+docker compose exec backend php artisan events:fetch --force      # 既存データ削除して再取得
 ```
 
 ## 🗾 都道府県管理システム
