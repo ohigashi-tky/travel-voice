@@ -29,11 +29,6 @@ class FetchTravelSpotImages extends Command
     public function __construct()
     {
         parent::__construct();
-        $apiKey = config('services.google.places_api_key');
-        if (!$apiKey) {
-            throw new \Exception('Google Maps API key is not configured. Please set GOOGLE_MAPS_API_KEY in your .env file.');
-        }
-        $this->apiKey = $apiKey;
     }
 
     /**
@@ -41,6 +36,14 @@ class FetchTravelSpotImages extends Command
      */
     public function handle()
     {
+        // API キーの初期化を handle メソッドで行う
+        $apiKey = config('services.google.places_api_key');
+        if (!$apiKey) {
+            $this->error('Google Maps API key is not configured. Please set GOOGLE_MAPS_API_KEY in your .env file.');
+            return Command::FAILURE;
+        }
+        $this->apiKey = $apiKey;
+        
         $this->info('観光地の写真取得を開始します...');
         
         // 対象のスポットを取得（place_idがnullでも対象に含める）
