@@ -157,6 +157,12 @@ docker compose exec frontend npm run type-check    # 型チェック
 | `GET` | `/api/popular-spots` | 人気スポット | ❌ |
 | `POST` | `/api/audio-guide/tourist-spot` | 音声ガイド生成 | ❌ |
 | `DELETE` | `/api/popular-spots/cache` | キャッシュクリア | ❌ |
+| `GET` | `/api/prefectures` | 全都道府県一覧 | ❌ |
+| `GET` | `/api/prefectures/available` | 利用可能都道府県 | ❌ |
+| `GET` | `/api/prefectures/by-region` | 地域別都道府県 | ❌ |
+| `GET` | `/api/prefectures/{id}` | 都道府県詳細 | ❌ |
+| `GET` | `/api/prefectures/{id}/spots` | 都道府県別観光地 | ❌ |
+| `GET` | `/api/prefectures/name/{name}/spots` | 都道府県名で観光地検索 | ❌ |
 
 ## 📸 画像管理システム
 
@@ -185,6 +191,31 @@ docker compose exec backend php artisan travel-spots:fetch-images
 # 全ての画像を強制再取得（既存も含む）
 docker compose exec backend php artisan travel-spots:fetch-images --force
 ```
+
+## 🗾 都道府県管理システム
+
+### 設計思想
+- **データベース最優先**: CLAUDE.mdガイドラインに従い、ハードコーディングを完全排除
+- **正規化設計**: prefecturesテーブルとprefecture_imagesテーブルによる適切な関係管理
+- **API駆動**: フロントエンドは100%APIからデータを取得
+
+### データベース構造
+```sql
+-- 都道府県マスターテーブル
+prefectures: id, name, name_kana, region, display_order, is_available
+
+-- 都道府県画像テーブル  
+prefecture_images: id, prefecture_id, image_url, image_type, display_order
+
+-- 観光地テーブル（修正）
+travel_spots: id, prefecture_id, name, description, ...
+```
+
+### 都道府県管理機能
+- **47都道府県完全管理**: 一般的な順番（北海道→本州→四国→九州→沖縄）で登録
+- **地域別分類**: 北海道・東北、関東、中部、近畿、中国、四国、九州・沖縄
+- **利用可能フラグ**: 観光地データの有無を`is_available`で管理
+- **将来対応**: 都道府県別アイコン画像の実装準備完了
 
 ## 🎯 音声ガイド品質管理
 

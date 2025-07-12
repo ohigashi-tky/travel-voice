@@ -47,8 +47,30 @@
           </p>
         </div>
 
+        <!-- Loading State -->
+        <div v-if="loading" class="flex items-center justify-center py-20">
+          <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+            <p class="text-white">都道府県データを読み込み中...</p>
+          </div>
+        </div>
+
+        <!-- Error State -->
+        <div v-else-if="error" class="text-center py-20">
+          <div class="glass-card rounded-3xl p-12 backdrop-blur-xl bg-white/5 border border-white/10 max-w-2xl mx-auto">
+            <h3 class="text-3xl font-bold text-white mb-4">エラーが発生しました</h3>
+            <p class="text-gray-300 mb-6">{{ error }}</p>
+            <button 
+              @click="initializePrefectureData"
+              class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300"
+            >
+              再試行
+            </button>
+          </div>
+        </div>
+
         <!-- Tourist Spots or Coming Soon -->
-        <div v-if="touristSpots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div v-else-if="touristSpots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           <div 
             v-for="(spot, index) in touristSpots" 
             :key="spot.id"
@@ -139,6 +161,12 @@ import type { TouristSpot } from '~/types'
 const route = useRoute()
 const prefectureName = decodeURIComponent(route.params.name as string)
 
+// 都道府県データをAPIから取得
+const { fetchPrefectureSpots } = usePrefectures()
+const prefectureData = ref(null)
+const loading = ref(true)
+const error = ref(null)
+
 // Page meta
 definePageMeta({
   middleware: 'auth'
@@ -152,33 +180,39 @@ useHead({
 
 const touristSpots = ref<TouristSpot[]>([])
 
+// APIデータから都道府県情報を取得
 const prefectureImage = computed(() => {
-  const imageMap: Record<string, string> = {
-    '東京都': '',
-    '大阪府': '',
-    '京都府': '',
-    '北海道': '',
-    '奈良県': '',
-    '広島県': '',
-    '福岡県': '',
-    '沖縄県': ''
+  if (prefectureData.value?.prefecture?.images?.length > 0) {
+    const bannerImage = prefectureData.value.prefecture.images.find(img => img.image_type === 'banner')
+    return bannerImage?.image_url || prefectureData.value.prefecture.images[0]?.image_url || ''
   }
-  
-  return imageMap[prefectureName] || ''
+  return ''
 })
 
 const prefectureDescription = computed(() => {
-  const descriptions: Record<string, string> = {
-    '東京都': '現代と伝統が融合する日本の首都。スカイツリー、浅草寺、明治神宮など、多彩な魅力に満ちています。',
-    '北海道': '雄大な自然と美味しい食べ物の宝庫。四季折々の美しい景色と新鮮な海の幸が楽しめます。',
-    '大阪府': '食い倒れの街として知られる関西の中心都市。大阪城や道頓堀など、歴史と現代が交差する魅力的な街です。',
-    '京都府': '千年の都として栄えた古都。数多くの寺社仏閣と伝統文化が今も息づく美しい街並みが魅力です。',
-    '奈良県': '日本の古都として知られ、東大寺や春日大社などの歴史的建造物と、鹿で有名な奈良公園があります。',
-    '広島県': '平和の象徴として世界に知られる都市。厳島神社や原爆ドームなど、重要な歴史的意義を持つ場所があります。',
-    '福岡県': '九州の玄関口として栄える都市。博多ラーメンや明太子などの美味しいグルメと、太宰府天満宮などの歴史スポットが魅力です。',
-    '沖縄県': '美しい海と独特の文化が魅力の南国の楽園。首里城や美ら海水族館など、本土とは異なる魅力に満ちています。'
+  return prefectureData.value?.prefecture?.description || `${prefectureName}の美しい自然と文化を音声ガイドと共に発見しましょう。`
+})
+
+// 都道府県データ初期化
+const initializePrefectureData = async () => {
+  try {
+    loading.value = true
+    error.value = null
+    const data = await fetchPrefectureSpots(prefectureName)
+    prefectureData.value = data
+    touristSpots.value = data.spots || []
+  } catch (err) {
+    console.error('Failed to fetch prefecture data:', err)
+    error.value = 'Failed to load prefecture data'
+    touristSpots.value = []
+  } finally {
+    loading.value = false
   }
-  return descriptions[prefectureName] || `${prefectureName}の美しい自然と文化を音声ガイドと共に発見しましょう。`
+}
+
+// データを初期化
+onMounted(() => {
+  initializePrefectureData()
 })
 
 const generateSpotImage = (spotName: string, category: string) => {

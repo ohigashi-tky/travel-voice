@@ -16,6 +16,7 @@ class TravelSpot extends Model
         'description',
         'category',
         'prefecture',
+        'prefecture_id',
         'place_id',
         'imageUrl',
         'overview',
@@ -32,5 +33,13 @@ class TravelSpot extends Model
     public function spotImages()
     {
         return $this->hasMany(TravelSpotImage::class)->where('is_active', true)->orderBy('order');
+    }
+
+    /**
+     * 都道府県との関係
+     */
+    public function prefecture()
+    {
+        return $this->belongsTo(Prefecture::class);
     }
 }

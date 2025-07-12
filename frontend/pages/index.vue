@@ -209,28 +209,39 @@
             <div class="text-center mb-2">
               <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('都道府県から探す') }}</h3>
             </div>
-            <div class="grid grid-cols-3 gap-3">
+            <!-- Loading State for Prefecture Grid -->
+            <div v-if="prefecturesLoading" class="flex items-center justify-center py-8">
+              <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              <span class="ml-3 text-gray-600 dark:text-gray-300">読み込み中...</span>
+            </div>
+            
+            <!-- Prefecture Grid -->
+            <div v-else class="grid grid-cols-3 gap-3">
               <button
                 v-for="prefecture in mainPrefectures"
                 :key="prefecture.name"
                 @click="selectPrefecture(prefecture)"
                 :class="[
-                  'group px-2 py-1.5 rounded-lg border transition-all duration-300',
+                  'group relative h-20 rounded-lg border transition-all duration-300 overflow-hidden',
                   prefecture.available 
-                    ? 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer'
-                    : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
+                    ? 'border-gray-200 dark:border-gray-600 transform hover:scale-105 cursor-pointer'
+                    : 'border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
                 ]"
                 :disabled="!prefecture.available"
               >
-                <div class="text-xl mb-0.5">{{ prefecture.emoji }}</div>
-                <h4 :class="[
-                  'font-light text-sm transition-colors tracking-wide leading-none',
-                  prefecture.available 
-                    ? 'text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
-                    : 'text-gray-500 dark:text-gray-400'
-                ]">
-                  {{ prefecture.name }}
-                </h4>
+                <!-- Background Image -->
+                <div 
+                  class="absolute inset-0 bg-cover bg-center"
+                  :style="{ backgroundImage: `url(${getPrefectureImagePath(prefecture.id)})` }"
+                ></div>
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-all duration-300"></div>
+                <!-- Prefecture Name -->
+                <div class="relative z-10 h-full flex items-center justify-center">
+                  <h4 class="text-white font-medium text-sm text-center px-2 leading-tight">
+                    {{ prefecture.name }}
+                  </h4>
+                </div>
               </button>
             </div>
             
@@ -318,7 +329,15 @@
         
         <!-- Modal Content -->
         <div class="p-6">
+          <!-- Loading State -->
+          <div v-if="prefecturesLoading" class="flex items-center justify-center py-12">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span class="ml-3 text-gray-600 dark:text-gray-300">都道府県データを読み込み中...</span>
+          </div>
+          
+          <!-- Prefecture Regions -->
           <div
+            v-else
             v-for="region in prefectureRegions"
             :key="region.name"
             class="mb-8 last:mb-0"
@@ -331,15 +350,24 @@
                 @click="selectPrefectureFromModal(prefecture)"
                 :disabled="!prefecture.available"
                 :class="[
-                  'text-left p-3 rounded-lg border transition-all duration-200',
+                  'relative h-16 rounded-lg border transition-all duration-200 overflow-hidden',
                   prefecture.available
-                    ? 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white cursor-pointer'
-                    : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                    ? 'border-gray-200 dark:border-gray-600 hover:scale-105 cursor-pointer'
+                    : 'border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
                 ]"
               >
-                <div class="flex items-center gap-2">
-                  <span class="text-lg">{{ prefecture.emoji }}</span>
-                  <span class="text-sm font-medium">{{ prefecture.name }}</span>
+                <!-- Background Image -->
+                <div 
+                  class="absolute inset-0 bg-cover bg-center"
+                  :style="{ backgroundImage: `url(${getPrefectureImagePath(prefecture.id)})` }"
+                ></div>
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-black bg-opacity-40 hover:bg-opacity-30 transition-all duration-200"></div>
+                <!-- Prefecture Name -->
+                <div class="relative z-10 h-full flex items-center justify-center">
+                  <span class="text-white text-sm font-medium text-center px-2 leading-tight">
+                    {{ prefecture.name }}
+                  </span>
                 </div>
               </button>
             </div>
@@ -578,20 +606,19 @@ const goToSpotDetail = (spotId) => {
 }
 
 
-const mainPrefectures = [
-  { name: '東京都', emoji: '🏙️', available: true },
-  { name: '大阪府', emoji: '🏯', available: true },
-  { name: '京都府', emoji: '⛩️', available: true },
-  { name: '北海道', emoji: '🐄', available: true },
-  { name: '福岡県', emoji: '🏮', available: true },
-  { name: '神奈川県', emoji: '🌊', available: true },
-  { name: '愛知県', emoji: '🏭', available: true },
-  { name: '埼玉県', emoji: '🌸', available: true },
-  { name: '千葉県', emoji: '🏰', available: true },
-  { name: '兵庫県', emoji: '🦌', available: true },
-  { name: '静岡県', emoji: '🗻', available: true },
-  { name: '広島県', emoji: '🕊️', available: true }
-]
+// 都道府県データ - API経由で取得
+const { 
+  featuredPrefectures, 
+  prefecturesByRegion,
+  fetchPrefectures,
+  fetchPrefecturesByRegion,
+  getPrefectureRoutePath,
+  loading: prefecturesLoading 
+} = usePrefectures()
+
+// 都道府県データを初期化時に取得
+const mainPrefectures = ref([])
+const prefectureRegions = ref([])
 
 // カテゴリリスト
 const categoryList = [
@@ -603,113 +630,70 @@ const categoryList = [
   { name: '観光エリア', emoji: '🌆' }
 ]
 
-// 地域別都道府県データ（人口順）
-const prefectureRegions = [
-  {
-    name: '北海道・東北地方',
-    prefectures: [
-      { name: '北海道', emoji: '🐄', available: true },
-      { name: '宮城県', emoji: '🌾', available: false },
-      { name: '福島県', emoji: '🍑', available: true },
-      { name: '青森県', emoji: '🍎', available: false },
-      { name: '岩手県', emoji: '⛰️', available: false },
-      { name: '山形県', emoji: '🍒', available: false },
-      { name: '秋田県', emoji: '🌾', available: false }
-    ]
-  },
-  {
-    name: '関東地方',
-    prefectures: [
-      { name: '東京都', emoji: '🗼', available: true },
-      { name: '神奈川県', emoji: '🗻', available: true },
-      { name: '埼玉県', emoji: '🌸', available: true },
-      { name: '千葉県', emoji: '🏰', available: true },
-      { name: '茨城県', emoji: '🥔', available: false },
-      { name: '栃木県', emoji: '🍓', available: false },
-      { name: '群馬県', emoji: '🏔️', available: false }
-    ]
-  },
-  {
-    name: '中部地方',
-    prefectures: [
-      { name: '愛知県', emoji: '🏭', available: true },
-      { name: '静岡県', emoji: '🗻', available: true },
-      { name: '新潟県', emoji: '🍚', available: true },
-      { name: '長野県', emoji: '🏔️', available: false },
-      { name: '岐阜県', emoji: '🏯', available: false },
-      { name: '山梨県', emoji: '🍇', available: false },
-      { name: '富山県', emoji: '🏔️', available: false },
-      { name: '石川県', emoji: '🦀', available: false },
-      { name: '福井県', emoji: '🦕', available: false }
-    ]
-  },
-  {
-    name: '近畿地方',
-    prefectures: [
-      { name: '大阪府', emoji: '🏯', available: true },
-      { name: '兵庫県', emoji: '🦌', available: true },
-      { name: '京都府', emoji: '⛩️', available: true },
-      { name: '三重県', emoji: '🦐', available: false },
-      { name: '滋賀県', emoji: '🏞️', available: false },
-      { name: '奈良県', emoji: '🦌', available: false },
-      { name: '和歌山県', emoji: '🍊', available: false }
-    ]
-  },
-  {
-    name: '中国地方',
-    prefectures: [
-      { name: '広島県', emoji: '🕊️', available: true },
-      { name: '岡山県', emoji: '🍑', available: false },
-      { name: '山口県', emoji: '🌉', available: true },
-      { name: '島根県', emoji: '⛩️', available: false },
-      { name: '鳥取県', emoji: '🏜️', available: false }
-    ]
-  },
-  {
-    name: '四国地方',
-    prefectures: [
-      { name: '愛媛県', emoji: '🍊', available: true },
-      { name: '香川県', emoji: '🍜', available: false },
-      { name: '徳島県', emoji: '🌀', available: true },
-      { name: '高知県', emoji: '🐟', available: false }
-    ]
-  },
-  {
-    name: '九州・沖縄地方',
-    prefectures: [
-      { name: '福岡県', emoji: '🏮', available: true },
-      { name: '熊本県', emoji: '🐻', available: false },
-      { name: '鹿児島県', emoji: '🌋', available: true },
-      { name: '長崎県', emoji: '⛪', available: false },
-      { name: '沖縄県', emoji: '🏖️', available: false },
-      { name: '大分県', emoji: '♨️', available: false },
-      { name: '宮崎県', emoji: '🌺', available: false },
-      { name: '佐賀県', emoji: '🏺', available: false }
-    ]
+// 都道府県データ初期化
+const initializePrefectureData = async () => {
+  try {
+    // 全都道府県データを取得（computedプロパティで人口順ソートのため）
+    await fetchPrefectures() // 全データを取得
+    
+    // 主要都道府県データを設定
+    mainPrefectures.value = featuredPrefectures.value.map(p => ({
+      id: p.id,
+      name: p.name,
+      emoji: p.emoji,
+      available: p.is_available
+    }))
+    
+    // デバッグ: 主要都道府県の順番を確認
+    console.log('Featured prefectures order:', mainPrefectures.value.map(p => p.name))
+    
+    // 地域別都道府県データを取得（人口順ソート済み）
+    prefectureRegions.value = Object.entries(prefecturesByRegion.value).map(([regionName, prefectures]) => ({
+      name: regionName,
+      prefectures: prefectures.map(p => ({
+        id: p.id,
+        name: p.name,
+        emoji: p.emoji,
+        available: p.is_available
+      }))
+    }))
+    
+    // デバッグ: 地域の順番と各地域内の都道府県順を確認
+    console.log('Prefecture regions order:', prefectureRegions.value.map(r => r.name))
+    prefectureRegions.value.forEach(region => {
+      console.log(`${region.name}:`, region.prefectures.map(p => p.name))
+    })
+  } catch (error) {
+    console.error('Failed to initialize prefecture data:', error)
+    // フォールバック: 空配列で初期化
+    mainPrefectures.value = []
+    prefectureRegions.value = []
   }
-]
-
-// 都道府県とルートのマッピング
-const prefectureRouteMap = {
-  '東京都': '/tokyo',
-  '大阪府': '/osaka', 
-  '京都府': '/kyoto',
-  '北海道': '/hokkaido',
-  '愛知県': '/aichi',
-  '福岡県': '/fukuoka',
-  '神奈川県': '/kanagawa',
-  '千葉県': '/chiba',
-  '兵庫県': '/hyogo',
-  '静岡県': '/shizuoka',
-  '広島県': '/hiroshima',
-  '愛媛県': '/ehime',
-  '福島県': '/fukushima',
-  '埼玉県': '/saitama',
-  '新潟県': '/niigata',
-  '山口県': '/yamaguchi',
-  '徳島県': '/tokushima',
-  '鹿児島県': '/kagoshima'
 }
+
+// 都道府県データ初期化を実行
+initializePrefectureData()
+
+// 都道府県の背景画像パスを生成
+const getPrefectureImagePath = (prefectureId) => {
+  if (!prefectureId) return ''
+  
+  // ID 25, 33, 38, 44, 47は.jpg形式、その他は.jpeg形式
+  const jpgIds = [25, 33, 38, 44, 47]
+  const extension = jpgIds.includes(prefectureId) ? 'jpg' : 'jpeg'
+  
+  return `/prefectures_image/${prefectureId}.${extension}`
+}
+
+// 画像読み込みエラー時のフォールバック
+const handleImageError = (event) => {
+  const img = event.target
+  if (img.style.backgroundImage) {
+    // 背景画像の場合、グラデーションでフォールバック
+    img.style.backgroundImage = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  }
+}
+
 
 const selectPrefecture = async (prefecture) => {
   if (!prefecture.available) {
@@ -717,15 +701,15 @@ const selectPrefecture = async (prefecture) => {
     return
   }
 
-  const route = prefectureRouteMap[prefecture.name]
-  if (!route) {
+  const routePath = getPrefectureRoutePath(prefecture.name)
+  if (!routePath) {
     console.error('Route not found for prefecture:', prefecture.name)
     alert(`${prefecture.name}のページが見つかりません。`)
     return
   }
 
   try {
-    await navigateTo(route)
+    await navigateTo(`/${routePath}`)
   } catch (error) {
     console.error('Navigation error:', error)
     // Remove alert and use proper error handling

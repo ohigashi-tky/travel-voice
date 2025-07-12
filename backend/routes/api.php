@@ -7,6 +7,7 @@ use App\Http\Controllers\TravelSpotController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\PopularSpotsController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PrefectureController;
 use App\Http\Controllers\Api\AudioGuideController;
 use App\Http\Controllers\Api\TestPollyController;
 
@@ -24,6 +25,14 @@ Route::get('/travel-spots/{id}', [TravelSpotController::class, 'show']);
 
 Route::get('/popular-spots', [PopularSpotsController::class, 'getPopularSpots']);
 Route::delete('/popular-spots/cache', [PopularSpotsController::class, 'clearCache']);
+
+// Prefecture API Routes
+Route::get('/prefectures', [PrefectureController::class, 'index']);
+Route::get('/prefectures/available', [PrefectureController::class, 'available']);
+Route::get('/prefectures/by-region', [PrefectureController::class, 'byRegion']);
+Route::get('/prefectures/{id}', [PrefectureController::class, 'show']);
+Route::get('/prefectures/{id}/spots', [PrefectureController::class, 'spots']);
+Route::get('/prefectures/name/{name}/spots', [PrefectureController::class, 'spotsByName']);
 
 Route::get('/guides/{guide}', [GuideController::class, 'show']);
 
