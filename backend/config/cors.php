@@ -19,7 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:3000',
+        'https://*.railway.app',
+        'https://travel-voice-production.up.railway.app',
+        'https://travel-voice-production-61af.up.railway.app',
+        '*'
+    ],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +35,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];
