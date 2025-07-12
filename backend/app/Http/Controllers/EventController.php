@@ -47,7 +47,8 @@ class EventController extends Controller
             }
 
             // 今後のイベントのみ（デフォルト）
-            if (!$request->filled('include_past')) {
+            // フロントエンドから明示的にinclude_past=trueが送信された場合のみ過去のイベントも含める
+            if (!$request->has('include_past') || $request->get('include_past') !== 'true') {
                 $query->upcoming();
             }
 
@@ -61,13 +62,12 @@ class EventController extends Controller
                 $query->orderBy($sortBy, $sortOrder);
             }
 
-            // ページネーション
-            $perPage = min($request->get('per_page', 100), 5000); // 最大5000件（全件取得対応）
-            $events = $query->paginate($perPage);
+            // 全件取得
+            $events = $query->get();
 
             return response()->json([
                 'success' => true,
-                'data' => $events->items(),
+                'data' => $events,
                 'message' => 'イベント情報を取得しました。'
             ]);
 

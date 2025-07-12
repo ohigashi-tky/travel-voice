@@ -245,9 +245,9 @@
               </div>
 
               <!-- Tags -->
-              <div class="flex flex-wrap gap-1 mt-2">
+              <div v-if="getEventTags(event).length > 0" class="flex flex-wrap gap-1 mt-2">
                 <span 
-                  v-for="tag in event.tags.slice(0, 3)" 
+                  v-for="tag in getEventTags(event).slice(0, 3)" 
                   :key="tag"
                   class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded text-xs"
                 >
@@ -452,21 +452,11 @@ const filteredEvents = computed(() => {
   // Category filter
   if (selectedCategory.value) {
     filtered = filtered.filter(event => {
-      const eventTags = event.tags || []
+      const eventTags = getEventTags(event)
       const category = selectedCategory.value
-      
-      // タグが配列であることを確認
-      if (!Array.isArray(eventTags)) {
-        console.warn('Event tags is not an array:', event.title, eventTags)
-        return false
-      }
       
       // Check if any tag matches the selected category
       return eventTags.some(tag => {
-        // タグが文字列であることを確認
-        if (typeof tag !== 'string') {
-          return false
-        }
         
         // Handle specific category mappings
         switch (category) {
@@ -584,6 +574,30 @@ const formatDateRange = (startDate, endDate) => {
   
   // Different months
   return `${start.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}`
+}
+
+// Get event tags as array (handle both string and array formats)
+const getEventTags = (event) => {
+  if (!event.tags) return []
+  
+  // If already an array, return it
+  if (Array.isArray(event.tags)) {
+    return event.tags.filter(tag => tag && typeof tag === 'string')
+  }
+  
+  // If string, try to parse as JSON
+  if (typeof event.tags === 'string') {
+    try {
+      const parsed = JSON.parse(event.tags)
+      if (Array.isArray(parsed)) {
+        return parsed.filter(tag => tag && typeof tag === 'string')
+      }
+    } catch (e) {
+      console.warn('Failed to parse event tags:', event.tags)
+    }
+  }
+  
+  return []
 }
 
 // Filter events when filters change

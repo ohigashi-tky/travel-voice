@@ -11,8 +11,12 @@
   - バックエンド: Laravel 11, PHP 8.2
   - フロントエンド: Nuxt.js 3, Vue 3, Tailwind CSS
   - 音声合成: Amazon Polly (Takumi/Tomoko)
+  - **データベース: MySQL (Docker環境) - 絶対にSQLiteは使用禁止**
 
 ## 開発時の注意事項
+- **MySQL Docker必須**: このプロジェクトはMySQLのDockerコンテナを使用する（SQLite使用禁止）
+- docker-compose.ymlでMySQLが定義済み（ポート3306で稼働）
+- **データベース設定変更禁止**: .envファイルのデータベース接続情報（DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD）を勝手に変更してはいけない
 - 音声ファイルは public storage に保存
 - Laravel の storage:link が必要
 - 24時間キャッシュによる音声ガイドテキスト管理

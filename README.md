@@ -71,12 +71,12 @@ docker compose exec backend php artisan migrate --seed
 - **Laravel 11** - 高性能PHPフレームワーク
 - **PHP 8.2+** - 最新PHP機能活用
 - **Laravel Sanctum** - API認証システム
-- **SQLite** - 軽量データベース
+- **MySQL** - データベース（Docker環境）
 
 ### AI・音声技術
 - **Amazon Polly Neural Engine** - 自然な日本語音声合成
 - **OpenRouter API** - AI応答生成（Google Gemini 2.5 Flash使用）
-  - **重要**: 本プロジェクトではOpenRouter APIのみ使用。OpenAI APIは使用しません。
+  - **重要**: 本プロジェクトではOpenRouter APIのみ使用。
 
 ### Infrastructure
 - **Docker**
@@ -91,6 +91,7 @@ travel-voice/
 │   ├── 📄 pages/            # ページコンポーネント
 │   │   ├── index.vue        # メインページ（人気スポット・都道府県選択）
 │   │   ├── login.vue        # ログインページ
+│   │   ├── events.vue       # イベント情報一覧ページ
 │   │   ├── spots/[id].vue   # 観光地詳細・音声ガイドページ
 │   │   └── prefecture/      # 都道府県別ページ
 │   ├── 🧩 components/       # 共通コンポーネント
@@ -163,6 +164,12 @@ docker compose exec frontend npm run type-check    # 型チェック
 | `GET` | `/api/prefectures/{id}` | 都道府県詳細 | ❌ |
 | `GET` | `/api/prefectures/{id}/spots` | 都道府県別観光地 | ❌ |
 | `GET` | `/api/prefectures/name/{name}/spots` | 都道府県名で観光地検索 | ❌ |
+| `GET` | `/api/events` | イベント情報一覧 | ❌ |
+| `GET` | `/api/events/{id}` | イベント詳細 | ❌ |
+| `GET` | `/api/events/count-by-prefecture` | 都道府県別イベント数 | ❌ |
+| `GET` | `/api/events/popular-tags` | 人気タグ一覧 | ❌ |
+| `GET` | `/api/events/featured` | おすすめイベント | ❌ |
+| `GET` | `/api/events/current` | 現在開催中イベント | ❌ |
 
 ## 📸 画像管理システム
 
@@ -191,10 +198,17 @@ docker compose exec backend php artisan travel-spots:fetch-images
 # 全ての画像を強制再取得（既存も含む）
 docker compose exec backend php artisan travel-spots:fetch-images --force
 
-# イベント情報管理（OpenRouter API使用）
+# 🎪 イベント情報管理（OpenRouter API使用）
 docker compose exec backend php artisan events:fetch              # 全都道府県のイベント情報取得
 docker compose exec backend php artisan events:fetch --prefecture=東京都  # 特定都道府県のみ
 docker compose exec backend php artisan events:fetch --force      # 既存データ削除して再取得
+
+## 🎪 イベント情報管理
+
+### データ管理方式
+- **ローカル環境**: OpenRouter APIで自動生成された1393件のイベントデータをMySQLで管理
+- **Railway本番環境**: Seederで登録した164件のイベントデータで運用
+- **place_id管理**: Railway環境では観光地のplace_idもSeederで事前登録済み
 ```
 
 ## 🗾 都道府県管理システム
