@@ -4,7 +4,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "bash deploy.sh",
     "healthcheckPath": "/up",
     "healthcheckTimeout": 300
   }
