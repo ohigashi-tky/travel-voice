@@ -33,7 +33,12 @@ export const useTouristSpots = () => {
         apiBaseUrl = config.apiBaseServer
       } else {
         const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
-        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+        if (isLocalDev) {
+          apiBaseUrl = 'http://localhost:8000'
+        } else {
+          // Railway production: use same domain
+          apiBaseUrl = config.public.apiBase || ''
+        }
       }
       const response = await $fetch(`${apiBaseUrl}/api/travel-spots`)
       
@@ -62,7 +67,12 @@ export const useTouristSpots = () => {
         apiBaseUrl = config.apiBaseServer
       } else {
         const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
-        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+        if (isLocalDev) {
+          apiBaseUrl = 'http://localhost:8000'
+        } else {
+          // Railway production: use same domain
+          apiBaseUrl = config.public.apiBase || ''
+        }
       }
       const response = await $fetch(`${apiBaseUrl}/api/travel-spots`)
       
@@ -116,7 +126,12 @@ export const useTouristSpots = () => {
         apiBaseUrl = config.apiBaseServer
       } else {
         const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
-        apiBaseUrl = isLocalDev ? 'http://localhost:8000' : config.public.apiBase
+        if (isLocalDev) {
+          apiBaseUrl = 'http://localhost:8000'
+        } else {
+          // Railway production: use same domain
+          apiBaseUrl = config.public.apiBase || ''
+        }
       }
       
       const response = await $fetch<{

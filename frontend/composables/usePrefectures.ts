@@ -108,9 +108,11 @@ export const usePrefectures = () => {
       loading.value = true
       error.value = null
 
+      // Railway production: use same domain
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? '' : config.public.apiBase
       const endpoint = availableOnly 
-        ? `${config.public.apiBase}/api/prefectures/available`
-        : `${config.public.apiBase}/api/prefectures`
+        ? `${apiBase}/api/prefectures/available`
+        : `${apiBase}/api/prefectures`
 
       const response = await $fetch<{success: boolean, data: Prefecture[]}>(endpoint)
       
@@ -138,7 +140,9 @@ export const usePrefectures = () => {
       loading.value = true
       error.value = null
 
-      const response = await $fetch<{success: boolean, data: PrefecturesByRegion}>(`${config.public.apiBase}/api/prefectures/by-region`)
+      // Railway production: use same domain
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? '' : config.public.apiBase
+      const response = await $fetch<{success: boolean, data: PrefecturesByRegion}>(`${apiBase}/api/prefectures/by-region`)
       
       if (response.success) {
         // 各都道府県に絵文字とルートパスを追加
@@ -179,7 +183,9 @@ export const usePrefectures = () => {
   // 都道府県別観光地取得
   const fetchPrefectureSpots = async (prefectureName: string) => {
     try {
-      const response = await $fetch<{success: boolean, data: {prefecture: Prefecture, spots: any[]}}>(`${config.public.apiBase}/api/prefectures/name/${prefectureName}/spots`)
+      // Railway production: use same domain
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? '' : config.public.apiBase
+      const response = await $fetch<{success: boolean, data: {prefecture: Prefecture, spots: any[]}}>(`${apiBase}/api/prefectures/name/${prefectureName}/spots`)
       
       if (response.success) {
         return response.data
