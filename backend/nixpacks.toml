@@ -1,5 +1,5 @@
 [phases.setup]
-aptPkgs = ["sqlite3"]
+# SQLiteパッケージを削除 - MySQLのみ使用
 
 [phases.install]
 cmds = ["composer install --no-dev --optimize-autoloader"]
