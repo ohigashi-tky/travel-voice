@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Add CORS middleware globally for API routes
         $middleware->api(prepend: [
             \Illuminate\Http\Middleware\HandleCors::class,
+            \App\Http\Middleware\CorsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
