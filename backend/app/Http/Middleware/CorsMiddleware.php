@@ -29,8 +29,7 @@ class CorsMiddleware
             $allowedOrigins = [
                 'http://localhost:3000',
                 'https://travel-voice-production.up.railway.app',
-                'https://travel-voice-production-61af.up.railway.app',
-                'https://travel-voice-production-f.up.railway.app'
+                'https://travel-voice-production-61af.up.railway.app'
             ];
             
             if (in_array($origin, $allowedOrigins) || 
