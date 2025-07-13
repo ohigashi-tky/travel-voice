@@ -57,6 +57,16 @@ Route::get('/health', function () {
     ]);
 });
 
+// Simple test endpoint
+Route::get('/test', function () {
+    return response()->json([
+        'status' => 'success',
+        'message' => 'API is working',
+        'cors' => 'enabled',
+        'timestamp' => now()
+    ]);
+});
+
 Route::get('/debug/prefectures', function () {
     try {
         $count = \App\Models\Prefecture::count();

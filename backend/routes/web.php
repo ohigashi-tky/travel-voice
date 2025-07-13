@@ -5,7 +5,21 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Laravel backend is running',
+        'timestamp' => now()
+    ]);
+});
+
+// Health check endpoint for Railway
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'healthy',
+        'service' => 'backend',
+        'port' => request()->server('SERVER_PORT'),
+        'timestamp' => now()
+    ]);
 });
 
 // Route to serve audio files (WAV) - シンプルなストリーミング対応

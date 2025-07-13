@@ -7,9 +7,10 @@ echo "🚀 Starting deployment initialization..."
 export APP_ENV=production
 export APP_DEBUG=false
 
+# Railwayが提供するPORT環境変数を使用（通常8080）
 # デフォルトポート設定
 if [ -z "$PORT" ]; then
-    export PORT=8000
+    export PORT=8080
 fi
 
 echo "📋 Environment: APP_ENV=$APP_ENV, PORT=$PORT"
