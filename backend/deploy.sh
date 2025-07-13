@@ -15,21 +15,26 @@ if [ -z "$PORT" ]; then
 fi
 
 echo "📋 Environment: APP_ENV=$APP_ENV, PORT=$PORT"
+echo "📋 Database: DB_CONNECTION=$DB_CONNECTION"
+
+# MySQL環境変数チェック
+if [ "$DB_CONNECTION" = "mysql" ]; then
+    echo "📋 MySQL Config: HOST=$MYSQLHOST, DATABASE=$MYSQLDATABASE, USER=$MYSQLUSER"
+    if [ -z "$MYSQLHOST" ]; then
+        echo "❌ ERROR: MySQL environment variables not set!"
+        echo "Please add MySQL service to Railway project"
+        exit 1
+    fi
+fi
 
 # 1. キー生成（強制実行）
 echo "🔑 Generating application key..."
 php artisan key:generate --force --no-interaction
 echo "APP_KEY: $APP_KEY"
 
-# 2. データベースファイル作成確認
-echo "💾 Setting up database..."
-mkdir -p database
-if [ ! -f database/database.sqlite ]; then
-    touch database/database.sqlite
-    echo "Created new SQLite database file"
-fi
-chmod 666 database/database.sqlite || true
-ls -la database/database.sqlite
+# 2. データベース接続確認（MySQL）
+echo "💾 Testing MySQL connection..."
+php artisan migrate:status || echo "Database connection test - will be established during migration"
 
 # 3. キャッシュクリア
 echo "🧹 Clearing caches..."
