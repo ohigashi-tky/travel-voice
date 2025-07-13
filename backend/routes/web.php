@@ -22,10 +22,6 @@ Route::get('/health', function () {
     ]);
 });
 
-// Railway health check endpoint
-Route::get('/up', function () {
-    return response('OK', 200);
-});
 
 // Route to serve audio files (WAV) - シンプルなストリーミング対応
 Route::get('/storage/audio/polly/{filename}', function ($filename) {
