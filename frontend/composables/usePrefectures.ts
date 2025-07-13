@@ -108,8 +108,8 @@ export const usePrefectures = () => {
       loading.value = true
       error.value = null
 
-      // Railway production: use same domain
-      const apiBase = process.client && window.location.hostname !== 'localhost' ? '' : config.public.apiBase
+      // Railway production: use backend URL
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? 'https://travel-voice-production.up.railway.app' : config.public.apiBase
       const endpoint = availableOnly 
         ? `${apiBase}/api/prefectures/available`
         : `${apiBase}/api/prefectures`
@@ -140,8 +140,8 @@ export const usePrefectures = () => {
       loading.value = true
       error.value = null
 
-      // Railway production: use same domain
-      const apiBase = process.client && window.location.hostname !== 'localhost' ? '' : config.public.apiBase
+      // Railway production: use backend URL
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? 'https://travel-voice-production.up.railway.app' : config.public.apiBase
       const response = await $fetch<{success: boolean, data: PrefecturesByRegion}>(`${apiBase}/api/prefectures/by-region`)
       
       if (response.success) {
@@ -183,8 +183,8 @@ export const usePrefectures = () => {
   // 都道府県別観光地取得
   const fetchPrefectureSpots = async (prefectureName: string) => {
     try {
-      // Railway production: use same domain
-      const apiBase = process.client && window.location.hostname !== 'localhost' ? '' : config.public.apiBase
+      // Railway production: use backend URL
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? 'https://travel-voice-production.up.railway.app' : config.public.apiBase
       const response = await $fetch<{success: boolean, data: {prefecture: Prefecture, spots: any[]}}>(`${apiBase}/api/prefectures/name/${prefectureName}/spots`)
       
       if (response.success) {

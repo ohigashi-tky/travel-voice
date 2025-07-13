@@ -32,12 +32,12 @@ export const useTouristSpots = () => {
       if (process.server) {
         apiBaseUrl = config.apiBaseServer
       } else {
-        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        const isLocalDev = window.location.hostname === 'localhost'
         if (isLocalDev) {
           apiBaseUrl = 'http://localhost:8000'
         } else {
-          // Railway production: use same domain
-          apiBaseUrl = config.public.apiBase || ''
+          // Railway production: use backend URL
+          apiBaseUrl = 'https://travel-voice-production.up.railway.app'
         }
       }
       const response = await $fetch(`${apiBaseUrl}/api/travel-spots`)
@@ -66,12 +66,12 @@ export const useTouristSpots = () => {
       if (process.server) {
         apiBaseUrl = config.apiBaseServer
       } else {
-        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        const isLocalDev = window.location.hostname === 'localhost'
         if (isLocalDev) {
           apiBaseUrl = 'http://localhost:8000'
         } else {
-          // Railway production: use same domain
-          apiBaseUrl = config.public.apiBase || ''
+          // Railway production: use backend URL
+          apiBaseUrl = 'https://travel-voice-production.up.railway.app'
         }
       }
       const response = await $fetch(`${apiBaseUrl}/api/travel-spots`)
@@ -125,12 +125,12 @@ export const useTouristSpots = () => {
       if (process.server) {
         apiBaseUrl = config.apiBaseServer
       } else {
-        const isLocalDev = window.location.hostname === 'localhost' && window.location.port === '3000'
+        const isLocalDev = window.location.hostname === 'localhost'
         if (isLocalDev) {
           apiBaseUrl = 'http://localhost:8000'
         } else {
-          // Railway production: use same domain
-          apiBaseUrl = config.public.apiBase || ''
+          // Railway production: use backend URL
+          apiBaseUrl = 'https://travel-voice-production.up.railway.app'
         }
       }
       

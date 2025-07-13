@@ -24,8 +24,16 @@ class CorsMiddleware
             $response = $next($request);
         }
 
-        // Set CORS headers - Allow all origins
-        $response->headers->set('Access-Control-Allow-Origin', '*');
+        // Set CORS headers - Allow all origins including specific Railway frontend
+        $origin = $request->headers->get('Origin');
+        if ($origin === 'https://travel-voice-production-61af.up.railway.app' || 
+            $origin === 'https://travel-voice-production-61af.up.railway.app:8080' ||
+            str_contains($origin, 'localhost') || 
+            str_contains($origin, 'railway.app')) {
+            $response->headers->set('Access-Control-Allow-Origin', $origin);
+        } else {
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+        }
         
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin, X-CSRF-TOKEN');
