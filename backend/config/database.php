@@ -33,7 +33,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => null,
+            'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
