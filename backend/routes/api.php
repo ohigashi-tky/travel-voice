@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/travel-spots', [TravelSpotController::class, 'index']);
 Route::get('/travel-spots/{id}', [TravelSpotController::class, 'show']);
+Route::get('/travel-spots/prefecture/{prefectureId}', [TravelSpotController::class, 'getByPrefecture']);
 
 Route::get('/popular-spots', [PopularSpotsController::class, 'getPopularSpots']);
 Route::delete('/popular-spots/cache', [PopularSpotsController::class, 'clearCache']);

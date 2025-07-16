@@ -39,24 +39,72 @@
 
 ## テストコマンド
 - フロントエンド: `npm run dev` (ポート: 3000)
-- バックエンド: `php artisan serve --port=8000`
-- ストレージリンク: `php artisan storage:link`
+- バックエンド: `docker compose exec backend php artisan serve --host=0.0.0.0 --port=8000`
+- ストレージリンク: `docker compose exec backend php artisan storage:link`
+
+## Laravel Artisanコマンド実行方法
+**重要**: 全てのLaravelコマンドは必ずDocker Composeを使用して実行してください
+```bash
+# 基本形式
+docker compose exec backend php artisan [コマンド]
+
+# 例
+docker compose exec backend php artisan migrate
+docker compose exec backend php artisan db:seed
+docker compose exec backend php artisan cache:clear
+
+# データベースリセット＋全シーダー実行
+docker compose exec backend php artisan migrate:fresh --seed
+```
 
 ## 観光地データ管理コマンド
-- place_id一括更新: `php artisan travel-spots:update-place-ids`
-- place_id強制更新: `php artisan travel-spots:update-place-ids --force`
-- 写真一括取得: `php artisan travel-spots:fetch-images`
-- 写真強制再取得: `php artisan travel-spots:fetch-images --force`
+- place_id一括更新: `docker compose exec backend php artisan travel-spots:update-place-ids`
+- place_id強制更新: `docker compose exec backend php artisan travel-spots:update-place-ids --force`
+- 写真一括取得: `docker compose exec backend php artisan travel-spots:fetch-images`
+- 写真強制再取得: `docker compose exec backend php artisan travel-spots:fetch-images --force`
 
 ## 新しい観光地の追加手順
 1. **データ追加**: `database/seeders/TravelSpotSeeder.php`に新しい観光地データを追加
-2. **シーダー実行**: `php artisan db:seed --class=TravelSpotSeeder`
-3. **写真取得**: `php artisan travel-spots:fetch-images`
-4. **place_id更新**: `php artisan travel-spots:update-place-ids`（必要に応じて）
+2. **シーダー実行**: `docker compose exec backend php artisan db:seed --class=TravelSpotSeeder`
+3. **写真取得**: `docker compose exec backend php artisan travel-spots:fetch-images`（新しい観光地のみ自動取得）
+4. **place_id更新**: `docker compose exec backend php artisan travel-spots:update-place-ids`（必要に応じて）
+
+## 完全リフレッシュ手順（推奨）
+```bash
+# 1. データベースリセット＋全シーダー実行
+docker compose exec backend php artisan migrate:fresh --seed
+
+# 2. 新しい観光地の画像を自動取得
+docker compose exec backend php artisan travel-spots:fetch-images
+```
+
+## 自動実行される処理
+**Railway環境**:
+- データベースマイグレーション（既存データ保持）
+- 全シーダー実行
+- サーバー起動
+
+**ローカル環境**:
+- データベースマイグレーション
+- 全シーダー実行
+- サーバー起動
+
+## 画像取得について
+**重要**: 画像取得は自動実行されません（APIコスト削減のため）
+
+**新しい観光地追加時の手動実行**:
+```bash
+# Railway環境（デプロイ後に一回だけ実行）
+Railway CLI: railway run php artisan travel-spots:fetch-images
+
+# ローカル環境
+docker compose exec backend php artisan travel-spots:fetch-images
+```
 
 **注意**: 
 - 全てのデータはtravel_spotsテーブルから取得する（ハードコーディング禁止）
-- 新しい観光地の写真は自動的にGoogle Places APIから取得される
+- 新しい観光地の写真は手動で取得する（APIコスト管理）
+- 既存の観光地画像は再取得されない（効率的な運用）
 - place_idが空の場合のみ自動取得される（`--force`オプションで強制更新可能）
 
 ## Railway環境での重要な教訓（2025年7月13日）

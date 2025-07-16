@@ -41,4 +41,20 @@ class TravelSpotController extends Controller
         ]);
     }
 
+    /**
+     * Get travel spots by prefecture ID.
+     */
+    public function getByPrefecture(int $prefectureId): JsonResponse
+    {
+        $spots = TravelSpot::with('spotImages')
+            ->where('prefecture_id', $prefectureId)
+            ->orderBy('rating', 'desc')
+            ->get();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $spots
+        ]);
+    }
+
 }

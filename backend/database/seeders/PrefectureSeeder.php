@@ -79,7 +79,7 @@ class PrefectureSeeder extends Seeder
         $availablePrefectures = [
             '北海道', '東京都', '神奈川県', '埼玉県', '千葉県', '新潟県', '静岡県', '愛知県',
             '京都府', '大阪府', '兵庫県', '広島県', '山口県', '徳島県', '愛媛県', '福岡県',
-            '福島県', '鹿児島県'
+            '福島県', '鹿児島県', '沖縄県'
         ];
 
         foreach ($prefectures as $prefecture) {

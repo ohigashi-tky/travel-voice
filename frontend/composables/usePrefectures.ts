@@ -99,7 +99,8 @@ export const usePrefectures = () => {
     '新潟県': 'niigata',
     '山口県': 'yamaguchi',
     '徳島県': 'tokushima',
-    '鹿児島県': 'kagoshima'
+    '鹿児島県': 'kagoshima',
+    '沖縄県': 'okinawa'
   }
 
   // 全都道府県取得
