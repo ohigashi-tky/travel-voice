@@ -64,10 +64,18 @@ docker compose exec backend php artisan migrate:fresh --seed
 - 写真強制再取得: `docker compose exec backend php artisan travel-spots:fetch-images --force`
 
 ## 新しい観光地の追加手順
-1. **データ追加**: `database/seeders/TravelSpotSeeder.php`に新しい観光地データを追加
+
+### **ローカル環境での作業**
+1. **観光地データ追加**: `database/seeders/TravelSpotSeeder.php`に新しい観光地データを追加
 2. **シーダー実行**: `docker compose exec backend php artisan db:seed --class=TravelSpotSeeder`
-3. **写真取得**: `docker compose exec backend php artisan travel-spots:fetch-images`（新しい観光地のみ自動取得）
-4. **place_id更新**: `docker compose exec backend php artisan travel-spots:update-place-ids`（必要に応じて）
+3. **画像取得**: `docker compose exec backend php artisan travel-spots:fetch-images`（新しい観光地のみ）
+4. **画像データをシーダー化**: 取得した画像データを`database/seeders/TravelSpotImageSeeder.php`に追加
+5. **place_id更新**: `docker compose exec backend php artisan travel-spots:update-place-ids`（必要に応じて）
+
+### **Railway環境での動作**
+- 自動実行: マイグレーション → シーダー実行（観光地データ + 画像データ）
+- **Google Places API呼び出しなし**（コスト削減）
+- 画像データは事前にシーダーで準備済み
 
 ## 完全リフレッシュ手順（推奨）
 ```bash
@@ -90,21 +98,25 @@ docker compose exec backend php artisan travel-spots:fetch-images
 - サーバー起動
 
 ## 画像取得について
-**重要**: 画像取得は自動実行されません（APIコスト削減のため）
 
-**新しい観光地追加時の手動実行**:
-```bash
-# Railway環境（デプロイ後に一回だけ実行）
-Railway CLI: railway run php artisan travel-spots:fetch-images
+### **ローカル環境とRailway環境の違い**
 
-# ローカル環境
-docker compose exec backend php artisan travel-spots:fetch-images
-```
+| 項目 | ローカル環境 | Railway環境 |
+|------|-------------|-------------|
+| 画像取得方法 | `travel-spots:fetch-images`コマンド | シーダーで事前準備済み |
+| Google Places API呼び出し | あり（新規観光地のみ） | なし |
+| APIコスト | 少量（新規分のみ） | ゼロ |
+| 画像データソース | `travel_spot_images`テーブル | `travel_spot_images`テーブル |
+
+### **開発フロー**
+1. **ローカル**: 新しい観光地追加 → 画像取得コマンド実行
+2. **シーダー更新**: 取得した画像データをシーダーに追加
+3. **Railway**: シーダーで画像データも含めて自動復元
 
 **注意**: 
 - 全てのデータはtravel_spotsテーブルから取得する（ハードコーディング禁止）
-- 新しい観光地の写真は手動で取得する（APIコスト管理）
-- 既存の観光地画像は再取得されない（効率的な運用）
+- Railway環境ではAPIコスト発生なし（シーダーで画像データ管理）
+- 新しい観光地追加時はローカルで画像取得してシーダー更新が必要
 - place_idが空の場合のみ自動取得される（`--force`オプションで強制更新可能）
 
 ## Railway環境での重要な教訓（2025年7月13日）

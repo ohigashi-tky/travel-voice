@@ -39,5 +39,5 @@ RUN composer install --optimize-autoloader
 # Expose port 8000
 EXPOSE 8000
 
-# Run migrations, seed and start Laravel server
-CMD php artisan migrate --no-interaction && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=8000
+# Run migrations, seed, fetch images and start Laravel server
+CMD php artisan migrate --force && php artisan db:seed --force && php artisan travel-spots:fetch-images && php artisan serve --host=0.0.0.0 --port=8000
