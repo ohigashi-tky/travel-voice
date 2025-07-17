@@ -84,7 +84,10 @@ class PrefectureSeeder extends Seeder
 
         foreach ($prefectures as $prefecture) {
             $prefecture['is_available'] = in_array($prefecture['name'], $availablePrefectures);
-            Prefecture::create($prefecture);
+            Prefecture::firstOrCreate(
+                ['name' => $prefecture['name']],
+                $prefecture
+            );
         }
     }
 }

@@ -230,18 +230,24 @@ class FetchEventsCommand extends Command
                     ? $this->parseDate($eventData['end_date']) 
                     : $startDate;
                 
-                Event::create([
-                    'title' => $eventData['title'],
-                    'description' => $eventData['description'] ?? '',
-                    'overview' => $eventData['overview'] ?? '',
-                    'prefecture' => $prefecture,
-                    'location' => $eventData['location'] ?? '',
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'category' => $eventData['category'] ?? 'その他',
-                    'tags' => $eventData['tags'] ?? [],
-                    'access' => $eventData['access'] ?? '',
-                    'url' => $eventData['url'] ?? '',
+                Event::updateOrCreate(
+                    [
+                        'title' => $eventData['title'],
+                        'prefecture' => $prefecture,
+                        'start_date' => $startDate,
+                    ],
+                    [
+                        'title' => $eventData['title'],
+                        'description' => $eventData['description'] ?? '',
+                        'overview' => $eventData['overview'] ?? '',
+                        'prefecture' => $prefecture,
+                        'location' => $eventData['location'] ?? '',
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'category' => $eventData['category'] ?? 'その他',
+                        'tags' => $eventData['tags'] ?? [],
+                        'access' => $eventData['access'] ?? '',
+                        'url' => $eventData['url'] ?? '',
                     'organizer' => $eventData['organizer'] ?? '',
                     'display_order' => $index,
                     'is_active' => true,

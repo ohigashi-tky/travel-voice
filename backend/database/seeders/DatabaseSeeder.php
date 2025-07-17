@@ -23,12 +23,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Seed prefectures, travel spots, guides and basic events
+        // Seed prefectures, travel spots, guides and pronunciation corrections
         $this->call([
             PrefectureSeeder::class,
             TravelSpotSeeder::class,
             AllGuidesSeeder::class, // 全観光地のガイドを自動生成
-            EventSeeder::class,
             PronunciationCorrectionSeeder::class,
         ]);
     }
