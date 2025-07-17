@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
                 // バックグラウンドでイベント取得を実行
                 register_shutdown_function(function () {
                     try {
-                        Artisan::call('events:fetch');
+                        Artisan::call('events:fetch', ['--force' => true]);
                         \Log::info('イベント取得バッチが正常に完了しました');
                     } catch (\Exception $e) {
                         \Log::error('イベント取得バッチでエラーが発生しました: ' . $e->getMessage());
