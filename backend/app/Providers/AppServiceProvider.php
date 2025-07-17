@@ -33,23 +33,5 @@ class AppServiceProvider extends ServiceProvider
             ]);
         }
         
-        // Railway環境でのイベント取得自動実行
-        if (config('app.env') === 'production' && env('RUN_EVENTS_FETCH', 'false') === 'true') {
-            $this->app->booted(function () {
-                if (!$this->app->runningInConsole() || $this->app->runningUnitTests()) {
-                    return;
-                }
-                
-                // バックグラウンドでイベント取得を実行
-                register_shutdown_function(function () {
-                    try {
-                        Artisan::call('events:fetch', ['--force' => true]);
-                        \Log::info('イベント取得バッチが正常に完了しました');
-                    } catch (\Exception $e) {
-                        \Log::error('イベント取得バッチでエラーが発生しました: ' . $e->getMessage());
-                    }
-                });
-            });
-        }
     }
 }
