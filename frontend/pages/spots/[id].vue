@@ -39,7 +39,11 @@
           <!-- Images Gallery -->
           <section class="mb-2 px-4">
             <div class="relative">
-              <div class="flex gap-4 overflow-x-auto scroll-smooth gallery-scroll">
+              <div 
+                ref="galleryContainer"
+                class="flex gap-4 overflow-x-auto scroll-smooth gallery-scroll"
+                @scroll="handleScroll"
+              >
                 <!-- Google Place Photo Main -->
                 <div class="flex-shrink-0 w-full aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
                   <PlacePhotoImage 
@@ -70,8 +74,9 @@
                 <button
                   v-for="(_, index) in getTotalImageCount"
                   :key="index"
-                  class="w-2 h-2 rounded-full transition-all duration-300"
-                  :class="index === 0 ? 'bg-blue-600 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-600'"
+                  @click="scrollToImage(index)"
+                  class="w-2 h-2 rounded-full transition-all duration-300 cursor-pointer hover:bg-blue-400"
+                  :class="index === currentImageIndex ? 'bg-blue-600 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-600'"
                 />
               </div>
             </div>
@@ -260,6 +265,11 @@ const currentSpot = ref<any>(null)
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 
+// Image gallery management
+const currentImageIndex = ref(0)
+const galleryContainer = ref<HTMLElement | null>(null)
+let autoScrollInterval: NodeJS.Timeout | null = null
+
 // Access tab management
 const accessTab = ref('transport')
 const availableTabs = ref<string[]>([])
@@ -419,6 +429,58 @@ const goBack = () => {
   navigateTo('/')
 }
 
+// Image gallery functions
+const handleScroll = () => {
+  if (!galleryContainer.value) return
+  
+  const scrollLeft = galleryContainer.value.scrollLeft
+  const scrollWidth = galleryContainer.value.scrollWidth
+  const clientWidth = galleryContainer.value.clientWidth
+  
+  // Calculate current image index based on scroll position
+  const imageWidth = clientWidth
+  const gap = 16 // 4 * 4px (gap-4 in Tailwind)
+  const index = Math.round(scrollLeft / (imageWidth + gap))
+  
+  currentImageIndex.value = Math.min(index, getTotalImageCount.value - 1)
+}
+
+const scrollToImage = (index: number) => {
+  if (!galleryContainer.value) return
+  
+  const imageWidth = galleryContainer.value.clientWidth
+  const gap = 16 // 4 * 4px (gap-4 in Tailwind)
+  const scrollPosition = index * (imageWidth + gap)
+  
+  galleryContainer.value.scrollTo({
+    left: scrollPosition,
+    behavior: 'smooth'
+  })
+  
+  currentImageIndex.value = index
+  
+  // Reset auto-scroll timer when user interacts
+  stopAutoScroll()
+  startAutoScroll()
+}
+
+const startAutoScroll = () => {
+  // Only start auto-scroll if there are multiple images
+  if (getTotalImageCount.value <= 1) return
+  
+  autoScrollInterval = setInterval(() => {
+    const nextIndex = (currentImageIndex.value + 1) % getTotalImageCount.value
+    scrollToImage(nextIndex)
+  }, 5000) // Change image every 5 seconds
+}
+
+const stopAutoScroll = () => {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval)
+    autoScrollInterval = null
+  }
+}
+
 // Load spot data on mount
 onMounted(async () => {
   try {
@@ -458,6 +520,10 @@ onMounted(async () => {
       // Initialize access tabs
       initializeTabs()
       
+      // Start auto-scroll for images
+      await nextTick()
+      startAutoScroll()
+      
       // Update page title
       useHead({
         title: `${spot.name} - Travel Voice`
@@ -476,6 +542,9 @@ onMounted(async () => {
 // Watch for route changes
 watch(() => route.params.id, async (newId) => {
   if (newId) {
+    // Stop auto-scroll when changing spots
+    stopAutoScroll()
+    
     const numericId = parseInt(newId as string)
     
     // travel_spots API優先
@@ -491,8 +560,16 @@ watch(() => route.params.id, async (newId) => {
       await loadGalleryPhotos()
       // Re-initialize tabs
       initializeTabs()
+      // Restart auto-scroll
+      await nextTick()
+      startAutoScroll()
     }
   }
+})
+
+// Clean up on unmount
+onUnmounted(() => {
+  stopAutoScroll()
 })
 </script>
 
