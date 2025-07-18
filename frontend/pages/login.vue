@@ -59,7 +59,7 @@
                 type="password"
                 required
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
-                placeholder="TravelGuide2024!"
+                placeholder="demo1234"
               />
             </div>
 
@@ -99,7 +99,7 @@
           <p class="text-blue-700 dark:text-blue-300 text-sm text-center">
             <strong>デモ用アカウント:</strong><br>
             メール: demo@example.com<br>
-            パスワード: TravelGuide2024!
+            パスワード: demo1234
           </p>
         </div>
       </div>

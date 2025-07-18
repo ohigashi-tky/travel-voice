@@ -26,10 +26,10 @@ export const useAuthStore = defineStore('auth', () => {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // Mock authentication - in real app, this would be an API call
-      if (email === 'demo@example.com' && password === 'TravelGuide2024!') {
+      if (email === 'demo@example.com' && password === 'demo1234') {
         user.value = {
           id: 1,
-          name: '田中太郎',
+          name: 'デモアカウント',
           email: email
         }
         
