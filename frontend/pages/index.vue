@@ -327,7 +327,7 @@
         @click.stop
       >
         <!-- Modal Header -->
-        <div class="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
+        <div class="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between z-10">
           <h2 class="text-xl font-semibold text-gray-800 dark:text-white">都道府県を選択</h2>
           <button
             @click="showPrefectureModal = false"
@@ -374,7 +374,7 @@
                 <!-- Overlay -->
                 <div class="absolute inset-0 bg-black bg-opacity-40 hover:bg-opacity-30 transition-all duration-200"></div>
                 <!-- Prefecture Name -->
-                <div class="relative z-10 h-full flex items-center justify-center">
+                <div class="relative h-full flex items-center justify-center">
                   <span class="text-white text-sm font-medium text-center px-2 leading-tight">
                     {{ prefecture.name }}
                   </span>
@@ -733,6 +733,17 @@ const selectPrefectureFromModal = async (prefecture) => {
   await selectPrefecture(prefecture)
 }
 
+// モーダル表示時のスクロール制御
+watch(showPrefectureModal, (newValue) => {
+  if (newValue) {
+    // モーダル表示時：bodyのスクロールを無効化
+    document.body.style.overflow = 'hidden'
+  } else {
+    // モーダル非表示時：bodyのスクロールを有効化
+    document.body.style.overflow = ''
+  }
+})
+
 const selectCategory = (category) => {
   navigateTo(`/category?name=${encodeURIComponent(category.name)}`)
 }
@@ -822,6 +833,13 @@ const scrollToTop = () => {
     behavior: 'smooth'
   })
 }
+
+// クリーンアップ：ページ離脱時にスクロールを復元
+onUnmounted(() => {
+  if (showPrefectureModal.value) {
+    document.body.style.overflow = ''
+  }
+})
 
 </script>
 
