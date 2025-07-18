@@ -9,8 +9,8 @@
         <User class="w-6 h-6 text-white" />
       </button>
       
-      <!-- Center Title (only show on home page) -->
-      <div v-if="$route.path === '/'" class="flex-1 flex flex-col items-center justify-center">
+      <!-- Center Title -->
+      <div class="flex-1 flex flex-col items-center justify-center">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white tracking-wider transition-colors duration-300">
           <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">
             おうち旅行
