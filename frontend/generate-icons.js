@@ -2,18 +2,21 @@ const sharp = require('sharp');
 const fs = require('fs');
 
 async function generateIcons() {
-  const pngBuffer = fs.readFileSync('./public/app-icon.png');
-  
-  // Standard icons
-  await sharp(pngBuffer)
-    .resize(192, 192)
-    .png()
-    .toFile('./public/icon-192x192.png');
+  try {
+    // Read the source file (it's actually SVG)
+    const svgBuffer = fs.readFileSync('./public/app-icon.png');
+    console.log('Using app-icon.png (SVG format) as source');
     
-  await sharp(pngBuffer)
-    .resize(512, 512)
-    .png()
-    .toFile('./public/icon-512x512.png');
+    // Standard icons
+    await sharp(svgBuffer)
+      .resize(192, 192)
+      .png()
+      .toFile('./public/icon-192x192.png');
+      
+    await sharp(svgBuffer)
+      .resize(512, 512)
+      .png()
+      .toFile('./public/icon-512x512.png');
   
   // Maskable icons (with padding for better appearance)
   const maskableSvg = `
@@ -71,24 +74,28 @@ async function generateIcons() {
     .png()
     .toFile('./public/icon-maskable-512x512.png');
     
-  // Generate favicon
-  await sharp(pngBuffer)
-    .resize(32, 32)
-    .png()
-    .toFile('./public/favicon-32x32.png');
+    // Generate favicon from source image
+    await sharp(svgBuffer)
+      .resize(32, 32)
+      .png()
+      .toFile('./public/favicon-32x32.png');
+      
+    await sharp(svgBuffer)
+      .resize(16, 16)
+      .png()
+      .toFile('./public/favicon-16x16.png');
     
-  await sharp(pngBuffer)
-    .resize(16, 16)
-    .png()
-    .toFile('./public/favicon-16x16.png');
-  
-  // Apple touch icon
-  await sharp(Buffer.from(maskableSvg))
-    .resize(180, 180)
-    .png()
-    .toFile('./public/apple-touch-icon.png');
-  
-  console.log('✅ All PWA icons generated successfully!');
+    // Apple touch icon from source image
+    await sharp(svgBuffer)
+      .resize(180, 180)
+      .png()
+      .toFile('./public/apple-touch-icon.png');
+    
+    console.log('✅ All PWA icons generated successfully!');
+    
+  } catch (error) {
+    console.error('Error generating icons:', error);
+  }
 }
 
 generateIcons().catch(console.error);
