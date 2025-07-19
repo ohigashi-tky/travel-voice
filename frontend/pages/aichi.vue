@@ -43,14 +43,12 @@
     </main>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 import TouristSpotCard from '~/components/TouristSpotCard.vue'
 import { useTouristSpots } from '~/composables/useTouristSpots'
 

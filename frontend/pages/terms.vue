@@ -106,7 +106,6 @@
     </main>
 
     <!-- Footer -->
-    <AppFooter v-model="activeTab" />
   </div>
 </template>
 
@@ -114,7 +113,6 @@
 import { ref } from 'vue'
 import { ArrowLeft } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 
 // Page meta
 definePageMeta({

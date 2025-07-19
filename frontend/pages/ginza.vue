@@ -192,14 +192,12 @@
     </main>
     
     <!-- Footer -->
-    <AppFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 import AudioGuideSimple from '~/components/AudioGuideSimple.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 import GoogleMapEmbed from '~/components/GoogleMapEmbed.vue'

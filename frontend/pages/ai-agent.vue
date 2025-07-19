@@ -124,7 +124,7 @@
     </main>
     
     <!-- Fixed Input Area -->
-    <div class="fixed left-0 right-0 z-30 flex justify-center pointer-events-none transition-all duration-500" :style="{ bottom: footerVisible ? '4rem' : '0' }">
+    <div class="fixed left-0 right-0 bottom-20 z-30 flex justify-center pointer-events-none transition-all duration-500">
       <div :class="[
         'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
         isActive ? 'max-w-sm' : 'max-w-[150px]'
@@ -156,15 +156,6 @@
         </form>
       </div>
     </div>
-    
-    <!-- Footer -->
-    <AppFooter 
-      ref="footerRef"
-      v-model="activeTab" 
-      :default-open="true" 
-      :scroll-target="chatContainer"
-      @visible="handleFooterVisibilityChange"
-    />
   </div>
 </template>
 
@@ -173,7 +164,6 @@ import { ref, nextTick, onMounted, computed, watch, onUnmounted } from 'vue'
 import { ArrowLeft, Bot, User, Send } from 'lucide-vue-next'
 // marked import removed - using custom markdown parser
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 
 // Page meta
 definePageMeta({
@@ -185,14 +175,11 @@ useHead({
 })
 
 // Reactive variables
-const activeTab = ref('ai')
 const userInput = ref('')
 const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const userMessage = ref<HTMLElement[]>([])
 const isActive = ref(false)
-const footerRef = ref<InstanceType<typeof AppFooter>>()
-const footerVisible = ref(true)
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -208,11 +195,10 @@ const dynamicSpacerHeight = computed(() => {
   // フォールバック: ビューポートベースの計算
   const viewportHeight = window.innerHeight
   const headerHeight = 64
-  const footerHeight = 80
   const inputHeight = 80
   
   // 利用可能なチャット表示領域の高さ
-  const availableHeight = viewportHeight - headerHeight - footerHeight - inputHeight
+  const availableHeight = viewportHeight - headerHeight - inputHeight
   
   // スペーサー高さはチャット領域の90%〜最大800px
   return Math.min(800, Math.max(500, availableHeight * 0.9))
@@ -556,7 +542,6 @@ onMounted(async () => {
     })
   }
   
-  // chatContainerがセットされた後にAppFooterのスクロール検知を明示的にバインド
   await nextTick()
   if (chatContainer.value && footerRef.value?.bindScrollToTarget) {
     footerRef.value.bindScrollToTarget(chatContainer.value)

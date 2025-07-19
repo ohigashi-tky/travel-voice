@@ -47,7 +47,6 @@
     </main>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" />
   </div>
 </template>
 
@@ -55,7 +54,6 @@
 import { ref, computed } from 'vue'
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta

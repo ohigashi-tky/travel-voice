@@ -126,7 +126,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="flex-1 relative z-10 pb-24">
+    <main class="flex-1 relative z-10 pb-32">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Loading State -->
         <div v-if="isLoading" class="flex items-center justify-center py-12">
@@ -306,9 +306,6 @@
 
       </div>
     </main>
-
-    <!-- Footer -->
-    <AppFooter />
   </div>
 </template>
 
@@ -377,7 +374,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useLanguage } from '~/composables/useLanguage'
 import { usePrefectures } from '~/composables/usePrefectures'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 import BackButton from '~/components/BackButton.vue'
 import CustomSelect from '~/components/CustomSelect.vue'
 

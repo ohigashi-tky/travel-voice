@@ -55,7 +55,6 @@
     </main>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" />
 
   </div>
 </template>
@@ -64,7 +63,6 @@
 import { ref, onMounted } from 'vue'
 import type { TouristSpot } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta

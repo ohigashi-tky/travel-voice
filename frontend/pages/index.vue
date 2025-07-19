@@ -387,7 +387,6 @@
     </div>
     
     <!-- Footer -->
-    <AppFooter v-model="activeTab" :default-open="true" />
     
     <!-- PWA Install Prompt -->
     <PWAInstallPrompt />
@@ -402,7 +401,6 @@ import { useAuthStore } from '~/stores/auth'
 import { useLanguage } from '~/composables/useLanguage'
 import { useTouristSpots } from '~/composables/useTouristSpots'
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 import PWAInstallPrompt from '~/components/PWAInstallPrompt.vue'
 
