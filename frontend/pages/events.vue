@@ -6,28 +6,33 @@
     <!-- Back Button -->
     <BackButton />
 
-    <!-- Title Section -->
-    <div class="pt-0 pb-6 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-6xl mx-auto">
-        <div class="text-center">
-          <div class="flex items-center justify-center gap-3 my-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
-              イベント情報
-            </h1>
+    <!-- Title and Filters Section with Background -->
+    <div class="relative">
+      <!-- Background Image -->
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('/event_image.webp')"></div>
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+      
+      <!-- Title Section -->
+      <div class="relative z-10 pt-0 pb-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-3 my-4">
+              <h1 class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
+                イベント情報
+              </h1>
+            </div>
+            <p class="text-white text-md max-w-2xl mx-auto drop-shadow-md">
+              全国各地で開催されるイベントを探してみよう
+            </p>
           </div>
-          <p class="text-gray-600 dark:text-gray-300 text-md max-w-2xl mx-auto">
-            全国各地で開催されるイベントを探してみよう
-          </p>
         </div>
       </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="flex-1 relative z-10 pb-24">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Filters Section -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-2 border border-gray-200 dark:border-gray-700 relative">
+      
+      <!-- Filters Section -->
+      <div class="relative z-10 px-4 sm:px-6 lg:px-8 pb-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 border border-white/20 dark:border-gray-700/30">
           <!-- Always visible: Prefecture filter and toggle button -->
           <div class="flex items-center gap-4">
             <!-- Prefecture Filter -->
@@ -115,8 +120,14 @@
               </div>
             </div>
           </div>
+          </div>
         </div>
+      </div>
+    </div>
 
+    <!-- Main Content -->
+    <main class="flex-1 relative z-10 pb-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Loading State -->
         <div v-if="isLoading" class="flex items-center justify-center py-12">
           <div class="text-center">
