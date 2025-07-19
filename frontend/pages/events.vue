@@ -28,13 +28,13 @@
       </div>
       
       <!-- Filters Section -->
-      <div class="relative z-10 px-4 sm:px-6 lg:px-8 pb-6">
+      <div class="relative z-[9996] px-4 sm:px-6 lg:px-8 pb-6">
         <div class="max-w-6xl mx-auto">
           <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 border border-white/20 dark:border-gray-700/30">
           <!-- Always visible: Prefecture filter and toggle button -->
           <div class="flex items-center gap-4">
             <!-- Prefecture Filter -->
-            <div class="flex-1 relative z-20">
+            <div class="flex-1 relative z-[9998]">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 都道府県
               </label>
@@ -76,7 +76,7 @@
               <!-- Date and Category Filters -->
               <div class="flex gap-4 relative">
                 <!-- Date Filter -->
-                <div class="flex-1 relative z-10">
+                <div class="flex-1 relative z-30">
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     日付
                   </label>
@@ -90,7 +90,7 @@
                 </div>
 
                 <!-- Category Filter -->
-                <div class="flex-1 relative z-10">
+                <div class="flex-1 relative z-[9997]">
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     カテゴリ
                   </label>
