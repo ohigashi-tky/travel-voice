@@ -11,12 +11,12 @@
             </span>
           </h1>
           <p class="text-lg text-gray-600 dark:text-gray-300 font-medium tracking-wide transition-colors duration-300">
-            穏やかな音声で日本を巡ろう
+            音声ガイドで日本を巡ろう
           </p>
         </div>
 
         <!-- Login Form -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
           <form @submit.prevent="handleSubmit" class="space-y-6">
             <!-- Name Field (only for register) -->
             <div v-if="isRegisterMode">
@@ -28,7 +28,7 @@
                 v-model="form.name"
                 type="text"
                 required
-                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                 placeholder="田中太郎"
               />
             </div>
@@ -43,7 +43,7 @@
                 v-model="form.email"
                 type="email"
                 required
-                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                 placeholder="demo@example.com"
               />
             </div>
@@ -58,7 +58,7 @@
                 v-model="form.password"
                 type="password"
                 required
-                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                 placeholder="demo1234"
               />
             </div>
@@ -72,7 +72,7 @@
             <button
               type="submit"
               :disabled="authStore.isLoading"
-              class="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-medium text-lg tracking-wide hover:from-cyan-700 hover:via-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105"
+              class="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-medium text-lg tracking-wide hover:from-cyan-700 hover:via-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105"
             >
               <span v-if="authStore.isLoading" class="flex items-center justify-center">
                 <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
@@ -84,18 +84,18 @@
             </button>
 
             <!-- Switch Mode Button -->
-            <button
+            <!-- <button
               type="button"
               @click="toggleMode"
               class="w-full text-blue-600 dark:text-blue-400 py-2 px-4 rounded-lg font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-300"
             >
               {{ isRegisterMode ? 'ログインはこちら' : 'アカウント登録はこちら' }}
-            </button>
+            </button> -->
           </form>
         </div>
 
         <!-- Demo Credentials -->
-        <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+        <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <p class="text-blue-700 dark:text-blue-300 text-sm text-center">
             <strong>デモ用アカウント:</strong><br>
             メール: demo@example.com<br>

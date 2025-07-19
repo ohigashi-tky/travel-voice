@@ -98,7 +98,7 @@
   
   <!-- Profile Modal -->
   <div v-if="showProfileModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click="showProfileModal = false">
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 m-4 max-w-sm w-full transition-colors duration-300" @click.stop>
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 m-4 max-w-sm w-full transition-colors duration-300" @click.stop>
       <div class="text-center">
         <div class="w-20 h-20 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
           <User class="w-10 h-10 text-white" />

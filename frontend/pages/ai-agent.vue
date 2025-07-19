@@ -126,7 +126,7 @@
     <!-- Fixed Input Area -->
     <div class="fixed left-0 right-0 bottom-14 z-30 flex justify-center pointer-events-none transition-all duration-500">
       <div :class="[
-        'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-xl shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
+        'bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-lg shadow-lg mx-auto my-2 border border-gray-200 dark:border-gray-700 p-1 w-full pointer-events-auto transition-all duration-500 ease-in-out',
         isActive ? 'max-w-sm' : 'max-w-[150px]'
       ]">
         <form @submit.prevent="sendMessage" class="flex gap-2" style="background:transparent;">

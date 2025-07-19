@@ -143,13 +143,13 @@
             <h3 class="text-3xl font-bold text-white mb-4">準備中です</h3>
             <p class="text-gray-300 leading-relaxed mb-6">
               {{ prefectureName }}の音声ガイドコンテンツを鋭意制作中です。<br>
-              現在は東京都のガイドをお楽しみいただけます。
+              しばらくお待ちください。
             </p>
             <button 
-              @click="navigateTo('/tokyo')"
+              @click="navigateTo('/')"
               class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300"
             >
-              東京ガイドを体験する
+              ホームに戻る
             </button>
           </div>
         </div>

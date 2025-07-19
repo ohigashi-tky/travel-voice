@@ -94,7 +94,7 @@
             <button
               @click="performSearch"
               :disabled="!searchQuery.trim()"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-4 py-1.5 rounded-xl text-sm font-medium transition-colors"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors"
             >
               {{ t('検索') }}
             </button>
@@ -138,7 +138,7 @@
       <div class="px-4 -mt-3">
         <div class="max-w-6xl mx-auto">
           <!-- Popular Spots Section -->
-          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-4 transition-all duration-300 relative z-10 shadow-lg">
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-lg py-2 px-2 mb-4 transition-all duration-300 relative z-10 shadow-lg">
             <div class="text-center mb-2">
               <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('人気スポット') }}</h3>
             </div>
@@ -205,7 +205,7 @@
           </div>
           
           <!-- Prefecture Selection -->
-          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-4 transition-all duration-300 relative z-10 shadow-lg">
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-lg py-2 px-2 mb-4 transition-all duration-300 relative z-10 shadow-lg">
             <div class="text-center mb-2">
               <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('都道府県から探す') }}</h3>
             </div>
@@ -258,7 +258,7 @@
           </div>
           
           <!-- Category Selection -->
-          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-xl py-2 px-2 mb-8 transition-all duration-300 relative z-10 shadow-lg">
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/20 dark:border-gray-700/30 rounded-lg py-2 px-2 mb-8 transition-all duration-300 relative z-10 shadow-lg">
             <div class="text-center mb-2">
               <h3 class="text-gray-800 dark:text-white text-2xl font-bold tracking-wide transition-colors duration-300" style="font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; font-weight: 700; letter-spacing: 0.05em;">{{ t('カテゴリから探す') }}</h3>
             </div>
@@ -323,7 +323,7 @@
       @click="closePrefectureModal"
     >
       <div
-        class="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        class="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         @click.stop
       >
         <!-- Modal Header -->
@@ -630,12 +630,12 @@ const prefectureRegions = ref([])
 
 // カテゴリリスト
 const categoryList = [
-  { name: '寺院', emoji: '⛩️', image: '/category/tera.jpg' },
-  { name: '歴史建造物', emoji: '🏯', image: '/category/rekishi.jpg' },
-  { name: '神社', emoji: '🕊️', image: '/category/jinjya.jpg' },
-  { name: '展望台', emoji: '🗼', image: '/category/tenbodai.jpg' },
-  { name: '博物館', emoji: '🏛️', image: '/category/hakubutsukan.jpeg' },
-  { name: '観光エリア', emoji: '🌆', image: '/category/kanko.jpg' }
+  { name: '寺院', image: '/category/tera.jpg' },
+  { name: '歴史建造物', image: '/category/rekishi.jpg' },
+  { name: '神社', image: '/category/jinjya.jpg' },
+  { name: '展望台', image: '/category/tenbodai.jpg' },
+  { name: '博物館', image: '/category/hakubutsukan.jpeg' },
+  { name: '観光エリア', image: '/category/kanko.jpg' }
 ]
 
 // 都道府県データ初期化
@@ -648,7 +648,6 @@ const initializePrefectureData = async () => {
     mainPrefectures.value = featuredPrefectures.value.map(p => ({
       id: p.id,
       name: p.name,
-      emoji: p.emoji,
       available: p.is_available
     }))
     
@@ -658,7 +657,6 @@ const initializePrefectureData = async () => {
       prefectures: prefectures.map(p => ({
         id: p.id,
         name: p.name,
-        emoji: p.emoji,
         available: p.is_available
       }))
     }))

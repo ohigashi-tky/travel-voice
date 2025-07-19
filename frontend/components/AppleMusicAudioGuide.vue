@@ -30,7 +30,7 @@
     </div>
 
     <!-- エラー表示 -->
-    <div v-if="error" class="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+    <div v-if="error" class="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
       <p class="text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
         <Icon name="lucide:alert-circle" class="w-4 h-4" />
         {{ error }}

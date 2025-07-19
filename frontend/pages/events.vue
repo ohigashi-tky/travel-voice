@@ -30,7 +30,7 @@
       <!-- Filters Section -->
       <div class="relative px-4 sm:px-6 lg:px-8 pb-6">
         <div class="max-w-6xl mx-auto">
-          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 border border-white/20 dark:border-gray-700/30 relative z-20">
+          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg p-4 border border-white/20 dark:border-gray-700/30 relative z-20">
           <!-- Always visible: Prefecture filter and toggle button -->
           <div class="flex items-center gap-4">
             <!-- Prefecture Filter -->

@@ -1,7 +1,7 @@
 <template>
   <div 
     @click="goToSpotDetail(spot.id)"
-    class="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer group"
+    class="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer group"
   >
     <!-- Spot Image -->
     <div class="h-48 bg-gradient-to-br from-cyan-400 to-blue-500 relative overflow-hidden">

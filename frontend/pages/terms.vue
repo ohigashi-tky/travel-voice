@@ -12,7 +12,7 @@
         </div>
 
         <!-- Terms Content -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
           <div class="prose dark:prose-invert max-w-none">
             <h2>アプリについて</h2>
             <p>「おうち旅行」は、日本各地の観光地を音声ガイドとともに楽しめるアプリです。家にいながら日本の魅力を発見していただければと思います。</p>

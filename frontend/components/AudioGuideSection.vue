@@ -54,7 +54,7 @@
       <!-- プレイヤーヘッダー -->
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
-          <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
             <Icon name="lucide:music" class="w-6 h-6 text-white" />
           </div>
           <div>
