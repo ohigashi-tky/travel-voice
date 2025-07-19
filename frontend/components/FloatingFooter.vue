@@ -1,7 +1,7 @@
 <template>
   <!-- 浮遊フッター -->
   <div 
-    class="fixed bottom-6 left-0 right-0 z-40 pointer-events-none transition-all duration-300 ease-in-out"
+    class="fixed bottom-3 left-0 right-0 z-40 pointer-events-none transition-all duration-300 ease-in-out"
     :class="[
       isVisible 
         ? 'translate-y-0 opacity-100' 
@@ -14,7 +14,7 @@
         <button 
           v-if="canGoBack"
           @click="goBack"
-          class="w-12 h-12 bg-white/50 dark:bg-gray-800/50 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-200 hover:scale-110"
+          class="w-12 h-12 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110"
         >
           <ChevronLeft class="w-6 h-6 text-gray-700 dark:text-gray-300" />
         </button>
@@ -24,15 +24,15 @@
         <!-- ホームボタン -->
         <button 
           @click="goToHome"
-          class="w-14 h-14 bg-white/50 dark:bg-gray-800/50 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-200 hover:scale-110"
+          class="w-11 h-11 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110"
         >
-          <Home class="w-7 h-7 text-gray-700 dark:text-gray-300" />
+          <Home class="w-6 h-6 text-gray-700 dark:text-gray-300" />
         </button>
         
         <!-- AIエージェントボタン -->
         <button 
           @click="goToAI"
-          class="w-12 h-12 bg-white/50 dark:bg-gray-800/50 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-200 hover:scale-110"
+          class="w-12 h-12 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110"
         >
           <Bot class="w-6 h-6 text-gray-700 dark:text-gray-300" />
         </button>

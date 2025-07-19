@@ -3,8 +3,6 @@
     <!-- Header -->
     <AppHeader />
 
-    <!-- Back Button -->
-    <BackButton />
 
     <!-- Page Title -->
     <div class="relative py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6 overflow-hidden">
@@ -64,7 +62,6 @@ import { ref } from 'vue'
 import type { TouristSpot } from '~/types'
 import AppHeader from '~/components/AppHeader.vue'
 import TouristSpotCard from '~/components/TouristSpotCard.vue'
-import BackButton from '~/components/BackButton.vue'
 
 // Page meta
 definePageMeta({

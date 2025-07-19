@@ -3,8 +3,6 @@
     <!-- Header -->
     <AppHeader />
     
-    <!-- Back Button -->
-    <BackButton />
 
     <!-- Title and Filters Section with Background -->
     <div class="relative">
@@ -374,7 +372,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useLanguage } from '~/composables/useLanguage'
 import { usePrefectures } from '~/composables/usePrefectures'
 import AppHeader from '~/components/AppHeader.vue'
-import BackButton from '~/components/BackButton.vue'
 import CustomSelect from '~/components/CustomSelect.vue'
 
 // Page meta

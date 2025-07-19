@@ -3,8 +3,6 @@
     <!-- Header -->
     <AppHeader />
 
-    <!-- Back Button -->
-    <BackButton />
 
     <!-- Page Title -->
     <div class="bg-white dark:bg-gray-900 py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6">

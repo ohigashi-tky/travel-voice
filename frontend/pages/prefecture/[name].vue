@@ -8,7 +8,6 @@
     </div>
 
     <!-- Fixed Back Button (always visible) -->
-    <BackButton />
 
     <!-- Header with Background Image -->
     <header class="relative z-10 p-6 pt-6">

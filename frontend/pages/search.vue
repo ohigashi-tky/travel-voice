@@ -22,8 +22,6 @@
       </div>
     </div>
 
-    <!-- Back Button -->
-    <BackButton fallback-route="/" />
 
     <!-- Search Bar -->
     <div class="bg-gray-50 dark:bg-gray-800 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -126,7 +124,6 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { Search } from 'lucide-vue-next'
 import AppHeader from '~/components/AppHeader.vue'
 import TouristSpotCard from '~/components/TouristSpotCard.vue'
-import BackButton from '~/components/BackButton.vue'
 
 // Page meta
 definePageMeta({
