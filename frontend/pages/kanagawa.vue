@@ -1,8 +1,5 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col transition-colors duration-300">
-    <!-- Header -->
-    <AppHeader />
-
 
     <!-- Page Title -->
     <div class="relative py-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 pt-6 overflow-hidden">
@@ -60,7 +57,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { TouristSpot } from '~/types'
-import AppHeader from '~/components/AppHeader.vue'
 import TouristSpotCard from '~/components/TouristSpotCard.vue'
 
 // Page meta

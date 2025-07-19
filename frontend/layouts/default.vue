@@ -10,6 +10,8 @@
     
     <!-- Main content when auth is ready -->
     <div v-else>
+      <!-- Header (全ページ共通) -->
+      <AppHeader />
       <slot />
       <!-- Floating Footer (全ページ共通) -->
       <FloatingFooter />
@@ -20,6 +22,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import AppHeader from '~/components/AppHeader.vue'
 import FloatingFooter from '~/components/FloatingFooter.vue'
 
 const authStore = useAuthStore()

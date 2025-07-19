@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-900 relative flex flex-col transition-colors duration-300">
-    <!-- Header -->
-    <AppHeader />
 
     <!-- Main Content -->
     <main class="flex-1 relative z-10 flex flex-col pb-0">
@@ -163,7 +161,6 @@
 import { ref, nextTick, onMounted, computed, watch, onUnmounted } from 'vue'
 import { ArrowLeft, Bot, User, Send } from 'lucide-vue-next'
 // marked import removed - using custom markdown parser
-import AppHeader from '~/components/AppHeader.vue'
 
 // Page meta
 definePageMeta({

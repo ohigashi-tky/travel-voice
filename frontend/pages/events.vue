@@ -1,8 +1,5 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col transition-colors duration-300">
-    <!-- Header -->
-    <AppHeader />
-    
 
     <!-- Title and Filters Section with Background -->
     <div class="relative">
@@ -371,7 +368,6 @@
 import { ref, onMounted, computed } from 'vue'
 import { useLanguage } from '~/composables/useLanguage'
 import { usePrefectures } from '~/composables/usePrefectures'
-import AppHeader from '~/components/AppHeader.vue'
 import CustomSelect from '~/components/CustomSelect.vue'
 
 // Page meta

@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-900 relative flex flex-col transition-colors duration-300">
-    <!-- Header -->
-    <AppHeader />
     
     <!-- Main Content (above the image with no gap) -->
     <div class="relative z-10">
@@ -69,7 +67,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useLanguage } from '~/composables/useLanguage'
-import AppHeader from '~/components/AppHeader.vue'
 import PWAInstallPrompt from '~/components/PWAInstallPrompt.vue'
 import PopularSpots from '~/components/PopularSpots.vue'
 import PrefectureSelection from '~/components/PrefectureSelection.vue'

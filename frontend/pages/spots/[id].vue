@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col transition-colors duration-300">
-    <!-- Header -->
-    <AppHeader />
 
     <!-- Loading State -->
     <div v-if="isLoading" class="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
@@ -234,7 +232,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
-import AppHeader from '~/components/AppHeader.vue'
 import AudioGuideSimple from '~/components/AudioGuideSimple.vue'
 import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 import GoogleMapEmbed from '~/components/GoogleMapEmbed.vue'
