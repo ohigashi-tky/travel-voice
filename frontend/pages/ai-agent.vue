@@ -171,7 +171,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'AIエージェント - Travel Voice'
+  title: 'AIエージェント - おうち旅行'
 })
 
 // Reactive variables
@@ -222,9 +222,6 @@ const sampleQuestions = [
   '一人旅におすすめの場所を教えて'
 ]
 
-const goHome = () => {
-  navigateTo('/')
-}
 
 // 音声ガイドが実装されている観光地のマスターデータ
 const audioGuideSpots = [
@@ -233,6 +230,7 @@ const audioGuideSpots = [
   { id: 101, name: '大阪城', keywords: ['大阪城'] },
   { id: 201, name: '清水寺', keywords: ['清水寺'] },
   { id: 202, name: '金閣寺', keywords: ['金閣寺', '鹿苑寺'] },
+  { id: 203, name: '伏見稲荷大社', keywords: ['伏見稲荷大社', '伏見稲荷', '千本鳥居'] },
   { id: 301, name: '札幌時計台', keywords: ['札幌時計台', '時計台'] },
   { id: 401, name: '名古屋城', keywords: ['名古屋城'] },
   { id: 402, name: '熱田神宮', keywords: ['熱田神宮'] },
@@ -241,7 +239,7 @@ const audioGuideSpots = [
   { id: 502, name: '福岡城跡', keywords: ['福岡城跡', '福岡城'] },
   { id: 503, name: '博多駅', keywords: ['博多駅', '博多'] },
   { id: 601, name: '原爆ドーム', keywords: ['原爆ドーム', '平和記念公園'] },
-  { id: 602, name: '厳島神社', keywords: ['厳島神社', '宮島', '鳥居'] },
+  { id: 602, name: '厳島神社', keywords: ['厳島神社', '宮島'] },
   { id: 603, name: '広島城', keywords: ['広島城', '鯉城'] }
 ]
 
@@ -249,12 +247,18 @@ const audioGuideSpots = [
 const detectAudioGuideSpots = (content: string) => {
   const detectedSpots = []
   
-  for (const spot of audioGuideSpots) {
+  // より具体的なキーワードを優先するため、キーワードの長さでソート
+  const sortedSpots = audioGuideSpots.map(spot => ({
+    ...spot,
+    keywords: spot.keywords.sort((a, b) => b.length - a.length) // 長いキーワードを優先
+  }))
+  
+  for (const spot of sortedSpots) {
     for (const keyword of spot.keywords) {
       if (content.includes(keyword)) {
         // 重複を避ける
         if (!detectedSpots.find(s => s.id === spot.id)) {
-          detectedSpots.push(spot)
+          detectedSpots.push({ id: spot.id, name: spot.name, matchedKeyword: keyword })
         }
         break
       }
@@ -265,7 +269,7 @@ const detectAudioGuideSpots = (content: string) => {
 }
 
 // シンプルなマークダウンフォーマット関数（音声ガイドボタン挿入機能付き）
-const formatMessage = (content: string, detectedSpots?: Array<{id: number, name: string}>) => {
+const formatMessage = (content: string, detectedSpots?: Array<{id: number, name: string, matchedKeyword?: string}>) => {
   let html = content
   
   // 関連質問セクションを削除（独立したメッセージとして表示するため）
@@ -285,17 +289,20 @@ const formatMessage = (content: string, detectedSpots?: Array<{id: number, name:
       // 重複を避ける
       if (processedSpots.has(detectedSpot.id)) return
       
-      // マスターデータから該当するスポットのキーワードを取得
-      const masterSpot = audioGuideSpots.find(s => s.id === detectedSpot.id)
-      if (masterSpot) {
-        // 最初に見つかったキーワードのみ処理
-        const keyword = masterSpot.keywords.find(k => html.includes(k))
-        if (keyword) {
-          // キーワードの後に改行がある場合、そこにボタンを挿入（1回のみ）
-          const pattern = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^\\n]*)(\\n)`)
-          html = html.replace(pattern, `$1$2<div class="mt-1 mb-3"><button onclick="navigateToSpot(${detectedSpot.id})" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"><span>📍</span><span>${detectedSpot.name}を詳しく知る</span><span>→</span></button></div>`)
-          processedSpots.add(detectedSpot.id)
+      // 検出時にマッチしたキーワードを使用、なければマスターデータから検索
+      let keyword = detectedSpot.matchedKeyword
+      if (!keyword) {
+        const masterSpot = audioGuideSpots.find(s => s.id === detectedSpot.id)
+        if (masterSpot) {
+          keyword = masterSpot.keywords.find(k => html.includes(k))
         }
+      }
+      
+      if (keyword && html.includes(keyword)) {
+        // キーワードの後に改行がある場合、そこにボタンを挿入（1回のみ）
+        const pattern = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^\\n]*)(\\n)`)
+        html = html.replace(pattern, `$1$2<div class="mt-1 mb-3"><button onclick="navigateToSpot(${detectedSpot.id})" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"><span>📍</span><span>${detectedSpot.name}を詳しく知る</span><span>→</span></button></div>`)
+        processedSpots.add(detectedSpot.id)
       }
     })
   }
