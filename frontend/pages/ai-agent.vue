@@ -344,20 +344,12 @@ const scrollToUserQuestion = () => {
 
 const askSampleQuestion = (question: string) => {
   userInput.value = question
-  // サンプル質問送信時にフッターを表示状態にリセット
-  if (footerRef.value) {
-    footerRef.value.showFooter()
-  }
   sendMessage()
 }
 
 // 関連質問クリック処理のグローバル関数
 const askRelatedQuestion = (question: string) => {
   userInput.value = question
-  // 関連質問送信時にフッターを表示状態にリセット
-  if (footerRef.value) {
-    footerRef.value.showFooter()
-  }
   sendMessage()
 }
 
@@ -367,11 +359,7 @@ const sendMessage = async () => {
   const userMessage = userInput.value.trim()
   userInput.value = ''
 
-  // 質問送信時にフッターを表示状態にリセット
   await nextTick()
-  if (footerRef.value) {
-    footerRef.value.showFooter()
-  }
 
   // Add user message
   messages.value.push({
@@ -518,10 +506,6 @@ watch(userInput, (val) => {
   else isActive.value = false
 })
 
-// フッターの表示状態変更ハンドラー（デバッグ用）
-const handleFooterVisibilityChange = (isVisible: boolean) => {
-  footerVisible.value = isVisible
-}
 
 // グローバルウィンドウに関数を追加
 onMounted(async () => {
@@ -543,8 +527,5 @@ onMounted(async () => {
   }
   
   await nextTick()
-  if (chatContainer.value && footerRef.value?.bindScrollToTarget) {
-    footerRef.value.bindScrollToTarget(chatContainer.value)
-  }
 })
 </script>
