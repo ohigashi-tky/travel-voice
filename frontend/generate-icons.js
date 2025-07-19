@@ -2,15 +2,15 @@ const sharp = require('sharp');
 const fs = require('fs');
 
 async function generateIcons() {
-  const svgBuffer = fs.readFileSync('./public/app-icon.svg');
+  const pngBuffer = fs.readFileSync('./public/app-icon.png');
   
   // Standard icons
-  await sharp(svgBuffer)
+  await sharp(pngBuffer)
     .resize(192, 192)
     .png()
     .toFile('./public/icon-192x192.png');
     
-  await sharp(svgBuffer)
+  await sharp(pngBuffer)
     .resize(512, 512)
     .png()
     .toFile('./public/icon-512x512.png');
@@ -72,12 +72,12 @@ async function generateIcons() {
     .toFile('./public/icon-maskable-512x512.png');
     
   // Generate favicon
-  await sharp(svgBuffer)
+  await sharp(pngBuffer)
     .resize(32, 32)
     .png()
     .toFile('./public/favicon-32x32.png');
     
-  await sharp(svgBuffer)
+  await sharp(pngBuffer)
     .resize(16, 16)
     .png()
     .toFile('./public/favicon-16x16.png');
