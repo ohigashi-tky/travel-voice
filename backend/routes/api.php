@@ -30,6 +30,7 @@ Route::delete('/popular-spots/cache', [PopularSpotsController::class, 'clearCach
 // Prefecture API Routes
 Route::get('/prefectures', [PrefectureController::class, 'index']);
 Route::get('/prefectures/available', [PrefectureController::class, 'available']);
+Route::get('/prefectures/featured', [PrefectureController::class, 'featured']);
 Route::get('/prefectures/by-region', [PrefectureController::class, 'byRegion']);
 Route::get('/prefectures/{id}', [PrefectureController::class, 'show']);
 Route::get('/prefectures/{id}/spots', [PrefectureController::class, 'spots']);

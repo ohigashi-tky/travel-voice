@@ -69,13 +69,37 @@ class PrefectureController extends Controller
     }
 
     /**
+     * 主要都道府県のみ取得
+     */
+    public function featured(): JsonResponse
+    {
+        try {
+            $prefectures = Prefecture::with('images')
+                ->featured()
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $prefectures
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch featured prefectures',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * 地域別都道府県取得
      */
     public function byRegion(): JsonResponse
     {
         try {
             $prefectures = Prefecture::with('images')
-                ->orderByDisplay()
+                ->orderByRegion()
                 ->get()
                 ->groupBy('region');
 

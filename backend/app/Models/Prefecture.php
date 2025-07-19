@@ -13,6 +13,9 @@ class Prefecture extends Model
         'region',
         'display_order',
         'is_available',
+        'order_in_region',
+        'featured_order',
+        'region_order',
     ];
 
     protected $casts = [
@@ -73,5 +76,29 @@ class Prefecture extends Model
     public function scopeByRegion($query, $region)
     {
         return $query->where('region', $region);
+    }
+
+    /**
+     * 地域内の順番でソート
+     */
+    public function scopeOrderByRegionOrder($query)
+    {
+        return $query->orderBy('order_in_region');
+    }
+
+    /**
+     * 主要都道府県のみ
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->whereNotNull('featured_order')->orderBy('featured_order');
+    }
+
+    /**
+     * 地域順でソート
+     */
+    public function scopeOrderByRegion($query)
+    {
+        return $query->orderBy('region_order')->orderBy('order_in_region');
     }
 }

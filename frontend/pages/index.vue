@@ -620,6 +620,7 @@ const {
   prefecturesByRegion,
   fetchPrefectures,
   fetchPrefecturesByRegion,
+  fetchFeaturedPrefectures,
   getPrefectureRoutePath,
   loading: prefecturesLoading 
 } = usePrefectures()
@@ -641,18 +642,17 @@ const categoryList = [
 // 都道府県データ初期化
 const initializePrefectureData = async () => {
   try {
-    // 全都道府県データを取得（computedプロパティで人口順ソートのため）
-    await fetchPrefectures() // 全データを取得
-    
-    // 主要都道府県データを設定
-    mainPrefectures.value = featuredPrefectures.value.map(p => ({
+    // 主要都道府県データを取得
+    const featuredData = await fetchFeaturedPrefectures()
+    mainPrefectures.value = featuredData.map(p => ({
       id: p.id,
       name: p.name,
       available: p.is_available
     }))
     
     // 地域別都道府県データを取得（人口順ソート済み）
-    prefectureRegions.value = Object.entries(prefecturesByRegion.value).map(([regionName, prefectures]) => ({
+    const regionData = await fetchPrefecturesByRegion()
+    prefectureRegions.value = Object.entries(regionData).map(([regionName, prefectures]) => ({
       name: regionName,
       prefectures: prefectures.map(p => ({
         id: p.id,
