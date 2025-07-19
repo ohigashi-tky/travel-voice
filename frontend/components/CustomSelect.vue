@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-[9998]">
+  <div class="relative z-10">
     <button
       @click="toggleDropdown"
       @blur="handleBlur"
@@ -20,7 +20,7 @@
     <!-- Dropdown -->
     <div
       v-if="isOpen"
-      class="absolute z-[9999] w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+      class="absolute z-[999] w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
     >
       <div
         v-for="option in options"
