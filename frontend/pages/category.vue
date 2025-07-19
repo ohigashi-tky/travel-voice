@@ -9,7 +9,6 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-center">
           <div class="text-center">
-            <div class="text-4xl mb-2">{{ categoryEmoji }}</div>
             <h1 class="text-3xl font-bold text-gray-800 dark:text-white tracking-wide transition-colors duration-300">
               <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                 {{ categoryName }}
@@ -44,7 +43,6 @@
 
         <!-- Empty State -->
         <div v-else class="text-center py-12">
-          <div class="text-6xl mb-4">{{ categoryEmoji }}</div>
           <h3 class="text-xl font-medium text-gray-800 dark:text-white mb-2 transition-colors duration-300">
             {{ categoryName }}の観光地が見つかりません
           </h3>
@@ -80,7 +78,6 @@ definePageMeta({
 const activeTab = ref('guide')
 const isLoading = ref(true)
 const categoryName = ref('')
-const categoryEmoji = ref('🏛️')
 
 // Get category from query params
 const route = useRoute()
@@ -368,20 +365,6 @@ const allSpots = [
   }
 ]
 
-// カテゴリごとのemoji
-const categoryEmojiMap = {
-  '寺院': '⛩️',
-  '歴史建造物': '🏯',
-  '神社': '🕊️',
-  '展望台': '🗼',
-  '博物館': '🏛️',
-  '観光エリア': '🌆',
-  '公園': '🌳',
-  '水族館': '🐟',
-  '歴史的景観': '🏞️',
-  '温泉': '♨️',
-  '自然': '🌲'
-}
 
 // Filter spots by category
 const filteredSpots = computed(() => {
@@ -407,7 +390,6 @@ onMounted(async () => {
     const queryCategory = route.query.name
     if (queryCategory) {
       categoryName.value = queryCategory
-      categoryEmoji.value = categoryEmojiMap[queryCategory] || '🏛️'
     } else {
       // If no category specified, redirect to home
       await navigateTo('/')
@@ -424,7 +406,6 @@ onMounted(async () => {
 watch(() => route.query.name, (newCategory) => {
   if (newCategory) {
     categoryName.value = newCategory
-    categoryEmoji.value = categoryEmojiMap[newCategory] || '🏛️'
   }
 })
 </script>
