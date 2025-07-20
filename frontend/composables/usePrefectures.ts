@@ -105,12 +105,30 @@ export const usePrefectures = () => {
     }
   }
 
-  // 都道府県別観光地取得
+  // 都道府県別観光地取得（名前）
   const fetchPrefectureSpots = async (prefectureName: string) => {
     try {
       // Railway production: use backend URL
       const apiBase = process.client && window.location.hostname !== 'localhost' ? 'https://travel-voice-production.up.railway.app' : config.public.apiBase
       const response = await $fetch<{success: boolean, data: {prefecture: Prefecture, spots: any[]}}>(`${apiBase}/api/prefectures/name/${prefectureName}/spots`)
+      
+      if (response.success) {
+        return response.data
+      } else {
+        throw new Error('Failed to fetch prefecture spots')
+      }
+    } catch (err) {
+      console.error('Error fetching prefecture spots:', err)
+      throw err
+    }
+  }
+
+  // 都道府県別観光地取得（ID）
+  const fetchPrefectureSpotsById = async (prefectureId: string) => {
+    try {
+      // Railway production: use backend URL
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? 'https://travel-voice-production.up.railway.app' : config.public.apiBase
+      const response = await $fetch<{success: boolean, data: {prefecture: Prefecture, spots: any[]}}>(`${apiBase}/api/prefectures/${prefectureId}/spots`)
       
       if (response.success) {
         return response.data
@@ -156,14 +174,23 @@ export const usePrefectures = () => {
   // 主要都道府県（APIから取得）
   const featuredPrefectures = ref<Prefecture[]>([])
 
-  // 都道府県のルートパスを取得（個別ページを使用）
+  // 都道府県のルートパスを取得（動的ページと個別ページの併用）
   const getPrefectureRoutePath = (prefectureName: string) => {
-    // 都道府県名から個別ページのパスを生成
+    // 動的ページを使用する都道府県
+    const dynamicRouteMap: Record<string, string> = {
+      '東京都': 'prefecture/13',
+      '大阪府': 'prefecture/27',
+      '京都府': 'prefecture/26',
+      '北海道': 'prefecture/1',
+      '沖縄県': 'prefecture/47'
+    }
+    
+    if (dynamicRouteMap[prefectureName]) {
+      return dynamicRouteMap[prefectureName]
+    }
+    
+    // その他の都道府県は個別ページを使用
     const routeMap: Record<string, string> = {
-      '東京都': 'tokyo',
-      '大阪府': 'osaka',
-      '京都府': 'kyoto',
-      '北海道': 'hokkaido',
       '福岡県': 'fukuoka',
       '神奈川県': 'kanagawa',
       '愛知県': 'aichi',
@@ -177,8 +204,7 @@ export const usePrefectures = () => {
       '新潟県': 'niigata',
       '山口県': 'yamaguchi',
       '徳島県': 'tokushima',
-      '鹿児島県': 'kagoshima',
-      '沖縄県': 'okinawa'
+      '鹿児島県': 'kagoshima'
     }
     
     return routeMap[prefectureName] || null
@@ -195,6 +221,7 @@ export const usePrefectures = () => {
     fetchPrefecturesByRegion,
     fetchFeaturedPrefectures,
     fetchPrefectureSpots,
+    fetchPrefectureSpotsById,
     getPrefectureRoutePath
   }
 }

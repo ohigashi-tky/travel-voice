@@ -39,11 +39,8 @@
         <div v-if="touristSpots.length === 0" class="text-center py-12">
           <div class="text-6xl mb-4">🗼</div>
           <h3 class="text-xl font-medium text-gray-800 dark:text-white mb-2 transition-colors duration-300">
-            東京の観光スポットを準備中
+            準備中です
           </h3>
-          <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-            魅力的な観光地の音声ガイドをお楽しみに！
-          </p>
         </div>
       </div>
 
