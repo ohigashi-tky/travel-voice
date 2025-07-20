@@ -31,7 +31,7 @@
           <!-- Always visible: Prefecture filter and toggle button -->
           <div class="flex items-center gap-4">
             <!-- Prefecture Filter -->
-            <div class="flex-1 relative">
+            <div class="w-1/2 relative">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 都道府県
               </label>
@@ -44,23 +44,25 @@
             </div>
 
             <!-- Toggle Button -->
-            <div class="flex flex-col justify-end">
+            <div class="w-1/2 flex flex-col justify-end">
               <div class="h-6 mb-2"></div>
-              <button
-                @click="isFiltersExpanded = !isFiltersExpanded"
-                class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-gray-600 dark:hover:to-gray-500 border border-blue-200 dark:border-gray-500 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center gap-1.5"
-              >
-                <span>詳細検索</span>
-                <svg 
-                  class="w-3 h-3 transition-transform duration-200 text-gray-400"
-                  :class="{ 'rotate-180': isFiltersExpanded }"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
+              <div class="flex justify-center">
+                <button
+                  @click="isFiltersExpanded = !isFiltersExpanded"
+                  class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-gray-600 dark:hover:to-gray-500 border border-blue-200 dark:border-gray-500 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center gap-1.5"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
+                  <span>詳細検索</span>
+                  <svg 
+                    class="w-3 h-3 transition-transform duration-200 text-gray-400"
+                    :class="{ 'rotate-180': isFiltersExpanded }"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
