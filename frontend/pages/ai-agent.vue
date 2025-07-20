@@ -372,16 +372,13 @@ const scrollToUserQuestion = async () => {
   if (userMessages.length > 0) {
     const lastUserMessage = userMessages[userMessages.length - 1] as HTMLElement
     
-    // 要素をまず上部に配置
-    lastUserMessage.scrollIntoView({
-      behavior: 'instant',
-      block: 'start',
-      inline: 'nearest'
-    })
+    // 要素の位置を取得
+    const rect = lastUserMessage.getBoundingClientRect()
+    const targetPosition = window.pageYOffset + rect.top - 20 // 20pxの余白
     
-    // 少し上にスクロールして余白を作る
-    window.scrollBy({
-      top: -20,
+    // スムーズにスクロール
+    window.scrollTo({
+      top: targetPosition,
       behavior: 'smooth'
     })
   }
