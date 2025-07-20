@@ -89,7 +89,7 @@
                   <span>{{ question }}</span>
                 </span>
               </button>
-              <div class="h-24"></div>
+              <div :class="isLastQuestionsMessage(index) ? 'h-6' : 'h-24'"></div>
             </div>
             
             <!-- User Avatar -->
@@ -385,6 +385,15 @@ const scrollToUserQuestion = async () => {
       behavior: 'smooth'
     })
   }
+}
+
+// 最後の関連質問メッセージかどうかを判定
+const isLastQuestionsMessage = (index: number) => {
+  // 現在のメッセージが最後の関連質問で、かつ次にユーザーメッセージがある場合は余白を小さくする
+  const currentMessage = messages.value[index]
+  const nextMessage = messages.value[index + 1]
+  
+  return currentMessage?.role === 'questions' && nextMessage?.role === 'user'
 }
 
 const askSampleQuestion = (question: string) => {
