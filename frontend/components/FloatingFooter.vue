@@ -4,13 +4,13 @@
     class="fixed bottom-3 left-0 right-0 z-40 pointer-events-none transition-all duration-500 ease-out"
     :class="[
       isVisible 
-        ? 'translate-y-0 opacity-100' 
-        : 'translate-y-full opacity-0'
+        ? 'translate-y-0 opacity-100 footer-visible' 
+        : 'translate-y-full opacity-0 footer-hidden'
     ]"
   >
     <div class="max-w-md mx-auto px-6">
       <!-- iOS 16スタイル 直接配置ボタン -->
-      <div class="flex items-center justify-between pointer-events-auto">
+      <div class="flex items-center justify-center gap-16 pointer-events-auto">
         <!-- 戻るボタン -->
         <button 
           v-if="canGoBack"
@@ -18,11 +18,11 @@
           class="liquid-glass-button group"
         >
           <div class="button-content">
-            <ChevronLeft class="w-5 h-5 text-gray-800 dark:text-white/90 group-active:text-gray-900 dark:group-active:text-white transition-colors duration-150" />
+            <ChevronLeft class="w-6 h-6 text-black/90 dark:text-white/90 group-active:text-black/90 dark:group-active:text-white/90 transition-colors duration-150" />
           </div>
         </button>
         <!-- 空のスペース（戻るボタンがない場合） -->
-        <div v-else class="w-12"></div>
+        <div v-else class="w-12 opacity-0"></div>
         
         <!-- ホームボタン -->
         <button 
@@ -30,7 +30,7 @@
           class="liquid-glass-button group"
         >
           <div class="button-content">
-            <Home class="w-5 h-5 text-gray-800 dark:text-white/90 group-active:text-gray-900 dark:group-active:text-white transition-colors duration-150" />
+            <Home class="w-6 h-6 text-black/90 dark:text-white/90 group-active:text-black/90 dark:group-active:text-white/90 transition-colors duration-150" />
           </div>
         </button>
         
@@ -40,7 +40,7 @@
           class="liquid-glass-button group"
         >
           <div class="button-content">
-            <Bot class="w-5 h-5 text-gray-800 dark:text-white/90 group-active:text-gray-900 dark:group-active:text-white transition-colors duration-150" />
+            <Bot class="w-6 h-6 text-black/90 dark:text-white/90 group-active:text-black/90 dark:group-active:text-white/90 transition-colors duration-150" />
           </div>
         </button>
       </div>
@@ -68,8 +68,8 @@ main {
   
   /* 透明ガラスモーフィズム - 背景色のみ透明 */
   background: transparent;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   
   /* 極細の境界線 */
   border: 0.5px solid rgba(255, 255, 255, 0.15);
@@ -165,9 +165,9 @@ main {
 }
 
 /* サファリ用の最適化 */
-@supports (-webkit-backdrop-filter: blur(25px)) {
+@supports (-webkit-backdrop-filter: blur(3px)) {
   .liquid-glass-button {
-    -webkit-backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(3px);
   }
 }
 
@@ -180,10 +180,16 @@ main {
 
 /* アニメーション性能向上 */
 .liquid-glass-button {
-  will-change: transform;
+  will-change: transform, backdrop-filter;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
+
+/* フッター非表示時は最適化のためblurを解除 */
+/* .footer-hidden .liquid-glass-button {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+} */
 </style>
 
 <script setup>
