@@ -182,32 +182,29 @@ export const usePrefectures = () => {
       '大阪府': 'prefecture/27',
       '京都府': 'prefecture/26',
       '北海道': 'prefecture/1',
-      '沖縄県': 'prefecture/47'
+      '沖縄県': 'prefecture/47',
+      '福岡県': 'prefecture/40',
+      '愛知県': 'prefecture/23',
+      '神奈川県': 'prefecture/14',
+      '広島県': 'prefecture/34',
+      '愛媛県': 'prefecture/38',
+      '山口県': 'prefecture/35',
+      '鹿児島県': 'prefecture/46',
+      '埼玉県': 'prefecture/11',
+      '千葉県': 'prefecture/12',
+      '兵庫県': 'prefecture/28',
+      '静岡県': 'prefecture/22',
+      '福島県': 'prefecture/7',
+      '新潟県': 'prefecture/15',
+      '徳島県': 'prefecture/36'
     }
     
     if (dynamicRouteMap[prefectureName]) {
       return dynamicRouteMap[prefectureName]
     }
     
-    // その他の都道府県は個別ページを使用
-    const routeMap: Record<string, string> = {
-      '福岡県': 'fukuoka',
-      '神奈川県': 'kanagawa',
-      '愛知県': 'aichi',
-      '埼玉県': 'saitama',
-      '千葉県': 'chiba',
-      '兵庫県': 'hyogo',
-      '静岡県': 'shizuoka',
-      '広島県': 'hiroshima',
-      '福島県': 'fukushima',
-      '愛媛県': 'ehime',
-      '新潟県': 'niigata',
-      '山口県': 'yamaguchi',
-      '徳島県': 'tokushima',
-      '鹿児島県': 'kagoshima'
-    }
-    
-    return routeMap[prefectureName] || null
+    // その他の都道府県（現在はすべて動的ページを使用）
+    return null
   }
 
   return {
