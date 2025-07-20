@@ -2,15 +2,17 @@
   <div class="min-h-screen bg-white dark:bg-gray-900 relative flex flex-col transition-colors duration-300">
 
     <!-- Main Content -->
-    <main class="flex-1 relative z-10 flex flex-col pb-0">
+    <main 
+      ref="chatContainer"
+      class="flex-1 relative z-10 flex flex-col pb-0 overflow-y-auto"
+      style="scroll-behavior: smooth;"
+    >
       <!-- Chat Container - Full Height -->
       <div class="flex-1 bg-white dark:bg-gray-800 flex flex-col">
         
         <!-- Chat Messages -->
         <div 
-          ref="chatContainer"
           class="flex-1 p-4 space-y-4"
-          style="scroll-behavior: smooth;"
         >
           <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full">
             <Bot class="w-16 h-16 text-gray-300 mb-4" />
@@ -39,10 +41,9 @@
           <div 
             v-for="(message, index) in messages" 
             :key="index"
-            :ref="message.role === 'user' ? 'userMessage' : null"
             class="flex gap-3"
             :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
-            :style="message.role === 'user' ? 'scroll-margin-top: 16px' : ''"
+            :data-user-message="message.role === 'user' ? 'true' : undefined"
           >
             <!-- AI Avatar -->
             <div 
@@ -176,7 +177,6 @@ useHead({
 const userInput = ref('')
 const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
-const userMessage = ref<HTMLElement[]>([])
 const isActive = ref(false)
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
@@ -363,16 +363,27 @@ const formatMessage = (content: string, detectedSpots?: Array<{id: number, name:
 }
 
 // ユーザー質問をチャット上部に表示するスクロール関数
-const scrollToUserQuestion = () => {
-  if (userMessage.value && userMessage.value.length > 0) {
-    const lastUserMessageEl = userMessage.value[userMessage.value.length - 1]
-    if (lastUserMessageEl) {
-      lastUserMessageEl.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest'
-      })
-    }
+const scrollToUserQuestion = async () => {
+  await nextTick() // DOM更新を待つ
+  
+  // ページ全体をスクロールする（最もシンプルで確実な方法）
+  const userMessages = document.querySelectorAll('[data-user-message="true"]')
+  
+  if (userMessages.length > 0) {
+    const lastUserMessage = userMessages[userMessages.length - 1] as HTMLElement
+    
+    // 要素をまず上部に配置
+    lastUserMessage.scrollIntoView({
+      behavior: 'instant',
+      block: 'start',
+      inline: 'nearest'
+    })
+    
+    // 少し上にスクロールして余白を作る
+    window.scrollBy({
+      top: -20,
+      behavior: 'smooth'
+    })
   }
 }
 
@@ -404,10 +415,14 @@ const sendMessage = async () => {
   isLoading.value = true
   
   // ユーザーメッセージ送信直後のスクロール（ローディング表示後）
+  // Vue 3のnextTickを二重に使用してDOMの完全な更新を保証
   await nextTick()
-  setTimeout(() => {
-    scrollToUserQuestion()
-  }, 300) // 2回目以降でもDOMが確実に更新されるよう遅延を増加
+  await nextTick()
+  
+  // さらに確実にするためsetTimeoutも併用
+  setTimeout(async () => {
+    await scrollToUserQuestion()
+  }, 100)
 
   try {
     // Call Real Chat API
