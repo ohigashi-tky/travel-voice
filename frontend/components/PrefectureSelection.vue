@@ -24,11 +24,25 @@
         ]"
         :disabled="!prefecture.available"
       >
-        <!-- Background Image -->
+        <!-- Loading Placeholder -->
         <div 
-          class="absolute inset-0 bg-cover bg-center"
-          :style="{ backgroundImage: `url(${getPrefectureImagePath(prefecture.id)})` }"
-        ></div>
+          v-if="!imageLoaded[prefecture.id]"
+          class="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center"
+        >
+          <div class="animate-pulse text-gray-400 dark:text-gray-500 text-xs">読み込み中...</div>
+        </div>
+        
+        <!-- Background Image -->
+        <img 
+          :src="getPrefectureImagePath(prefecture.id)"
+          :alt="`${prefecture.name}の風景`"
+          class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+          :class="{ 'opacity-0': !imageLoaded[prefecture.id] }"
+          loading="eager"
+          decoding="async"
+          @load="handleImageLoad(prefecture.id)"
+          @error="handleImageError"
+        />
         <!-- Overlay -->
         <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-all duration-300"></div>
         <!-- Prefecture Name -->
@@ -102,11 +116,25 @@
                   : 'border-gray-300 dark:border-gray-600 opacity-50 cursor-not-allowed'
               ]"
             >
-              <!-- Background Image -->
+              <!-- Loading Placeholder -->
               <div 
-                class="absolute inset-0 bg-cover bg-center"
-                :style="{ backgroundImage: `url(${getPrefectureImagePath(prefecture.id)})` }"
-              ></div>
+                v-if="!imageLoaded[prefecture.id]"
+                class="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center"
+              >
+                <div class="animate-pulse text-gray-400 dark:text-gray-500 text-xs">読み込み中...</div>
+              </div>
+              
+              <!-- Background Image -->
+              <img 
+                :src="getPrefectureImagePath(prefecture.id)"
+                :alt="`${prefecture.name}の風景`"
+                class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                :class="{ 'opacity-0': !imageLoaded[prefecture.id] }"
+                loading="lazy"
+                decoding="async"
+                @load="handleImageLoad(prefecture.id)"
+                @error="handleImageError"
+              />
               <!-- Overlay -->
               <div class="absolute inset-0 bg-black bg-opacity-40 hover:bg-opacity-30 transition-all duration-200"></div>
               <!-- Prefecture Name -->
@@ -149,6 +177,9 @@ const showPrefectureModal = ref(false)
 const mainPrefectures = ref([])
 const prefectureRegions = ref([])
 
+// 画像読み込み状態を管理
+const imageLoaded = ref({})
+
 // 都道府県データ初期化
 const initializePrefectureData = async () => {
   try {
@@ -188,6 +219,18 @@ const getPrefectureImagePath = (prefectureId) => {
   const extension = jpgIds.includes(prefectureId) ? 'jpg' : 'jpeg'
   
   return `/prefectures_image/${prefectureId}.${extension}`
+}
+
+// 画像読み込み成功時の処理
+const handleImageLoad = (prefectureId) => {
+  imageLoaded.value[prefectureId] = true
+}
+
+// 画像読み込みエラーハンドリング
+const handleImageError = (event) => {
+  console.warn('Failed to load prefecture image:', event.target.src)
+  // フォールバック画像の設定（任意）
+  // event.target.src = '/path/to/fallback-image.jpg'
 }
 
 const selectPrefecture = async (prefecture) => {
