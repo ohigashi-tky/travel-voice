@@ -176,3 +176,97 @@ docker compose exec backend php artisan travel-spots:fetch-images
 - **502エラー = アプリ起動失敗、CORSエラー = 502の結果**
 - **Railwayの自動設定を信頼し、過剰な設定変更を避ける**
 - **動作していた過去の状態を基準点とする**
+
+## 画像表示実装ガイドライン
+
+### **必須実装パターン**
+新しい画像表示機能を実装する際は、以下のパターンを**必ず**使用してください：
+
+#### 1. HTML構造（imgタグ使用）
+```vue
+<template>
+  <!-- ❌ 使用禁止: CSS background-image -->
+  <!-- <div :style="{ backgroundImage: `url(${imageUrl})` }"></div> -->
+  
+  <!-- ✅ 必須: imgタグ + 読み込み状態管理 -->
+  <div class="image-container">
+    <!-- 読み込み中プレースホルダー -->
+    <div 
+      v-if="!imageLoaded[item.id]" 
+      class="loading-placeholder animate-pulse bg-gradient-to-r from-gray-200 to-gray-300"
+    >
+      <span class="text-gray-500">読み込み中...</span>
+    </div>
+    
+    <!-- 画像本体 -->
+    <img 
+      v-show="imageLoaded[item.id]"
+      :src="item.imageUrl"
+      :alt="item.name"
+      @load="imageLoaded[item.id] = true"
+      @error="handleImageError(item)"
+      loading="eager"
+      decoding="async"
+      class="w-full h-full object-cover transition-opacity duration-300"
+    />
+  </div>
+</template>
+```
+
+#### 2. JavaScript実装（Vue 3 Composition API）
+```javascript
+import { ref } from 'vue'
+
+// 画像読み込み状態管理
+const imageLoaded = ref({})
+
+// エラーハンドリング
+const handleImageError = (item) => {
+  console.warn(`Failed to load image for: ${item.name}`)
+  imageLoaded.value[item.id] = false
+  // 必要に応じてフォールバック画像を設定
+}
+```
+
+#### 3. CSS実装
+```css
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 150px; /* 適切な最小高さを設定 */
+}
+
+img {
+  transition: opacity 0.3s ease;
+}
+```
+
+### **loading属性の使い分け**
+- **`loading="eager"`**: ホームページ、重要なコンテンツ（即座に読み込み）
+- **`loading="lazy"`**: モーダル、下部コンテンツ（スクロール時に読み込み）
+
+### **禁止事項**
+- ❌ **CSS background-imageの使用禁止**: 読み込み状態を追跡できないため
+- ❌ **エラーハンドリングなしの実装禁止**: 読み込み失敗時の対応が必要
+- ❌ **読み込み状態の表示なし禁止**: ユーザーに読み込み状況を示す必要
+
+### **必須チェックリスト**
+新しい画像表示実装時は以下を確認：
+- [ ] `<img>`タグを使用している
+- [ ] `@load`と`@error`イベントハンドラーが設定されている
+- [ ] 読み込み中のプレースホルダーが実装されている
+- [ ] `loading`と`decoding`属性が適切に設定されている
+- [ ] エラー時の処理が実装されている
+- [ ] 画像読み込み状態のリアクティブ管理が実装されている
+
+### **実装例の参照**
+- **成功例**: `PrefectureSelection.vue`, `CategorySelection.vue`
+- **これらのコンポーネントを参考に同じパターンで実装すること**
