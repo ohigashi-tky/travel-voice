@@ -8,10 +8,24 @@
       class="absolute inset-0 transition-opacity duration-[5000ms] ease-in-out"
       :style="{ opacity: currentHeroIndex === index ? 1 : 0 }"
     >
+      <!-- 読み込み中プレースホルダー -->
+      <div 
+        v-if="!imageLoaded[index]" 
+        class="loading-placeholder animate-pulse bg-gradient-to-r from-gray-200 to-gray-300 w-full h-full flex items-center justify-center"
+      >
+        <span class="text-gray-500">読み込み中...</span>
+      </div>
+      
+      <!-- 画像本体 -->
       <img 
+        v-show="imageLoaded[index]"
         :src="image"
         :alt="`ヒーローイメージ ${index + 1}`"
-        class="w-full h-full object-cover"
+        @load="imageLoaded[index] = true"
+        @error="handleImageError(index, image)"
+        loading="eager"
+        decoding="async"
+        class="w-full h-full object-cover transition-opacity duration-300"
       />
       <div class="absolute inset-0 bg-black bg-opacity-30"></div>
     </div>
@@ -113,6 +127,16 @@ const heroImages = [
   '/top_image_3.jpg'
 ]
 let heroInterval = null
+
+// 画像読み込み状態管理
+const imageLoaded = ref({})
+
+// 画像エラーハンドリング
+const handleImageError = (index, imagePath) => {
+  console.warn(`Failed to load hero image ${index + 1}: ${imagePath}`)
+  imageLoaded.value[index] = false
+  // 必要に応じてフォールバック画像を設定
+}
 
 // Search related variables
 const searchQuery = ref('')
