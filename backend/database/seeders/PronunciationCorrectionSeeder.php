@@ -44,6 +44,9 @@ class PronunciationCorrectionSeeder extends Seeder
             ['original_text' => '後楽園', 'pronunciation' => 'こうらくえん', 'priority' => 70],
             ['original_text' => '白川郷', 'pronunciation' => 'しらかわごう', 'priority' => 70],
             ['original_text' => '五箇山', 'pronunciation' => 'ごかやま', 'priority' => 70],
+            
+            // 橋・建造物
+            ['original_text' => '角島大橋', 'pronunciation' => 'つのしまおおはし', 'priority' => 80],
         ];
 
         foreach ($corrections as $correction) {
