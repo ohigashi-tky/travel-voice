@@ -69,7 +69,7 @@
           <!-- Expandable filters -->
           <div 
             v-show="isFiltersExpanded"
-            class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 transition-all duration-300"
+            class="mt-4 border-t border-gray-200 dark:border-gray-700 transition-all duration-300"
           >
             <div class="flex flex-col gap-4">
               <!-- Date and Category Filters -->
@@ -153,7 +153,7 @@
         <!-- Pagination Controls -->
         <div v-if="filteredEvents.length > 0 && totalPages > 1" class="mb-2">
           <!-- Results Summary -->
-          <div class="text-sm text-gray-600 dark:text-gray-300 mb-1 text-center">
+          <div class="text-sm text-gray-600 dark:text-gray-300 my-2 text-center">
             全{{ filteredEvents.length }}件 {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredEvents.length) }}件を表示
           </div>
           
