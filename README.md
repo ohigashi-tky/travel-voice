@@ -1,12 +1,12 @@
 # 🏠 おうち旅行
 
-音声で日本を巡る、家にいながら楽しめる旅行体験アプリ
+家にいながら音声で楽しめる旅行体験アプリ
 
 [![Laravel](https://img.shields.io/badge/Laravel-11.x-red.svg)](https://laravel.com/)
 [![Nuxt.js](https://img.shields.io/badge/Nuxt.js-3.x-green.svg)](https://nuxt.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 
-## 🚀 クイックスタート
+## 環境構築
 
 ### 1. 環境変数の設定
 
@@ -62,30 +62,21 @@ docker compose exec backend php artisan events:fetch --prefecture=東京都  # �
 docker compose exec backend php artisan events:fetch --force      # 既存データ削除して再取得
 ```
 
-## 🏗️ 技術スタック
+## 技術スタック
 
-- **Frontend**: Nuxt.js 3, Vue 3, TailwindCSS, TypeScript
-- **Backend**: Laravel 11, PHP 8.2, MySQL
-- **AI・音声**: Amazon Polly, OpenRouter API (Google Gemini)
-- **Infrastructure**: Docker, Docker Compose
+- **フロントエンド**: Nuxt.js 3, Vue 3, TailwindCSS, TypeScript
+- **バックエンド**: Laravel 11, PHP 8.2, MySQL
+- **AI・音声**: Amazon Polly, OpenRouter API (Gemini)
+- **インフラ**: Docker, Docker Compose, Railway(本番環境)
+- **地図、観光地データ**: Google Maps API, Google Places API
 
-## 📊 主要API
+## 機能
 
-| エンドポイント | 説明 |
-|-------------|------|
-| `GET /api/travel-spots` | 観光スポット一覧 |
-| `GET /api/travel-spots/{id}` | スポット詳細 |
-| `POST /api/audio-guide/tourist-spot` | 音声ガイド生成 |
-| `GET /api/prefectures` | 都道府県一覧 |
-| `GET /api/events` | イベント情報 |
-
-## 🎯 主要機能
-
-- **音声ガイド**: Amazon Polly Neural Engineによる自然な日本語音声
-- **画像管理**: データベース保存によりGoogle Places API呼び出し削減
+- **音声ガイド**: Amazon Pollyによる生成
+- **画像管理**: Google Maps APIで初回のみ一括取得
+- **イベント情報**: AIによる一括取得バッチ。任意の実行。
 - **検索機能**: 観光地名・都道府県での高速検索
-- **レスポンシブ対応**: PC・スマートフォン・タブレット対応
+- **レスポンシブ対応**: メインはスマホ。PCにも対応しています。
 
 ---
-
-📍 **本番環境**: https://travel-voice-production-61af.up.railway.app/
+**本番環境**: https://travel-voice-production-61af.up.railway.app/
