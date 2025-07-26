@@ -40,7 +40,7 @@ docker compose exec backend php artisan migrate --seed
 - **API**: http://localhost:8000
 - **DB管理**: http://localhost:8080
 
-## 🔧 開発コマンド
+## 開発コマンド
 
 ```bash
 # 全サービス管理
@@ -77,6 +77,10 @@ docker compose exec backend php artisan events:fetch --force      # 既存デー
 - **イベント情報**: AIによる一括取得バッチ。任意の実行。
 - **検索機能**: 観光地名・都道府県での高速検索
 - **レスポンシブ対応**: メインはスマホ。PCにも対応しています。
+
+## AIによる開発支援
+- **メイン開発** Claude Code
+- **issueによる自動開発** Amazon Q Developer
 
 ---
 **本番環境**: https://travel-voice-production-61af.up.railway.app/
