@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Prefecture;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PrefectureController extends Controller
 {
@@ -74,9 +75,15 @@ class PrefectureController extends Controller
     public function featured(): JsonResponse
     {
         try {
-            $prefectures = Prefecture::with('images')
-                ->featured()
-                ->get();
+            // キャッシュキー
+            $cacheKey = 'prefectures.featured';
+            
+            // キャッシュから取得、なければDBから取得して24時間キャッシュ
+            $prefectures = Cache::remember($cacheKey, 60 * 60 * 24, function () {
+                return Prefecture::featured()
+                    ->select('id', 'name', 'is_available', 'featured_order')
+                    ->get();
+            });
 
             return response()->json([
                 'success' => true,
@@ -98,10 +105,16 @@ class PrefectureController extends Controller
     public function byRegion(): JsonResponse
     {
         try {
-            $prefectures = Prefecture::with('images')
-                ->orderByRegion()
-                ->get()
-                ->groupBy('region');
+            // キャッシュキー
+            $cacheKey = 'prefectures.by_region';
+            
+            // キャッシュから取得、なければDBから取得して24時間キャッシュ
+            $prefectures = Cache::remember($cacheKey, 60 * 60 * 24, function () {
+                return Prefecture::orderByRegion()
+                    ->select('id', 'name', 'region', 'is_available', 'region_order', 'order_in_region')
+                    ->get()
+                    ->groupBy('region');
+            });
 
             return response()->json([
                 'success' => true,
@@ -112,6 +125,52 @@ class PrefectureController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch prefectures by region',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * トップページ用データ一括取得（新規追加）
+     * 主要都道府県と地域別都道府県を一度に取得
+     */
+    public function topPageData(): JsonResponse
+    {
+        try {
+            // キャッシュキー
+            $cacheKey = 'prefectures.top_page';
+            
+            // キャッシュから取得、なければDBから取得して24時間キャッシュ
+            $data = Cache::remember($cacheKey, 60 * 60 * 24, function () {
+                // 必要最小限のカラムのみ選択
+                $columns = ['id', 'name', 'region', 'is_available', 'featured_order', 'region_order', 'order_in_region'];
+                
+                // 主要都道府県
+                $featured = Prefecture::featured()
+                    ->select($columns)
+                    ->get();
+                
+                // 地域別都道府県
+                $byRegion = Prefecture::orderByRegion()
+                    ->select($columns)
+                    ->get()
+                    ->groupBy('region');
+                
+                return [
+                    'featured' => $featured,
+                    'by_region' => $byRegion
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch prefecture data',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -195,6 +254,30 @@ class PrefectureController extends Controller
                 'message' => 'Prefecture not found',
                 'error' => $e->getMessage()
             ], 404);
+        }
+    }
+
+    /**
+     * キャッシュクリア（管理者用）
+     */
+    public function clearCache(): JsonResponse
+    {
+        try {
+            Cache::forget('prefectures.featured');
+            Cache::forget('prefectures.by_region');
+            Cache::forget('prefectures.top_page');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Prefecture cache cleared successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to clear cache',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

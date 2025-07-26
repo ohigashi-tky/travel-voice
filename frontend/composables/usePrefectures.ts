@@ -29,6 +29,9 @@ export const usePrefectures = () => {
   const prefectures = ref<Prefecture[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  
+  // トップページデータのキャッシュ（メモリ内キャッシュ）
+  const topPageDataCache = ref<{featured: Prefecture[], by_region: PrefecturesByRegion} | null>(null)
 
   // 全都道府県取得
   const fetchPrefectures = async (availableOnly = false) => {
@@ -207,6 +210,36 @@ export const usePrefectures = () => {
     return null
   }
 
+  // トップページ用データ一括取得（新規追加）
+  const fetchTopPageData = async () => {
+    try {
+      // キャッシュがあればそれを返す
+      if (topPageDataCache.value) {
+        return topPageDataCache.value
+      }
+      
+      loading.value = true
+      error.value = null
+
+      // Railway production: use backend URL
+      const apiBase = process.client && window.location.hostname !== 'localhost' ? 'https://travel-voice-production.up.railway.app' : config.public.apiBase
+      const response = await $fetch<{success: boolean, data: {featured: Prefecture[], by_region: PrefecturesByRegion}}>(`${apiBase}/api/prefectures/top-page`)
+      
+      if (response.success) {
+        topPageDataCache.value = response.data
+        return response.data
+      } else {
+        throw new Error('Failed to fetch top page data')
+      }
+    } catch (err) {
+      console.error('Error fetching top page data:', err)
+      error.value = 'Failed to load prefecture data'
+      return { featured: [], by_region: {} }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     prefectures,
     availablePrefectures,
@@ -219,6 +252,7 @@ export const usePrefectures = () => {
     fetchFeaturedPrefectures,
     fetchPrefectureSpots,
     fetchPrefectureSpotsById,
+    fetchTopPageData,
     getPrefectureRoutePath
   }
 }

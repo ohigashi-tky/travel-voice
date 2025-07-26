@@ -152,63 +152,47 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onUnmounted } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useLanguage } from '~/composables/useLanguage'
-import { usePrefectures } from '~/composables/usePrefectures'
+import { useTopPageData } from '~/composables/useTopPageData'
 
 // Language
 const { t } = useLanguage()
 
-// 都道府県データ - API経由で取得
+// 都道府県データ - 最適化されたAPI経由で取得
 const { 
-  featuredPrefectures, 
-  prefecturesByRegion,
-  fetchPrefectures,
-  fetchPrefecturesByRegion,
-  fetchFeaturedPrefectures,
-  getPrefectureRoutePath,
-  loading: prefecturesLoading 
-} = usePrefectures()
+  featuredPrefectures,
+  regionalPrefectures,
+  fetchTopPageData,
+  isLoading: prefecturesLoading,
+  error: prefecturesError
+} = useTopPageData()
 
 // Modal state
 const showPrefectureModal = ref(false)
 
 // 都道府県データを初期化時に取得
-const mainPrefectures = ref([])
-const prefectureRegions = ref([])
+const mainPrefectures = computed(() => 
+  featuredPrefectures.value.map(p => ({
+    id: p.id,
+    name: p.name,
+    available: true // APIから取得されるデータは利用可能と仮定
+  }))
+)
+
+const prefectureRegions = computed(() => 
+  regionalPrefectures.value.map(region => ({
+    name: region.region,
+    prefectures: region.prefectures.map(p => ({
+      id: p.id,
+      name: p.name,
+      available: true // APIから取得されるデータは利用可能と仮定
+    }))
+  }))
+)
 
 // 画像読み込み状態を管理
 const imageLoaded = ref({})
-
-// 都道府県データ初期化
-const initializePrefectureData = async () => {
-  try {
-    // 主要都道府県データを取得
-    const featuredData = await fetchFeaturedPrefectures()
-    mainPrefectures.value = featuredData.map(p => ({
-      id: p.id,
-      name: p.name,
-      available: p.is_available
-    }))
-    
-    // 地域別都道府県データを取得（人口順ソート済み）
-    const regionData = await fetchPrefecturesByRegion()
-    prefectureRegions.value = Object.entries(regionData).map(([regionName, prefectures]) => ({
-      name: regionName,
-      prefectures: prefectures.map(p => ({
-        id: p.id,
-        name: p.name,
-        available: p.is_available
-      }))
-    }))
-    
-  } catch (error) {
-    console.error('Failed to initialize prefecture data:', error)
-    // フォールバック: 空配列で初期化
-    mainPrefectures.value = []
-    prefectureRegions.value = []
-  }
-}
 
 // 都道府県の背景画像パスを生成
 const getPrefectureImagePath = (prefectureId) => {
@@ -239,20 +223,13 @@ const selectPrefecture = async (prefecture) => {
     return
   }
 
-  const routePath = getPrefectureRoutePath(prefecture.name)
-  if (!routePath) {
-    console.error('Route not found for prefecture:', prefecture.name)
-    alert(`${prefecture.name}のページが見つかりません。`)
-    return
-  }
-
   try {
-    await navigateTo(`/${routePath}`)
+    // 都道府県IDベースのルートに遷移
+    await navigateTo(`/prefecture/${prefecture.id}`)
   } catch (error) {
     console.error('Navigation error:', error)
-    // Remove alert and use proper error handling
     console.warn(`Failed to navigate to ${prefecture.name}. Attempting fallback...`)
-    // Fallback to prefecture page route
+    // フォールバック: 名前ベースのルートを試行
     await navigateTo(`/prefecture/${encodeURIComponent(prefecture.name)}`)
   }
 }
@@ -282,7 +259,7 @@ watch(showPrefectureModal, (newValue) => {
 
 // Initialize on mount
 onMounted(() => {
-  initializePrefectureData()
+  fetchTopPageData()
 })
 
 // クリーンアップ：ページ離脱時にスクロールを復元

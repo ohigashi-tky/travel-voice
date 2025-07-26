@@ -10,6 +10,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PrefectureController;
 use App\Http\Controllers\Api\AudioGuideController;
 use App\Http\Controllers\Api\TestPollyController;
+use App\Http\Controllers\Api\TopPageController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -32,9 +33,12 @@ Route::get('/prefectures', [PrefectureController::class, 'index']);
 Route::get('/prefectures/available', [PrefectureController::class, 'available']);
 Route::get('/prefectures/featured', [PrefectureController::class, 'featured']);
 Route::get('/prefectures/by-region', [PrefectureController::class, 'byRegion']);
+// Top Page API Routes (高速化されたエンドポイント)
+Route::get('/top-page/data', [TopPageController::class, 'index']); // 新規追加：トップページ用一括取得
 Route::get('/prefectures/{id}', [PrefectureController::class, 'show']);
 Route::get('/prefectures/{id}/spots', [PrefectureController::class, 'spots']);
 Route::get('/prefectures/name/{name}/spots', [PrefectureController::class, 'spotsByName']);
+Route::delete('/prefectures/cache', [PrefectureController::class, 'clearCache']); // 新規追加：キャッシュクリア
 
 Route::get('/guides/{guide}', [GuideController::class, 'show']);
 
