@@ -79,8 +79,8 @@ docker compose exec backend php artisan events:fetch --force      # 既存デー
 - **レスポンシブ対応**: メインはスマホ。PCにも対応しています。
 
 ## AIによる開発支援
-- **メイン開発** Claude Code
-- **issueによる自動開発** Amazon Q Developer
+- **メイン開発**: Claude Code
+- **issueによる自動開発**: Amazon Q Developer
 
 ---
 **本番環境**: https://travel-voice-production-61af.up.railway.app/
