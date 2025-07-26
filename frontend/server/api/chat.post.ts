@@ -50,9 +50,9 @@ export default defineEventHandler(async (event) => {
     }
 
     // システムプロンプト
-    const systemPrompt = `あなたは日本の観光情報に詳しいAIアシスタントです。以下の点を心がけて回答してください：
+    const systemPrompt = `あなたは日本の観光情報に詳しいAIアシスタントです。会話履歴を参考にして、自然で文脈に沿った回答をしてください。
 
-【重要】関連質問では「この場所」「ここ」「そこ」などの指示語は絶対に使用せず、必ず具体的な場所名・施設名を明記してください。${contextInfo}
+【重要】「この場所」「あの観光地」「先ほどお話しした」などの指示語を使用する際は、会話履歴から具体的な場所名を特定して回答してください。${contextInfo}
 
 【回答フォーマット】
 - 必ずマークダウン形式で回答してください
@@ -110,9 +110,9 @@ export default defineEventHandler(async (event) => {
       }
     ]
 
-    // 会話履歴があれば追加（最大10メッセージ）
+    // 会話履歴があれば追加（最大12メッセージ - より多くの文脈を保持）
     if (Array.isArray(conversation) && conversation.length > 0) {
-      messages.push(...conversation.slice(-10))
+      messages.push(...conversation.slice(-12))
     }
 
     // ユーザーメッセージを追加

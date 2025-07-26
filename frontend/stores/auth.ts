@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { useAiChatStore } from './aiChat'
 
 export interface User {
   id: number
@@ -79,6 +80,10 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null
     error.value = null
     localStorage.removeItem('user')
+    
+    // AIチャットの会話履歴をクリア
+    const aiChatStore = useAiChatStore()
+    aiChatStore.clearMessages()
   }
 
   const initializeAuth = async () => {

@@ -13,20 +13,25 @@
       <!-- Header (全ページ共通) -->
       <AppHeader />
       <slot />
-      <!-- Floating Footer (全ページ共通) -->
-      <FloatingFooter />
+      <!-- Floating Footer (ログインページ以外で表示) -->
+      <FloatingFooter v-if="!isLoginPage" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import { useRoute } from 'vue-router'
 import AppHeader from '~/components/AppHeader.vue'
 import FloatingFooter from '~/components/FloatingFooter.vue'
 
 const authStore = useAuthStore()
+const route = useRoute()
 const isAuthLoading = ref(true)
+
+// ログインページかどうかを判定
+const isLoginPage = computed(() => route.path === '/login')
 
 onMounted(async () => {
   // Initialize auth state

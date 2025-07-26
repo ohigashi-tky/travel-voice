@@ -162,6 +162,7 @@
 import { ref, nextTick, onMounted, computed, watch, onUnmounted } from 'vue'
 import { ArrowLeft, Bot, User, Send } from 'lucide-vue-next'
 import { useTouristSpots } from '~/composables/useTouristSpots'
+import { useAiChatStore } from '~/stores/aiChat'
 // marked import removed - using custom markdown parser
 
 // Page meta
@@ -175,9 +176,11 @@ useHead({
 
 // Reactive variables
 const userInput = ref('')
-const isLoading = ref(false)
 const chatContainer = ref<HTMLElement>()
 const isActive = ref(false)
+
+// Store
+const aiChatStore = useAiChatStore()
 
 // 動的スペーサー高さ（チャットコンテナの高さに合わせて調整）
 const dynamicSpacerHeight = computed(() => {
@@ -202,14 +205,9 @@ const dynamicSpacerHeight = computed(() => {
   return Math.min(800, Math.max(500, availableHeight * 0.9))
 })
 
-interface Message {
-  role: 'user' | 'assistant' | 'questions'
-  content: string
-  questions?: string[]
-  audioGuideSpots?: Array<{id: number, name: string}>
-}
-
-const messages = ref<Message[]>([])
+// Store経由でmessagesとisLoadingにアクセス
+const messages = computed(() => aiChatStore.messages)
+const isLoading = computed(() => aiChatStore.isLoading)
 
 const sampleQuestions = [
   '東京で桜の名所を教えて',
@@ -405,55 +403,34 @@ const askRelatedQuestion = (question: string) => {
 }
 
 const sendMessage = async () => {
-  if (!userInput.value.trim() || isLoading.value) return
+  if (!userInput.value.trim() || aiChatStore.isLoading) return
 
   const userMessage = userInput.value.trim()
   userInput.value = ''
 
   await nextTick()
 
-  // Add user message
-  messages.value.push({
-    role: 'user',
-    content: userMessage
-  })
-
-  isLoading.value = true
-  
-  // ユーザーメッセージ送信直後のスクロール（ローディング表示後）
-  // Vue 3のnextTickを二重に使用してDOMの完全な更新を保証
+  // ユーザーメッセージ送信直後のスクロール準備
   await nextTick()
   await nextTick()
   
-  // さらに確実にするためsetTimeoutも併用
   setTimeout(async () => {
     await scrollToUserQuestion()
   }, 100)
 
   try {
-    // Call Real Chat API
-    const response = await $fetch('/api/chat', {
-      method: 'POST',
-      body: {
-        message: userMessage,
-        conversation: messages.value
-      }
-    })
-
-    // Add AI response
-    if (typeof response === 'object' && response !== null && 'content' in response && response.content) {
+    // ストア経由でメッセージ送信
+    const result = await aiChatStore.sendMessage(userMessage)
+    
+    if (result.success && result.content) {
       // AI回答から音声ガイド対応観光地を検出
-      const detectedSpots = detectAudioGuideSpots(response.content as string)
+      const detectedSpots = detectAudioGuideSpots(result.content)
       
-      // AI回答を追加
-      messages.value.push({
-        role: 'assistant',
-        content: response.content as string,
-        audioGuideSpots: detectedSpots
-      })
+      // AI回答を追加（音声ガイドスポット情報付き）
+      aiChatStore.addAssistantMessage(result.content, detectedSpots)
 
       // 関連質問を抽出して独立したメッセージとして追加
-      const relatedQuestions = extractRelatedQuestions(response.content as string)
+      const relatedQuestions = extractRelatedQuestions(result.content)
       
       // 関連質問が見つからない場合はより具体的な質問を使用
       const fallbackQuestions = [
@@ -472,29 +449,14 @@ const sendMessage = async () => {
       
       const finalQuestions = relatedQuestions.length > 0 ? relatedQuestions : randomQuestions
       
-      const questionsMessage = {
-        role: 'questions' as const,
-        content: '',
-        questions: finalQuestions
-      }
-      
-      messages.value.push(questionsMessage)
-      
-    } else if (typeof response === 'object' && response !== null && 'error' in response && response.error) {
-      messages.value.push({
-        role: 'assistant',
-        content: `エラー: ${response.error}${'details' in response && response.details ? ` (${response.details})` : ''}`
-      })
+      // 関連質問を追加
+      aiChatStore.addQuestionsMessage(finalQuestions)
     }
+    // エラーの場合はストア側で既にエラーメッセージが追加されている
 
   } catch (error) {
-    messages.value.push({
-      role: 'assistant',
-      content: '申し訳ございません。現在AIサービスに接続できません。しばらく経ってから再度お試しください。'
-    })
-  } finally {
-    isLoading.value = false
-    // AI回答完了後はスクロールしない（ユーザーが読みやすい位置を維持）
+    // 予期しないエラーの処理（ストア側でも処理されるが念のため）
+    console.error('Unexpected error in sendMessage:', error)
   }
 }
 
@@ -550,6 +512,11 @@ const navigateToSpot = (spotId: number) => {
   navigateTo(`/spots/${spotId}`)
 }
 
+// 会話履歴をクリア（必要に応じて使用）
+const clearConversation = () => {
+  aiChatStore.clearMessages()
+}
+
 function handleFocus() {
   isActive.value = true
 }
@@ -566,6 +533,9 @@ watch(userInput, (val) => {
 onMounted(async () => {
   // 観光地データを初期化
   await initializeAudioGuideSpots()
+  
+  // ストアから会話履歴を復元
+  aiChatStore.loadFromStorage()
   
   // グローバル関数として観光地詳細への遷移を設定
   if (typeof window !== 'undefined') {
