@@ -82,7 +82,7 @@ const coordinates = computed(() => {
 
 const apiKey = computed(() => {
   const config = useRuntimeConfig()
-  return config.public.googleMapsApiKey || 'AIzaSyDBTzeSepixQFP2y2pQcNciOSj8kYlDzh4'
+  return config.public.googleMapsApiKey || 'your_api_key'
 })
 
 // Place モードのURL

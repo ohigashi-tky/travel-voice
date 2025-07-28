@@ -56,7 +56,7 @@ const coordinates = computed(() => {
 
 const mapUrl = computed(() => {
   const config = useRuntimeConfig()
-  const apiKey = config.public.googleMapsApiKey || 'AIzaSyDBTzeSepixQFP2y2pQcNciOSj8kYlDzh4'
+  const apiKey = config.public.googleMapsApiKey || 'your_api_key'
   
   // Google Maps Embed API using view mode
   return `https://www.google.com/maps/embed/v1/view?key=${apiKey}&center=${coordinates.value.lat},${coordinates.value.lng}&zoom=${props.zoom}`
