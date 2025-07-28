@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
 const mapContainer = ref<HTMLElement>()
 let map: google.maps.Map | null = null
 const config = useRuntimeConfig()
-const apiKey = config.public.googleMapsApiKey || 'AIzaSyDBTzeSepixQFP2y2pQcNciOSj8kYlDzh4'
+const apiKey = config.public.googleMapsApiKey || 'your_api_key'
 
 // 観光地の座標データ
 const spotCoordinates: Record<string, { lat: number; lng: number }> = {
