@@ -24,7 +24,6 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     // Private keys (only available on server-side)
-    googleMapsApiKey: process.env.NUXT_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API_KEY,
     openrouterApiKey: process.env.NUXT_OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY,
     openrouterModel: process.env.NUXT_OPENROUTER_MODEL || process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash-lite-preview-06-17',
     // Server-side API base URL (for SSR)
@@ -32,6 +31,7 @@ export default defineNuxtConfig({
     public: {
       // Client-side API base URL - use localhost for local dev, Railway backend for production
       apiBase: process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NUXT_PUBLIC_API_BASE || 'https://travel-voice-production.up.railway.app',
+      googleMapsApiKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API_KEY,
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID
     }
   },

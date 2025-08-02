@@ -64,3 +64,18 @@ Route::get('/download/audio/polly/{filename}', function ($filename) {
         'Content-Type' => 'audio/mpeg'
     ]);
 })->where('filename', '.*\.mp3$');
+
+// API Documentation
+Route::get('/docs', function() {
+    return view('scribe.index');
+})->name('scribe.docs');
+
+Route::get('/docs/{path}', function($path) {
+    if ($path === 'postman') {
+        return response()->file(storage_path('app/private/scribe/collection.json'));
+    }
+    if ($path === 'openapi') {
+        return response()->file(storage_path('app/private/scribe/openapi.yaml'));
+    }
+    return abort(404);
+})->where('path', 'postman|openapi')->name('scribe.assets');

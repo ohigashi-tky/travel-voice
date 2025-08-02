@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 
 interface Props {
   spotName: string
@@ -82,7 +82,21 @@ const coordinates = computed(() => {
 
 const apiKey = computed(() => {
   const config = useRuntimeConfig()
-  return config.public.googleMapsApiKey || 'AIzaSyDBTzeSepixQFP2y2pQcNciOSj8kYlDzh4'
+  const key = config.public.googleMapsApiKey
+  
+  // 開発環境でAPIキーが設定されていない場合の警告
+  if (!key) {
+    console.warn('Google Maps API key is not set in environment variables')
+  }
+  
+  return key
+})
+
+// デバッグ用：マウント時にAPIキーの状態を確認
+onMounted(() => {
+  if (!apiKey.value) {
+    console.error('Google Maps API key is missing. Please set NUXT_PUBLIC_GOOGLE_MAPS_API_KEY or GOOGLE_MAPS_API_KEY in your .env file')
+  }
 })
 
 // Place モードのURL

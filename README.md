@@ -38,6 +38,7 @@ docker compose exec backend php artisan migrate --seed
 
 - **アプリ**: http://localhost:3000
 - **API**: http://localhost:8000
+- **API仕様書**: http://localhost:8000/docs
 - **DB管理**: http://localhost:8080
 
 ## 開発コマンド
@@ -60,6 +61,9 @@ docker compose exec backend php artisan travel-spots:update-place-ids  # place_i
 docker compose exec backend php artisan events:fetch              # 全都道府県のイベント情報取得
 docker compose exec backend php artisan events:fetch --prefecture=東京都  # 特定都道府県のみ
 docker compose exec backend php artisan events:fetch --force      # 既存データ削除して再取得
+
+# API仕様書管理
+docker compose exec backend php artisan scribe:generate           # API仕様書の再生成
 ```
 
 ## 技術スタック
@@ -69,6 +73,7 @@ docker compose exec backend php artisan events:fetch --force      # 既存デー
 - **AI・音声**: Amazon Polly, OpenRouter API (Gemini)
 - **インフラ**: Docker, Docker Compose, Railway(本番環境)
 - **地図、観光地データ**: Google Maps API, Google Places API
+- **API仕様書**: Laravel Scribe
 
 ## 機能
 
@@ -81,6 +86,22 @@ docker compose exec backend php artisan events:fetch --force      # 既存デー
 ## AIによる開発支援
 - **メイン開発**: Claude Code
 - **issueによる自動開発**: Amazon Q Developer
+
+## API仕様書
+
+### 📚 確認方法
+- **ローカル環境**: http://localhost:8000/docs
+- **本番環境**: https://travel-voice-production.up.railway.app/docs
+
+### 🔄 更新方法
+API変更（コントローラー・ルート修正）後は以下コマンドで仕様書を再生成：
+```bash
+docker compose exec backend php artisan scribe:generate
+```
+
+### ⚠️ 注意事項
+- API仕様書は自動生成ファイルのため、`.gitignore`でGit管理から除外されています
+- 設定ファイル（`config/scribe.php`）のみGit管理対象です
 
 ---
 **本番環境**: https://travel-voice-production-61af.up.railway.app/

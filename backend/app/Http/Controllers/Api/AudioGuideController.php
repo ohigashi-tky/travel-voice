@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\PollyService;
+use App\Contracts\AudioSynthesizerInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -11,22 +11,55 @@ use Illuminate\Support\Facades\Log;
 
 class AudioGuideController extends Controller
 {
-    private PollyService $pollyService;
+    private AudioSynthesizerInterface $audioSynthesizer;
 
-    public function __construct(PollyService $pollyService)
+    /**
+     * 依存性注入でAudioSynthesizerInterfaceを受け取る
+     * 
+     * これにより、本番環境ではPollyService、テスト環境ではMockAudioSynthesizer
+     * といったように、実行環境に応じて異なる実装を使用できる
+     */
+    public function __construct(AudioSynthesizerInterface $audioSynthesizer)
     {
-        $this->pollyService = $pollyService;
+        $this->audioSynthesizer = $audioSynthesizer;
     }
 
     /**
      * 利用可能な音声一覧を取得
+     * 
+     * Amazon Pollyで利用可能な日本語音声の一覧を取得します。
+     * 
+     * @group 音声ガイド / Audio Guide
+     * 
+     * @response 200 scenario="成功時" {
+     *   "success": true,
+     *   "data": {
+     *     "voices": [
+     *       {
+     *         "id": "Takumi",
+     *         "name": "Takumi",
+     *         "gender": "Male",
+     *         "language_code": "ja-JP",
+     *         "supported_engines": ["neural", "standard"]
+     *       },
+     *       {
+     *         "id": "Tomoko",
+     *         "name": "Tomoko",
+     *         "gender": "Female",
+     *         "language_code": "ja-JP",
+     *         "supported_engines": ["neural", "standard"]
+     *       }
+     *     ],
+     *     "recommended": ["Takumi", "Tomoko", "Mizuki", "Kazuha"]
+     *   }
+     * }
      *
      * @return JsonResponse
      */
     public function getAvailableVoices(): JsonResponse
     {
         try {
-            $voices = $this->pollyService->getAvailableVoices();
+            $voices = $this->audioSynthesizer->getAvailableVoices();
             
             return response()->json([
                 'success' => true,
@@ -68,7 +101,7 @@ class AudioGuideController extends Controller
         }
 
         try {
-            $result = $this->pollyService->synthesizeSpeech(
+            $result = $this->audioSynthesizer->synthesizeSpeech(
                 $request->input('text'),
                 $request->input('voice_id')
             );
@@ -156,7 +189,7 @@ class AudioGuideController extends Controller
             }
 
             // 音声合成
-            $result = $this->pollyService->synthesizeSpeech(
+            $result = $this->audioSynthesizer->synthesizeSpeech(
                 $guideText,
                 $request->input('voice_id')
             );
@@ -193,7 +226,7 @@ class AudioGuideController extends Controller
     public function clearCache(): JsonResponse
     {
         try {
-            $this->pollyService->clearCache();
+            $this->audioSynthesizer->clearCache();
             
             return response()->json([
                 'success' => true,

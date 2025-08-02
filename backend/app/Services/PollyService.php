@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use App\Models\PronunciationCorrection;
+use App\Contracts\AudioSynthesizerInterface;
 
-class PollyService
+class PollyService implements AudioSynthesizerInterface
 {
     private PollyClient $pollyClient;
     private string $region;
@@ -236,5 +237,41 @@ class PollyService
         }
         
         Log::info('Polly cache cleared');
+    }
+
+    /**
+     * 指定した音声IDが利用可能かチェック
+     *
+     * @param string $voiceId チェックする音声ID
+     * @return bool 利用可能な場合true
+     */
+    public function isVoiceAvailable(string $voiceId): bool
+    {
+        $voices = $this->getAvailableVoices();
+        
+        foreach ($voices as $voice) {
+            if ($voice['id'] === $voiceId) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * 音声合成の設定を取得
+     *
+     * @return array 現在の設定（engine, region, format等）
+     */
+    public function getConfiguration(): array
+    {
+        return [
+            'service' => 'Amazon Polly',
+            'region' => $this->region,
+            'output_format' => $this->outputFormat,
+            'voice_id' => $this->voiceId,
+            'engine' => $this->engine,
+            'version' => 'latest',
+        ];
     }
 }

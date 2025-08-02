@@ -116,8 +116,8 @@ Route::get('/test-events', function () {
 
 // Audio Guide API Routes
 Route::prefix('audio-guide')->group(function () {
-    Route::post('/synthesize', [AudioGuideController::class, 'synthesize']);
-    Route::get('/voices', [AudioGuideController::class, 'voices']);
+    Route::post('/synthesize', [AudioGuideController::class, 'testSynthesis']);
+    Route::get('/voices', [AudioGuideController::class, 'getAvailableVoices']);
     Route::post('/tourist-spot', [AudioGuideController::class, 'generateTouristSpotAudio']);
     
     // Admin routes (require authentication)

@@ -122,7 +122,7 @@ Google Maps APIは使用量に応じて課金されます：
 #### APIキー設定
 詳細地図機能には以下の設定が必要です：
 ```bash
-GOOGLE_MAPS_API_KEY=AIzaSyDBTzeSepixQFP2y2pQcNciOSj8kYlDzh4
+GOOGLE_MAPS_API_KEY=api_key
 ```
 
 #### 必要なAPI有効化
