@@ -117,7 +117,7 @@ import PlacePhotoImage from '~/components/PlacePhotoImage.vue'
 const { t } = useLanguage()
 
 // Tourist spots data for search
-const { searchSpots } = useTouristSpots()
+const { searchSpots, fetchSpots, spots } = useTouristSpots()
 
 // Hero image slider variables
 const currentHeroIndex = ref(0)
@@ -178,10 +178,18 @@ const stopPlaceholderRotation = () => {
 }
 
 // Search functionality
-const onSearchInput = () => {
+const onSearchInput = async () => {
   if (searchQuery.value.trim().length > 0) {
+    // Check if spots data is available, if not fetch it
+    if (spots.value.length === 0) {
+      await fetchSpots()
+    }
     const results = searchSpots(searchQuery.value)
     searchSuggestions.value = results.slice(0, 5) // 最大5件まで表示
+    // Ensure suggestions are shown if we have results
+    if (results.length > 0) {
+      showSuggestions.value = true
+    }
   } else {
     searchSuggestions.value = []
   }
@@ -191,9 +199,20 @@ const selectSuggestion = (suggestion) => {
   navigateTo(`/spots/${suggestion.id}`)
 }
 
-const onInputFocus = () => {
+const onInputFocus = async () => {
   isInputFocused.value = true
-  showSuggestions.value = true
+  
+  // If we have a search query and no suggestions yet, try to fetch and search
+  if (searchQuery.value.trim().length > 0 && searchSuggestions.value.length === 0) {
+    if (spots.value.length === 0) {
+      await fetchSpots()
+    }
+    const results = searchSpots(searchQuery.value)
+    searchSuggestions.value = results.slice(0, 5)
+  }
+  
+  // Only show suggestions if we have any
+  showSuggestions.value = searchSuggestions.value.length > 0
 }
 
 const onInputBlur = () => {
@@ -246,6 +265,11 @@ const getPlaceholderStyle = (index) => {
 onMounted(() => {
   startPlaceholderRotation()
   startHeroSlider()
+  
+  // Fetch tourist spots data for search functionality
+  fetchSpots().catch(err => {
+    console.error('Failed to fetch tourist spots on mount:', err)
+  })
 })
 
 onUnmounted(() => {
